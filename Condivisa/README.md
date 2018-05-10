@@ -1,7 +1,7 @@
 # Documenti condivisi
 
-Database: Derby
-Pattern: MVC, Beans, Servlet, JSP
+Database: Derby   
+Pattern: MVC, Beans, Servlet, JSP   
 Grafica: Bootstrap   
 
 Creazione DB: Alessandro, Samuele   
