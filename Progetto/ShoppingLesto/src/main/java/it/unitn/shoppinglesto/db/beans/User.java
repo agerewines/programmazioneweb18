@@ -14,19 +14,29 @@ import java.io.Serializable;
  * Updated by: alessandrogerevini, on 17/09
  */
 public class User implements Serializable {
-    
+    private int id;
+
     private String mail, name, surname, avatar;
     private String password; // Cripted
 
     public User() {
     }
 
-    public User(String mail, String name, String surname, String avatar, String password) {
+    public User(int id, String mail, String name, String surname, String avatar, String password) {
+        this.id = id;
         this.mail = mail;
         this.name = name;
         this.surname = surname;
         this.avatar = avatar;
         this.password = password;
+    }
+    
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getMail() {

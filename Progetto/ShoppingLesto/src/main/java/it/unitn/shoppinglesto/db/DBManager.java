@@ -30,7 +30,7 @@ public class DBManager {
         } catch (ClassNotFoundException cnfe) {
             throw new RuntimeException(cnfe.getMessage(), cnfe.getCause());
         }
-
+        System.out.println("Connesso al db");
         CON = (Connection) DriverManager.getConnection("jdbc:derby://" + ipaddress + "/" + databasename, login, pass);
     }
 
@@ -45,7 +45,7 @@ public class DBManager {
     public List<User> getUsers() throws SQLException {
         List<User> users = new ArrayList<>();
 
-        try (PreparedStatement stm = CON.prepareStatement("SELECT * FROM user ORDER BY lastname")) {
+        try (PreparedStatement stm = CON.prepareStatement("SELECT * FROM User ORDER BY surname")) {
             try (ResultSet rs = stm.executeQuery()) {
 
                 while (rs.next()) {
