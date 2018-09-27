@@ -21,19 +21,11 @@ import java.util.List;
 /**
  * The JDBC implementation of the {@link ShoppingListDAO} interface.
  *
- * @author Stefano Chirico &lt;stefano dot chirico at unitn dot it&gt;
- * @since 2017.03.31
+ * @author alessandrogerevini
  */
 public class JDBCShoppingListDAO extends JDBCDAO<ShoppingList, Integer> implements ShoppingListDAO {
     
-    /**
-     * The default constructor of the class.
-     *
-     * @param con the connection to the persistence system.
-     *
-     * @author Stefano Chirico
-     * @since 1.0.180330
-     */
+
     public JDBCShoppingListDAO(Connection con) {
         super(con);
     }
@@ -46,8 +38,7 @@ public class JDBCShoppingListDAO extends JDBCDAO<ShoppingList, Integer> implemen
      * @throws DAOException if an error occurred during the information
      * retrieving.
      *
-     * @author Stefano Chirico
-     * @since 1.0.180331
+     * @author alessandrogerevini
      */
     @Override
     public Long getCount() throws DAOException {
@@ -75,8 +66,7 @@ public class JDBCShoppingListDAO extends JDBCDAO<ShoppingList, Integer> implemen
      * @throws DAOException if an error occurred during the information
      * retrieving.
      *
-     * @author Stefano Chirico
-     * @since 1.0.180331
+     * @author alessandrogerevini
      */
     @Override
     public ShoppingList getByPrimaryKey(Integer primaryKey) throws DAOException {
@@ -108,15 +98,14 @@ public class JDBCShoppingListDAO extends JDBCDAO<ShoppingList, Integer> implemen
      * @throws DAOException if an error occurred during the information
      * retrieving.
      *
-     * @author Stefano Chirico
-     * @since 1.0.180331
+     * @author alessandrogerevini
      */
     @Override
     public List<ShoppingList> getAll() throws DAOException {
         List<ShoppingList> shoppingLists = new ArrayList<>();
 
         try (Statement stm = CON.createStatement()) {
-            try (ResultSet rs = stm.executeQuery("SELECT * FROM shopping_lists ORDER BY name")) {
+            try (ResultSet rs = stm.executeQuery("SELECT * FROM List ORDER BY name")) {
 
                 while (rs.next()) {
                     ShoppingList shoppingList = new ShoppingList();
@@ -141,12 +130,11 @@ public class JDBCShoppingListDAO extends JDBCDAO<ShoppingList, Integer> implemen
      * @return the id of the new persisted record.
      * @throws DAOException if an error occurred during the persist action.
      * 
-     * @author Stefano Chirico
-     * @since 1.0.180331
+     * @author alessandrogerevini
      */
     @Override
     public Integer insert(ShoppingList shoppingList) throws DAOException {
-        try (PreparedStatement ps = CON.prepareStatement("INSERT INTO shopping_lists (name, description) VALUES (?,?)", Statement.RETURN_GENERATED_KEYS)) {
+        try (PreparedStatement ps = CON.prepareStatement("INSERT INTO List (name, description) VALUES (?,?)", Statement.RETURN_GENERATED_KEYS)) {
 
             ps.setString(1, shoppingList.getName());
             ps.setString(2, shoppingList.getDescription());
@@ -172,16 +160,15 @@ public class JDBCShoppingListDAO extends JDBCDAO<ShoppingList, Integer> implemen
      * system.
      * @throws DAOException if an error occurred during the persist action.
      * 
-     * @author Stefano Chirico
-     * @since 1.0.180331
+     * @author alessandrogerevini
      */
     @Override
     public boolean linkShoppingListToUser(ShoppingList shoppingList, User user) throws DAOException {
         if ((shoppingList == null) || (user == null)) {
-            throw new DAOException("Shopping_list and user are mandatory fields", new NullPointerException("shopping_list or user are null"));
+            throw new DAOException("Shopping list and user are mandatory fields", new NullPointerException("shopping list or user are null"));
         }
         
-        try (PreparedStatement ps = CON.prepareStatement("INSERT INTO users_shopping_lists (id_user, id_shopping_list) VALUES (?, ?)")) {
+        try (PreparedStatement ps = CON.prepareStatement("INSERT INTO UserList (invitedUser, sharedList) VALUES (?, ?)")) {
 
             ps.setInt(1, user.getId());
             ps.setInt(2, shoppingList.getId());
@@ -204,17 +191,15 @@ public class JDBCShoppingListDAO extends JDBCDAO<ShoppingList, Integer> implemen
      * @throws DAOException if an error occurred during the information
      * retrieving.
      *
-     * @author Stefano Chirico
-     * @since 1.0.180331
+     * @author alessandrogerevini
      */
     @Override
     public List<ShoppingList> getByUserId(Integer userId) throws DAOException {
         if (userId == null) {
             throw new DAOException("userId is mandatory field", new NullPointerException("userId is null"));
         }
-        
-        try (PreparedStatement stm = CON.prepareStatement("SELECT * FROM shopping_lists WHERE id IN (SELECT id_shopping_list FROM users_shopping_lists WHERE id_user = ?) ORDER BY name")) {
-            List<ShoppingList> shoppingLists = new ArrayList<>();
+        List<ShoppingList> shoppingLists = new ArrayList<>();
+        try (PreparedStatement stm = CON.prepareStatement("SELECT * FROM List WHERE user_id = ? ORDER BY name")) {
             stm.setInt(1, userId);
             try (ResultSet rs = stm.executeQuery()) {
                 while (rs.next()) {
@@ -226,11 +211,27 @@ public class JDBCShoppingListDAO extends JDBCDAO<ShoppingList, Integer> implemen
                     shoppingLists.add(shoppingList);
                 }
 
-                return shoppingLists;
+                
             }
         } catch (SQLException ex) {
             throw new DAOException("Impossible to get the list of users", ex);
         }
+        try (PreparedStatement stm = CON.prepareStatement("SELECT * FROM List WHERE list_id IN (SELECT sharedList FROM UserList WHERE invitedUser = ?) ORDER BY name")) {
+            stm.setInt(1, userId);
+            try (ResultSet rs = stm.executeQuery()) {
+                while (rs.next()) {
+                    ShoppingList shoppingList = new ShoppingList();
+                    shoppingList.setId(rs.getInt("id"));
+                    shoppingList.setName(rs.getString("name"));
+                    shoppingList.setDescription(rs.getString("description"));
+
+                    shoppingLists.add(shoppingList);
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DAOException("Impossible to get the list of users", ex);
+        }
+        return shoppingLists;
     }
 
 }

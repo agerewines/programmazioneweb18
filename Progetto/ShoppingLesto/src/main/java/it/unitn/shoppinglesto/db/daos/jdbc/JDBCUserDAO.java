@@ -20,34 +20,14 @@ import java.util.List;
 /**
  * The JDBC implementation of the {@link UserDAO} interface.
  *
- * @author Stefano Chirico &lt;stefano dot chirico at unitn dot it&gt;
- * @since 2017.03.31
+ * @author alessandrogerevini
  */
 public class JDBCUserDAO extends JDBCDAO<User, Integer> implements UserDAO {
 
-    /**
-     * The default constructor of the class.
-     *
-     * @param con the connection to the persistence system.
-     *
-     * @author Stefano Chirico
-     * @since 1.0.180330
-     */
     public JDBCUserDAO(Connection con) {
         super(con);
     }
 
-    /**
-     * Returns the number of {@link User users} stored on the persistence system
-     * of the application.
-     *
-     * @return the number of records present into the storage system.
-     * @throws DAOException if an error occurred during the information
-     * retrieving.
-     *
-     * @author Stefano Chirico
-     * @since 1.0.180330
-     */
     @Override
     public Long getCount() throws DAOException {
         try (Statement stmt = CON.createStatement()) {
@@ -74,33 +54,24 @@ public class JDBCUserDAO extends JDBCDAO<User, Integer> implements UserDAO {
      * @throws DAOException if an error occurred during the information
      * retrieving.
      *
-     * @author Stefano Chirico
-     * @since 1.0.180331
+     * @author alessandrogerevini
      */
     @Override
     public User getByPrimaryKey(Integer primaryKey) throws DAOException {
         if (primaryKey == null) {
             throw new DAOException("primaryKey is null");
         }
-        try (PreparedStatement stm = CON.prepareStatement("SELECT * FROM users WHERE id = ?")) {
+        try (PreparedStatement stm = CON.prepareStatement("SELECT * FROM User WHERE id = ?")) {
             stm.setInt(1, primaryKey);
             try (ResultSet rs = stm.executeQuery()) {
 
                 rs.next();
                 User user = new User();
                 user.setId(rs.getInt("id"));
-                user.setMail(rs.getString("email"));
+                user.setMail(rs.getString("mail"));
                 user.setPassword(rs.getString("password"));
-                user.setFirstName(rs.getString("name"));
-                user.setLastName(rs.getString("lastname"));
-
-                try (PreparedStatement todoStatement = CON.prepareStatement("SELECT count(*) FROM USERS_SHOPPING_LISTS WHERE id_user = ?")) {
-                    todoStatement.setInt(1, user.getId());
-
-                    ResultSet counter = todoStatement.executeQuery();
-                    counter.next();
-                    //user.setShoppingListsCount(counter.getInt(1));
-                }
+                user.setFirstName(rs.getString("firstName"));
+                user.setLastName(rs.getString("lastName"));
 
                 return user;
             }
@@ -120,8 +91,7 @@ public class JDBCUserDAO extends JDBCDAO<User, Integer> implements UserDAO {
      * @throws DAOException if an error occurred during the information
      * retrieving.
      *
-     * @author Stefano Chirico
-     * @since 1.0.180404
+     * @author alessandrogerevini
      */
     @Override
     public User getByEmailAndPassword(String email, String password) throws DAOException {
@@ -129,12 +99,10 @@ public class JDBCUserDAO extends JDBCDAO<User, Integer> implements UserDAO {
             throw new DAOException("Email and password are mandatory fields", new NullPointerException("email or password are null"));
         }
 
-        try (PreparedStatement stm = CON.prepareStatement("SELECT * FROM user WHERE email = ? AND password = ?")) {
+        try (PreparedStatement stm = CON.prepareStatement("SELECT * FROM User WHERE mail = ? AND password = ?")) {
             stm.setString(1, email);
             stm.setString(2, password);
             try (ResultSet rs = stm.executeQuery()) {
-                PreparedStatement shoppingListStatement = CON.prepareStatement("SELECT count(*) FROM users_shopping_lists WHERE id_user = ?");
-
                 int count = 0;
                 while (rs.next()) {
                     count++;
@@ -143,24 +111,14 @@ public class JDBCUserDAO extends JDBCDAO<User, Integer> implements UserDAO {
                     }
                     User user = new User();
                     user.setId(rs.getInt("id"));
-                    user.setMail(rs.getString("email"));
+                    user.setMail(rs.getString("mail"));
                     user.setPassword(rs.getString("password"));
-                    user.setFirstName(rs.getString("name"));
-                    user.setLastName(rs.getString("lastname"));
+                    user.setFirstName(rs.getString("firstName"));
+                    user.setLastName(rs.getString("lastName"));
 
-                    shoppingListStatement.setInt(1, user.getId());
-
-                    ResultSet counter = shoppingListStatement.executeQuery();
-                    counter.next();
-                    //user.setShoppingListsCount(counter.getInt(1));
 
                     return user;
                 }
-
-                if (!shoppingListStatement.isClosed()) {
-                    shoppingListStatement.close();
-                }
-
                 return null;
             }
         } catch (SQLException ex) {
@@ -176,8 +134,7 @@ public class JDBCUserDAO extends JDBCDAO<User, Integer> implements UserDAO {
      * @throws DAOException if an error occurred during the information
      * retrieving.
      *
-     * @author Stefano Chirico
-     * @since 1.0.180331
+     * @author alessandrogerevini
      */
     @Override
     public List<User> getAll() throws DAOException {
@@ -186,22 +143,14 @@ public class JDBCUserDAO extends JDBCDAO<User, Integer> implements UserDAO {
         try (Statement stm = CON.createStatement()) {
             try (ResultSet rs = stm.executeQuery("SELECT * FROM User ORDER BY lastName")) {
 
-                //PreparedStatement shoppingListsStatement = CON.prepareStatement("SELECT count(*) FROM users_shopping_lists WHERE id_user = ?");
 
                 while (rs.next()) {
                     User user = new User();
-                    //user.setId(rs.getInt("id"));
+                    user.setId(rs.getInt("id"));
                     user.setMail(rs.getString("mail"));
                     user.setPassword(rs.getString("password"));
                     user.setFirstName(rs.getString("firstName"));
                     user.setLastName(rs.getString("lastName"));
-
-                    //shoppingListsStatement.setInt(1, user.getId());
-
-                    //ResultSet counter = shoppingListsStatement.executeQuery();
-                    //counter.next();
-                    //user.setShoppingListsCount(counter.getInt(1));
-
                     users.add(user);
                 }
             }

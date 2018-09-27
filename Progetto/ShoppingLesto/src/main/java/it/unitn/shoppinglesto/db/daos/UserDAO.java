@@ -13,8 +13,6 @@ import it.unitn.shoppinglesto.db.exceptions.DAOException;
  * All concrete DAOs must implement this interface to handle the persistence 
  * system that interact with {@link User users}.
  * 
- * @author Stefano Chirico &lt;stefano dot chirico at unitn dot it&gt;
- * @since 2017.03.31
  */
 public interface UserDAO extends DAO<User, Integer> {
     /**
@@ -27,8 +25,6 @@ public interface UserDAO extends DAO<User, Integer> {
      * @throws DAOException if an error occurred during the information
      * retrieving.
      * 
-     * @author Stefano Chirico
-     * @since 1.0.170331
      */
     public User getByEmailAndPassword(String email, String password) throws DAOException;
 }

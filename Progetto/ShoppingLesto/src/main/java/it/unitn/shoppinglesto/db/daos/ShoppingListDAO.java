@@ -15,8 +15,6 @@ import java.util.List;
  * All concrete DAOs must implement this interface to handle the persistence 
  * system that interact with {@link ShoppingList shopping-lists}.
  * 
- * @author Stefano Chirico &lt;stefano dot chirico at unitn dot it&gt;
- * @since 2017.03.30
  */
 public interface ShoppingListDAO extends DAO<ShoppingList, Integer> {
     /**
@@ -26,8 +24,6 @@ public interface ShoppingListDAO extends DAO<ShoppingList, Integer> {
      * @return the id of the new persisted record.
      * @throws DAOException if an error occurred during the persist action.
      * 
-     * @author Stefano Chirico
-     * @since 1.0.180330
      */
     public Integer insert(ShoppingList shoppingList) throws DAOException;
     
@@ -39,8 +35,6 @@ public interface ShoppingListDAO extends DAO<ShoppingList, Integer> {
      * system.
      * @throws DAOException if an error occurred during the persist action.
      * 
-     * @author Stefano Chirico
-     * @since 1.0.180331
      */
     public boolean linkShoppingListToUser(ShoppingList shoppingList, User user) throws DAOException;
     
@@ -56,8 +50,6 @@ public interface ShoppingListDAO extends DAO<ShoppingList, Integer> {
      * @throws DAOException if an error occurred during the information
      * retrieving.
      *
-     * @author Stefano Chirico
-     * @since 1.0.180330
      */
     public List<ShoppingList> getByUserId(Integer userId) throws DAOException;
 }

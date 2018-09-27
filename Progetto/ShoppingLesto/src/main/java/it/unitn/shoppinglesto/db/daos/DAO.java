@@ -17,8 +17,6 @@ import java.util.List;
  * @param <PRIMARY_KEY_CLASS> the class of the primary key of the entity the DAO
  * handle.
  * 
- * @author Stefano Chirico &lt;stefano dot chirico at unitn dot it&gt;
- * @since 2017.03.30
  */
 public interface DAO<ENTITY_CLASS, PRIMARY_KEY_CLASS> {
 
@@ -30,8 +28,6 @@ public interface DAO<ENTITY_CLASS, PRIMARY_KEY_CLASS> {
      * @throws DAOException if an error occurred during the information
      * retrieving.
      *
-     * @author Stefano Chirico
-     * @since 1.0.170330
      */
     public Long getCount() throws DAOException;
 
@@ -47,8 +43,6 @@ public interface DAO<ENTITY_CLASS, PRIMARY_KEY_CLASS> {
      * @throws DAOException if an error occurred during the information
      * retrieving.
      *
-     * @author Stefano Chirico
-     * @since 1.0.170330
      */
     public ENTITY_CLASS getByPrimaryKey(PRIMARY_KEY_CLASS primaryKey) throws DAOException;
 
@@ -60,8 +54,6 @@ public interface DAO<ENTITY_CLASS, PRIMARY_KEY_CLASS> {
      * @throws DAOException if an error occurred during the information
      * retrieving.
      *
-     * @author Stefano Chirico
-     * @since 1.0.1803303
      */
     public List<ENTITY_CLASS> getAll() throws DAOException;
     
@@ -76,8 +68,6 @@ public interface DAO<ENTITY_CLASS, PRIMARY_KEY_CLASS> {
      * parameter can interact with this DAO.
      * @throws DAOFactoryException if an error occurred.
      *
-     * @author Stefano Chirico
-     * @since 1.0.170403
      */
     public <DAO_CLASS extends DAO> DAO_CLASS getDAO(Class<DAO_CLASS> daoClass) throws DAOFactoryException;
 }
