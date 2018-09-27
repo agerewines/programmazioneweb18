@@ -5,6 +5,7 @@
  */
 package it.unitn.shoppinglesto.db;
 
+import it.unitn.shoppinglesto.db.entities.User;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -13,7 +14,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
-import it.unitn.shoppinglesto.db.beans.*;
 
 /**
  *
@@ -22,21 +22,21 @@ import it.unitn.shoppinglesto.db.beans.*;
 public class DBManager {
 
     private final transient Connection CON;
-    private String ipaddress = "164.132.195.86", databasename = "web_db", login = "root", pass = "PastoLesto22";
+    private String ipaddress = "164.132.195.86:3306", databasename = "web_db", login = "root", pass = "Pasto_Lesto22";
 
     public DBManager() throws SQLException {
         try {
-            Class.forName("org.apache.derby.jdbc.ClientDriver", true, getClass().getClassLoader());
+            Class.forName("com.mysql.jdbc.Driver", true, getClass().getClassLoader());
         } catch (ClassNotFoundException cnfe) {
             throw new RuntimeException(cnfe.getMessage(), cnfe.getCause());
         }
         System.out.println("Connesso al db");
-        CON = (Connection) DriverManager.getConnection("jdbc:derby://" + ipaddress + "/" + databasename, login, pass);
+        CON = (Connection) DriverManager.getConnection("jdbc:mysql://" + ipaddress + "/" + databasename, login, pass);
     }
 
     public static void shutdown() {
         try {
-            DriverManager.getConnection("jdbc:derby:;shutdown=true");
+            DriverManager.getConnection("jdbc:mysql:;shutdown=true");
         } catch (SQLException sqle) {
             Logger.getLogger(DBManager.class.getName()).info(sqle.getMessage());
         }
@@ -52,8 +52,8 @@ public class DBManager {
                     User user = new User();
                     user.setMail(rs.getString("mail"));
                     user.setPassword(rs.getString("password"));
-                    user.setName(rs.getString("name"));
-                    user.setSurname(rs.getString("surname"));
+                    user.setFirstName(rs.getString("name"));
+                    user.setLastName(rs.getString("surname"));
                     user.setAvatar("avatar");
 
                     /*try (PreparedStatement slstm = CON.prepareStatement("SELECT count(id_shopping_list) FROM users_shopping_lists WHERE id_user = ?")) {

@@ -5,12 +5,17 @@
  */
 package it.unitn.shoppinglesto.servlet;
 
+import it.unitn.shoppinglesto.db.entities.*;
 import it.unitn.shoppinglesto.db.*;
-import it.unitn.shoppinglesto.db.beans.*;
+import it.unitn.shoppinglesto.db.exceptions.*;
+import it.unitn.shoppinglesto.db.factories.*;
+import it.unitn.shoppinglesto.db.daos.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -22,11 +27,20 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class UsersListServlet extends HttpServlet {
 
-    private DBManager dbManager;
+    private UserDAO dao;
+
 
     @Override
     public void init() throws ServletException {
-        dbManager = (DBManager) super.getServletContext().getAttribute("dbmanager");
+        DAOFactory daoFactory = (DAOFactory) super.getServletContext().getAttribute("daoFactory");
+        if (daoFactory == null) {
+            throw new ServletException("Impossible to get dao factory for user storage system");
+        }
+        try {
+            dao = daoFactory.getDAO(UserDAO.class);
+        } catch (DAOFactoryException ex) {
+            throw new ServletException("Impossible to get dao factory for user storage system2", ex);
+        }
     }
 
     @Override
@@ -35,7 +49,7 @@ public class UsersListServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         try {
-            List<User> users = dbManager.getUsers();
+            List<User> users = dao.getAll();
 
             out.println(
                     "<!DOCTYPE html>\n"
@@ -65,16 +79,15 @@ public class UsersListServlet extends HttpServlet {
                     + "                            <th>Email</th>\n"
                     + "                            <th>First name</th>\n"
                     + "                            <th>Last name</th>\n"
-                    + "                            <th>Shopping Lists</th>\n"
                     + "                        </tr>\n"
             );
             for (User user : users) {
                 out.println(
                         "                        <tr>\n"
                         + "                            <td>" + user.getMail() + "</td>\n"
-                        + "                            <td>" + user.getName() + "</td>\n"
-                        + "                            <td>" + user.getSurname() + "</td>\n"
-                       // + "                            <td><a href=\"shopping.lists.handler?id=" + user.getId() + "\"><span class=\"badge badge-primary badge-pill\">" + user.getShoppingListsCount()+ "</span></a></td>\n"
+                        + "                            <td>" + user.getFirstName() + "</td>\n"
+                        + "                            <td>" + user.getLastName() + "</td>\n"
+                        // + "                            <td><a href=\"shopping.lists.handler?id=" + user.getId() + "\"><span class=\"badge badge-primary badge-pill\">" + user.getShoppingListsCount()+ "</span></a></td>\n"
                         + "                        </tr>\n"
                 );
             }
@@ -92,7 +105,7 @@ public class UsersListServlet extends HttpServlet {
                     + "</html>"
             );
 
-        } catch (SQLException ex) {
+        /*} catch (SQLException ex) {
             out.println(
                     "<!DOCTYPE html>\n"
                     + "<html>\n"
@@ -121,7 +134,9 @@ public class UsersListServlet extends HttpServlet {
                     + "        <script src=\"https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js\" crossorigin=\"anonymous\"></script>\n"
                     + "    </body>\n"
                     + "</html>"
-            );
+            );*/
+        } catch (DAOException ex) {
+            Logger.getLogger(UsersListServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

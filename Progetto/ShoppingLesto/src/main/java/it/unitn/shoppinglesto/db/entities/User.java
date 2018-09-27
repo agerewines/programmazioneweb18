@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package it.unitn.shoppinglesto.db.beans;
+package it.unitn.shoppinglesto.db.entities;
 
 import java.beans.*;
 import java.io.Serializable;
@@ -16,7 +16,7 @@ import java.io.Serializable;
 public class User implements Serializable {
     private int id;
 
-    private String mail, name, surname, avatar;
+    private String mail, firstName, lastName, avatar;
     private String password; // Cripted
 
     public User() {
@@ -25,8 +25,8 @@ public class User implements Serializable {
     public User(int id, String mail, String name, String surname, String avatar, String password) {
         this.id = id;
         this.mail = mail;
-        this.name = name;
-        this.surname = surname;
+        this.firstName = name;
+        this.lastName = surname;
         this.avatar = avatar;
         this.password = password;
     }
@@ -47,20 +47,20 @@ public class User implements Serializable {
         this.mail = mail;
     }
 
-    public String getName() {
-        return name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public String getSurname() {
-        return surname;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setSurname(String surname) {
-        this.surname = surname;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getAvatar() {

@@ -3,24 +3,44 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package it.unitn.shoppinglesto.db.beans;
+package it.unitn.shoppinglesto.db.entities;
 
 /**
  *
  * @author alessandrogerevini
  */
-public class Category {
+public class ShoppingList {
     private int id;
     private String name, description, image;
+    private int categoryId; // chiave esterna per la categoria di lista
+    private String userEmail; // chiave esterna per la mail dell'utente
 
-    public Category() {
+    public ShoppingList() {
     }
 
-    public Category(int id, String name, String description, String image) {
+    public ShoppingList(int id, String name, String description, String image, int categoryId, String userEmail) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.image = image;
+        this.categoryId = categoryId;
+        this.userEmail = userEmail;
+    }
+
+    public int getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
     }
 
     public int getId() {
@@ -54,7 +74,5 @@ public class Category {
     public void setImage(String image) {
         this.image = image;
     }
-    
-    
     
 }

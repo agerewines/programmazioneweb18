@@ -1,6 +1,4 @@
 /Progetto/ShoppingLesto/target/
 # Ignore Mac DS_Store files
 .DS_Store
-/Progetto/Esercitazione4/nbproject/private/
-/Progetto/Esercitazione4/build/
-/Progetto/Esercitazione4/dist/
+/Progetto/ShoppingLesto/src/main/webapp/WEB-INF/db.properties

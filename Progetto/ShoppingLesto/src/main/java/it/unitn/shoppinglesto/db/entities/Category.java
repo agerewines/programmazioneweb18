@@ -3,20 +3,20 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package it.unitn.shoppinglesto.db.beans;
+package it.unitn.shoppinglesto.db;
 
 /**
  *
  * @author alessandrogerevini
  */
-public class List {
+public class Category {
     private int id;
     private String name, description, image;
 
-    public List() {
+    public Category() {
     }
 
-    public List(int id, String name, String description, String image) {
+    public Category(int id, String name, String description, String image) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -54,5 +54,7 @@ public class List {
     public void setImage(String image) {
         this.image = image;
     }
+    
+    
     
 }

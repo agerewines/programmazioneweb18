@@ -8,9 +8,13 @@
         <servlet-name>UsersListServlet</servlet-name>
         <servlet-class>it.unitn.shoppinglesto.servlet.UsersListServlet</servlet-class>
     </servlet>
+        <listener>
+        <description>ServletContextListener</description>
+        <listener-class>it.unitn.shoppinglesto.listeners.WebAppContextListener</listener-class>
+    </listener>
     <servlet-mapping>
         <servlet-name>UsersListServlet</servlet-name>
-        <url-pattern>/users.handler</url-pattern>
+        <url-pattern>/users</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
