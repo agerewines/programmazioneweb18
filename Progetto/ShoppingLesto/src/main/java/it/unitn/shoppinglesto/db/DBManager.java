@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 /**
- *
+ * Deprecated
  * @author alessandrogerevini
  */
 public class DBManager {

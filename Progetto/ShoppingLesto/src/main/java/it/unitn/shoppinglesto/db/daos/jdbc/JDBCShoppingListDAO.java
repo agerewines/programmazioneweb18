@@ -234,4 +234,14 @@ public class JDBCShoppingListDAO extends JDBCDAO<ShoppingList, Integer> implemen
         return shoppingLists;
     }
 
+    @Override
+    public Integer save(ShoppingList entity) throws DAOException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Integer delete(Integer primaryKey) throws DAOException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }

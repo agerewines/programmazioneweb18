@@ -16,7 +16,7 @@ import java.util.List;
  * @param <ENTITY_CLASS> the class of the entity to handle.
  * @param <PRIMARY_KEY_CLASS> the class of the primary key of the entity the DAO
  * handle.
- * 
+ *
  */
 public interface DAO<ENTITY_CLASS, PRIMARY_KEY_CLASS> {
 
@@ -56,7 +56,7 @@ public interface DAO<ENTITY_CLASS, PRIMARY_KEY_CLASS> {
      *
      */
     public List<ENTITY_CLASS> getAll() throws DAOException;
-    
+
     /**
      * If this DAO can interact with it, then returns the DAO of class passed as
      * parameter.
@@ -70,4 +70,22 @@ public interface DAO<ENTITY_CLASS, PRIMARY_KEY_CLASS> {
      *
      */
     public <DAO_CLASS extends DAO> DAO_CLASS getDAO(Class<DAO_CLASS> daoClass) throws DAOFactoryException;
+
+    /**
+     * Saves the entity instance passed as parameter to the storage system
+     *
+     * @param entity the instance of type @{link ENTITY_CLASS}
+     * @return the id of the entity stored in the database
+     * @throws DAOException if an error occurred during the action
+     */
+    public Integer save(ENTITY_CLASS entity) throws DAOException;
+
+    /**
+     * Deletes the entity instance passed as parameter from the storage system.
+     *
+     * @param primaryKey the id of {@link ENTITY_CLASS} to delete.
+     * @return the result of the delete operation
+     * @throws DAOException if an error occurred during the action
+     */
+    public Integer delete(PRIMARY_KEY_CLASS primaryKey) throws DAOException;
 }

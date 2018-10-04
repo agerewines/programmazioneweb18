@@ -10,19 +10,23 @@ import java.io.Serializable;
 
 /**
  *
- * @author Alberto
- * Updated by: alessandrogerevini, on 17/09
+ * @author Alberto Updated by: alessandrogerevini, on 17/09
  */
 public class User implements Serializable {
-    private int id;
+
+    private Integer id;
 
     private String mail, firstName, lastName, avatar;
     private String password; // Cripted
+    private boolean active, admin;
 
     public User() {
+        this.active = false;
+        this.admin = false;
     }
 
-    public User(int id, String mail, String firstName, String lastName, String avatar, String password) {
+    public User(Integer id, String mail, String firstName, String lastName, String avatar, String password) {
+        super();
         this.id = id;
         this.mail = mail;
         this.firstName = firstName;
@@ -30,12 +34,20 @@ public class User implements Serializable {
         this.avatar = avatar;
         this.password = password;
     }
-    
-    public int getId() {
+
+    public User(Integer id, String mail, String firstName, String lastName, String password) {
+        super();
+        this.id = id;
+        this.mail = mail;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.password = password;
+    }
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -78,7 +90,21 @@ public class User implements Serializable {
     public void setPassword(String password) {
         this.password = password;
     }
-    
-    
-    
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public boolean isAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(boolean admin) {
+        this.admin = admin;
+    }
+
 }

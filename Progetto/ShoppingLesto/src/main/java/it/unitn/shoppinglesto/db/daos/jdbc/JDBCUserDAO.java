@@ -16,6 +16,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+import org.apache.commons.codec.digest.DigestUtils;
 
 /**
  * The JDBC implementation of the {@link UserDAO} interface.
@@ -72,7 +74,9 @@ public class JDBCUserDAO extends JDBCDAO<User, Integer> implements UserDAO {
                 user.setPassword(rs.getString("password"));
                 user.setFirstName(rs.getString("firstName"));
                 user.setLastName(rs.getString("lastName"));
-
+                user.setAvatar(rs.getString("avatar") != null ? rs.getString("avatar") : null);
+                user.setActive(Boolean.getBoolean(rs.getString("active")));
+                user.setAdmin(Boolean.getBoolean(rs.getString("admin")));
                 return user;
             }
         } catch (SQLException ex) {
@@ -115,7 +119,9 @@ public class JDBCUserDAO extends JDBCDAO<User, Integer> implements UserDAO {
                     user.setPassword(rs.getString("password"));
                     user.setFirstName(rs.getString("firstName"));
                     user.setLastName(rs.getString("lastName"));
-
+                    user.setAvatar(rs.getString("avatar") != null ? rs.getString("avatar") : null);
+                    user.setActive(Boolean.getBoolean(rs.getString("active")));
+                    user.setAdmin(Boolean.getBoolean(rs.getString("admin")));
 
                     return user;
                 }
@@ -143,7 +149,6 @@ public class JDBCUserDAO extends JDBCDAO<User, Integer> implements UserDAO {
         try (Statement stm = CON.createStatement()) {
             try (ResultSet rs = stm.executeQuery("SELECT * FROM User ORDER BY lastName")) {
 
-
                 while (rs.next()) {
                     User user = new User();
                     user.setId(rs.getInt("id"));
@@ -151,6 +156,9 @@ public class JDBCUserDAO extends JDBCDAO<User, Integer> implements UserDAO {
                     user.setPassword(rs.getString("password"));
                     user.setFirstName(rs.getString("firstName"));
                     user.setLastName(rs.getString("lastName"));
+                    user.setAvatar(rs.getString("avatar") != null ? rs.getString("avatar") : null);
+                    user.setActive(Boolean.getBoolean(rs.getString("active")));
+                    user.setAdmin(Boolean.getBoolean(rs.getString("admin")));
                     users.add(user);
                 }
             }
@@ -159,5 +167,142 @@ public class JDBCUserDAO extends JDBCDAO<User, Integer> implements UserDAO {
         }
 
         return users;
+    }
+
+    @Override
+    public User getByMail(String mail) throws DAOException {
+        if (mail == null) {
+            throw new DAOException("Email and password are mandatory fields", new NullPointerException("email or password are null"));
+        }
+
+        try (PreparedStatement stm = CON.prepareStatement("SELECT * FROM User WHERE mail = ?")) {
+            stm.setString(1, mail);
+            try (ResultSet rs = stm.executeQuery()) {
+                int count = 0;
+                while (rs.next()) {
+                    count++;
+                    if (count > 1) {
+                        throw new DAOException("Unique constraint violated! There are more than one user with the same email! WHY???");
+                    }
+                    User user = new User();
+                    user.setId(rs.getInt("id"));
+                    user.setMail(rs.getString("mail"));
+                    user.setPassword(rs.getString("password"));
+                    user.setFirstName(rs.getString("firstName"));
+                    user.setLastName(rs.getString("lastName"));
+                    user.setAvatar(rs.getString("avatar") != null ? rs.getString("avatar") : null);
+                    user.setActive(Boolean.getBoolean(rs.getString("active")));
+                    user.setAdmin(Boolean.getBoolean(rs.getString("admin")));
+
+                    return user;
+                }
+                return null;
+            }
+        } catch (SQLException ex) {
+            throw new DAOException("Impossible to get the list of users", ex);
+        }
+    }
+
+    /**
+     * Checks whether an {@code mail} exists in the database.
+     *
+     * @param mail the {@code mail} to check.
+     * @return true if the mail passed as parameter exists in the database, if
+     * not false.
+     * @throws DAOException if an error occurred during the operation.
+     */
+    @Override
+    public boolean emailExists(String mail) throws DAOException {
+        boolean exists = false;
+        if (mail == null) {
+            throw new DAOException("Email cannot be null!");
+        }
+
+        String checkQuery = "SELECT * FROM User WHERE mail=?";
+        try {
+            PreparedStatement prepStm = CON.prepareStatement(checkQuery);
+            prepStm.setNString(1, mail);
+            try (ResultSet rs = prepStm.executeQuery()) {
+                if (rs.next()) {
+                    exists = true;
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DAOException("Error on checking email's parameters", ex);
+        }
+        return exists;
+    }
+
+    @Override
+    public Integer save(User user) throws DAOException {
+        if (user == null) {
+            throw new DAOException("parameter not valid", new IllegalArgumentException("The passed user is null"));
+        }
+        if (!emailExists(user.getMail())) {
+            String insert = "INSERT INTO `User`(`firstName`, `lastName`, `mail`, `password`, `admin`, `active`)"
+                    + "VALUES (?,?,?,?,?,?)";
+            try (PreparedStatement prepStm = CON.prepareStatement(insert, Statement.RETURN_GENERATED_KEYS)) {
+                prepStm.setString(1, user.getFirstName());
+                prepStm.setString(2, user.getLastName());
+                prepStm.setString(3, user.getMail());
+                prepStm.setString(4, user.getPassword());
+                prepStm.setBoolean(5, user.isAdmin());
+                prepStm.setBoolean(6, user.isActive());
+                prepStm.executeUpdate();
+                try (ResultSet rs = prepStm.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        user.setId(rs.getInt(1));
+                        String insertActivation = "INSERT INTO `UserActivationKeys`(`activationKey`, `userId`)"
+                                + "VALUES(?,?)";
+                        PreparedStatement pstm2 = CON.prepareStatement(insertActivation);
+                        pstm2.setString(1, DigestUtils.md5Hex(user.getMail()));
+                        pstm2.setInt(2, user.getId());
+                        pstm2.executeUpdate();
+                    }
+                }
+            } catch (SQLException ex) {
+                throw new DAOException("There was a problem saving the user into db", ex);
+            }
+        } else {
+            throw new DAOException("Violation of email constraint");
+        }
+        return user.getId();
+    }
+
+    /**
+     * Update the @{link User user} passed as parameter and returns it.
+     *
+     * @param user the @{link User user} used to update the persistence system.
+     * @return the updated user.
+     * @throws DAOException if an error occurred during the action.
+     *
+     */
+    @Override
+    public User update(User user) throws DAOException {
+        if (user == null) {
+            throw new DAOException("User null, not valid.", new IllegalArgumentException("User null."));
+        }
+
+        try (PreparedStatement prepStm = CON.prepareStatement("UPDATE User SET mail = ?, password = ?, fisrtName = ?, lastName = ?, avatar = ?, active = ? WHERE id = ?")) {
+            prepStm.setString(1, user.getMail());
+            prepStm.setString(2, user.getPassword());
+            prepStm.setString(3, user.getFirstName());
+            prepStm.setString(4, user.getLastName());
+            prepStm.setString(5, user.getAvatar());
+            prepStm.setBoolean(7, user.isActive());
+            prepStm.setInt(8, user.getId());
+            if (prepStm.executeUpdate() == 1) {
+                return user;
+            } else {
+                throw new DAOException("Error while updatting the user");
+            }
+        } catch (SQLException ex) {
+            throw new DAOException("Error while updating the user!", ex);
+        }
+    }
+
+    @Override
+    public Integer delete(Integer primaryKey) throws DAOException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

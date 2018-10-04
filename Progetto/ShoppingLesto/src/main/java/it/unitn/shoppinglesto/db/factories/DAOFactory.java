@@ -11,7 +11,6 @@ import it.unitn.shoppinglesto.db.exceptions.DAOFactoryException;
 
 /**
  * This interface must be implemented by all the concrete {@code DAOFactor(y)}
- * ies.
  * 
  * @author Stefano Chirico &lt;stefano dot chirico at unitn dot it&gt;
  * @since 2017.03.30
