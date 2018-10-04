@@ -73,6 +73,7 @@ public class RegistrationServlet extends HttpServlet {
         } else {
             String message = "You are already logged in";
             session.setAttribute("infoMessage", message);
+            // rimando alla servlet della home
             response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath() + "/home"));
         }
     }
@@ -98,7 +99,7 @@ public class RegistrationServlet extends HttpServlet {
         String password = (String) request.getAttribute("password");
         String confirmation = (String) request.getAttribute("confirmation");
         // Dubbi
-        String termsStr = request.getParameter("terms");
+        String termsStr = request.getParameter("checkTerms");
         boolean terms = "A".equals(termsStr);
 
         if (firstName == null || lastName == null || email == null || password == null || confirmation == null
@@ -116,8 +117,14 @@ public class RegistrationServlet extends HttpServlet {
                         hasError = true;
                         message = "Password confirmation does not match Password!";
                     } else {
-                        user = new User(null, firstName, lastName, email, password);
-                        userDAO.save(user);
+                        if(!terms){
+                            hasError = true;
+                            message = "You need to accept our terms, before register!";
+                        }else{
+                            user = new User(null, email, firstName, lastName, password);
+                            userDAO.save(user);
+                        }
+
                     }
                 }
             } catch (DAOException ex) {
@@ -125,24 +132,25 @@ public class RegistrationServlet extends HttpServlet {
             }
 
         }
-
+        String dest;
         if (hasError) {
             request.setAttribute("errorMessage", message);
             request.setAttribute("firstName", firstName);
             request.setAttribute("lastName", lastName);
             request.setAttribute("mail", email);
-            request.setAttribute("action", "register");
-            RequestDispatcher rd = getServletContext().getRequestDispatcher("/WEB-INF/views/index.jsp");
-            rd.forward(request, response);
+            request.setAttribute("action", "registerError");
+            dest = "/WEB-INF/views/register.jsp";
         } else {
             request.setAttribute("user", user);
             request.setAttribute("path", "/verification?id=");
             request.setAttribute("subject", "Confirmation Instructions");
             request.setAttribute("template", "registrationConfirmTemplate.vm");
             request.setAttribute("linkName", "Confirm Registration");
-            RequestDispatcher rd = getServletContext().getRequestDispatcher("/WEB-INF/views/users.jsp");
-            rd.forward(request, response);
+            System.out.println("not error");
+            dest = "/WEB-INF/views/users.jsp";
         }
+        RequestDispatcher rd = getServletContext().getRequestDispatcher(dest);
+        rd.forward(request, response);
 
     }
 

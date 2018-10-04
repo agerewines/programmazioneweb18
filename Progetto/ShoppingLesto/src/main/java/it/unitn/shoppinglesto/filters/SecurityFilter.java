@@ -22,7 +22,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 
 /**
  *
- * @author pablo
+ * @author alessandrogerevini
  */
 public class SecurityFilter implements Filter {
     

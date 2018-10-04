@@ -19,6 +19,8 @@ import java.util.List;
 import java.util.UUID;
 import org.apache.commons.codec.digest.DigestUtils;
 
+import javax.sound.midi.Soundbank;
+
 /**
  * The JDBC implementation of the {@link UserDAO} interface.
  *
@@ -240,7 +242,7 @@ public class JDBCUserDAO extends JDBCDAO<User, Integer> implements UserDAO {
         }
         if (!emailExists(user.getMail())) {
             String insert = "INSERT INTO `User`(`firstName`, `lastName`, `mail`, `password`, `admin`, `active`)"
-                    + "VALUES (?,?,?,?,?,?)";
+                    + " VALUES (?,?,?,?,?,?)";
             try (PreparedStatement prepStm = CON.prepareStatement(insert, Statement.RETURN_GENERATED_KEYS)) {
                 prepStm.setString(1, user.getFirstName());
                 prepStm.setString(2, user.getLastName());
@@ -252,7 +254,7 @@ public class JDBCUserDAO extends JDBCDAO<User, Integer> implements UserDAO {
                 try (ResultSet rs = prepStm.getGeneratedKeys()) {
                     if (rs.next()) {
                         user.setId(rs.getInt(1));
-                        String insertActivation = "INSERT INTO `UserActivationKeys`(`activationKey`, `userId`)"
+                        String insertActivation = "INSERT INTO UserActivationKeys (activationKey, userId)"
                                 + "VALUES(?,?)";
                         PreparedStatement pstm2 = CON.prepareStatement(insertActivation);
                         pstm2.setString(1, DigestUtils.md5Hex(user.getMail()));
@@ -289,8 +291,8 @@ public class JDBCUserDAO extends JDBCDAO<User, Integer> implements UserDAO {
             prepStm.setString(3, user.getFirstName());
             prepStm.setString(4, user.getLastName());
             prepStm.setString(5, user.getAvatar());
-            prepStm.setBoolean(7, user.isActive());
-            prepStm.setInt(8, user.getId());
+            prepStm.setBoolean(6, user.isActive());
+            prepStm.setInt(7, user.getId());
             if (prepStm.executeUpdate() == 1) {
                 return user;
             } else {

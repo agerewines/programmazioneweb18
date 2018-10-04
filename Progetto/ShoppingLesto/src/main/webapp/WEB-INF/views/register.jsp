@@ -5,6 +5,7 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -12,6 +13,9 @@
         <title>Register</title>
     </head>
     <body>
+    <c:if test="${not empty errorMessage}">
+        <c:out value="${errorMessage}"/>
+    </c:if>
         <form action="${pageContext.request.contextPath}/register" method="POST">
             <table>
             <tr>
@@ -31,8 +35,12 @@
                <td><input type="password" name="password"/> </td>
             </tr>
             <tr>
-               <td>Password Confirmation</td>
-               <td><input type="password" name="confirmation"/> </td>
+                <td>Password Confirmation</td>
+                <td><input type="password" name="confirmation"/> </td>
+            </tr>
+            <tr>
+                <td>Check terms</td>
+                <td><input type="checkbox" name="checkTerms" value="A"/> </td>
             </tr>
             <tr>
                <td colspan ="2">

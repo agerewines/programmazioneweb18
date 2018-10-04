@@ -33,6 +33,8 @@ public class User implements Serializable {
         this.lastName = lastName;
         this.avatar = avatar;
         this.password = password;
+        this.active = false;
+        this.admin = false;
     }
 
     public User(Integer id, String mail, String firstName, String lastName, String password) {
@@ -42,6 +44,8 @@ public class User implements Serializable {
         this.firstName = firstName;
         this.lastName = lastName;
         this.password = password;
+        this.active = false;
+        this.admin = false;
     }
     public Integer getId() {
         return id;
