@@ -76,7 +76,7 @@ public class JDBCUserDAO extends JDBCDAO<User, Integer> implements UserDAO {
                 user.setPassword(rs.getString("password"));
                 user.setFirstName(rs.getString("firstName"));
                 user.setLastName(rs.getString("lastName"));
-                user.setAvatar(rs.getString("avatar") != null ? rs.getString("avatar") : null);
+                user.setAvatar(rs.getString("avatar"));
                 user.setActive(Boolean.getBoolean(rs.getString("active")));
                 user.setAdmin(Boolean.getBoolean(rs.getString("admin")));
                 return user;
@@ -108,27 +108,7 @@ public class JDBCUserDAO extends JDBCDAO<User, Integer> implements UserDAO {
         try (PreparedStatement stm = CON.prepareStatement("SELECT * FROM User WHERE mail = ? AND password = ?")) {
             stm.setString(1, email);
             stm.setString(2, password);
-            try (ResultSet rs = stm.executeQuery()) {
-                int count = 0;
-                while (rs.next()) {
-                    count++;
-                    if (count > 1) {
-                        throw new DAOException("Unique constraint violated! There are more than one user with the same email! WHY???");
-                    }
-                    User user = new User();
-                    user.setId(rs.getInt("id"));
-                    user.setMail(rs.getString("mail"));
-                    user.setPassword(rs.getString("password"));
-                    user.setFirstName(rs.getString("firstName"));
-                    user.setLastName(rs.getString("lastName"));
-                    user.setAvatar(rs.getString("avatar") != null ? rs.getString("avatar") : null);
-                    user.setActive(Boolean.getBoolean(rs.getString("active")));
-                    user.setAdmin(Boolean.getBoolean(rs.getString("admin")));
-
-                    return user;
-                }
-                return null;
-            }
+            return getUser(stm);
         } catch (SQLException ex) {
             throw new DAOException("Impossible to get the list of users", ex);
         }
@@ -158,7 +138,7 @@ public class JDBCUserDAO extends JDBCDAO<User, Integer> implements UserDAO {
                     user.setPassword(rs.getString("password"));
                     user.setFirstName(rs.getString("firstName"));
                     user.setLastName(rs.getString("lastName"));
-                    user.setAvatar(rs.getString("avatar") != null ? rs.getString("avatar") : null);
+                    user.setAvatar(rs.getString("avatar"));
                     user.setActive(Boolean.getBoolean(rs.getString("active")));
                     user.setAdmin(Boolean.getBoolean(rs.getString("admin")));
                     users.add(user);
@@ -179,29 +159,41 @@ public class JDBCUserDAO extends JDBCDAO<User, Integer> implements UserDAO {
 
         try (PreparedStatement stm = CON.prepareStatement("SELECT * FROM User WHERE mail = ?")) {
             stm.setString(1, mail);
-            try (ResultSet rs = stm.executeQuery()) {
-                int count = 0;
-                while (rs.next()) {
-                    count++;
-                    if (count > 1) {
-                        throw new DAOException("Unique constraint violated! There are more than one user with the same email! WHY???");
-                    }
-                    User user = new User();
-                    user.setId(rs.getInt("id"));
-                    user.setMail(rs.getString("mail"));
-                    user.setPassword(rs.getString("password"));
-                    user.setFirstName(rs.getString("firstName"));
-                    user.setLastName(rs.getString("lastName"));
-                    user.setAvatar(rs.getString("avatar") != null ? rs.getString("avatar") : null);
-                    user.setActive(Boolean.getBoolean(rs.getString("active")));
-                    user.setAdmin(Boolean.getBoolean(rs.getString("admin")));
-
-                    return user;
-                }
-                return null;
-            }
+            return getUser(stm);
         } catch (SQLException ex) {
             throw new DAOException("Impossible to get the list of users", ex);
+        }
+    }
+
+    /**
+     * Duplicated code
+     * Retrieve user information from sql query
+     * @param stm sql code to run
+     * @return The {@code user} object got from the query
+     * @throws SQLException error with the sql code
+     * @throws DAOException error completing the UserDao
+     */
+    private User getUser(PreparedStatement stm) throws SQLException, DAOException {
+        try (ResultSet rs = stm.executeQuery()) {
+            int count = 0;
+            while (rs.next()) {
+                count++;
+                if (count > 1) {
+                    throw new DAOException("Unique constraint violated! There are more than one user with the same email! WHY???");
+                }
+                User user = new User();
+                user.setId(rs.getInt("id"));
+                user.setMail(rs.getString("mail"));
+                user.setPassword(rs.getString("password"));
+                user.setFirstName(rs.getString("firstName"));
+                user.setLastName(rs.getString("lastName"));
+                user.setAvatar(rs.getString("avatar"));
+                user.setActive(Boolean.getBoolean(rs.getString("active")));
+                user.setAdmin(Boolean.getBoolean(rs.getString("admin")));
+
+                return user;
+            }
+            return null;
         }
     }
 
@@ -304,7 +296,26 @@ public class JDBCUserDAO extends JDBCDAO<User, Integer> implements UserDAO {
     }
 
     @Override
-    public Integer delete(Integer primaryKey) throws DAOException {
+    public String getActivationKey(User user) throws DAOException {
+        if(user == null){
+            throw new DAOException("parameter not valid", new IllegalArgumentException("The passed user is null"));
+        }
+        String activationKey = null;
+        String query = "SELECT activationKey FROM UserActivationKeys WHERE userId = ?";
+        try(PreparedStatement pstm = CON.prepareStatement(query)){
+            pstm.setInt(1, user.getId());
+            try(ResultSet rs = pstm.executeQuery()){
+                if(rs.next())
+                    activationKey = rs.getString(1);
+            }
+        } catch (SQLException ex) {
+            throw new DAOException("Could not retrieve activation key", ex);
+        }
+        return activationKey;
+    }
+
+    @Override
+    public Integer delete(Integer primaryKey) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

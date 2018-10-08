@@ -1,5 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
+    wxosbrxukguhigey
+    <context-param>
+        <param-name>smtp-hostname</param-name>
+        <param-value>smtp.gmail.com</param-value>
+    </context-param>
+    <context-param>
+        <param-name>smtp-port</param-name>
+        <param-value>465</param-value>
+    </context-param>
+    <context-param>
+        <param-name>smtp-username</param-name>
+        <param-value>onlygere@gmail.com</param-value>
+    </context-param>
+    <context-param>
+        <param-name>smtp-password</param-name>
+        <param-value>wxosbrxukguhigey</param-value>
+    </context-param>
     <filter>
         <filter-name>SecurityFilter</filter-name>
         <filter-class>it.unitn.shoppinglesto.filters.SecurityFilter</filter-class>
@@ -16,6 +33,10 @@
         <servlet-name>RegistrationServlet</servlet-name>
         <servlet-class>it.unitn.shoppinglesto.servlet.authentication.RegistrationServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>MailSenderServlet</servlet-name>
+        <servlet-class>it.unitn.shoppinglesto.servlet.authentication.MailSenderServlet</servlet-class>
+    </servlet>
     <listener>
         <description>ServletContextListener</description>
         <listener-class>it.unitn.shoppinglesto.listeners.WebAppContextListener</listener-class>
@@ -27,6 +48,10 @@
     <servlet-mapping>
         <servlet-name>RegistrationServlet</servlet-name>
         <url-pattern>/register</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>MailSenderServlet</servlet-name>
+        <url-pattern>/sendRegistrationEmail.handler</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

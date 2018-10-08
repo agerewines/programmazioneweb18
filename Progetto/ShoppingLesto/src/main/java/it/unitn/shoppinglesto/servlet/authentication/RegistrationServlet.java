@@ -139,18 +139,16 @@ public class RegistrationServlet extends HttpServlet {
             request.setAttribute("lastName", lastName);
             request.setAttribute("mail", email);
             request.setAttribute("action", "registerError");
-            dest = "/WEB-INF/views/register.jsp";
+            response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath() + "/home"));
         } else {
             request.setAttribute("user", user);
             request.setAttribute("path", "/verification?id=");
             request.setAttribute("subject", "Confirmation Instructions");
             request.setAttribute("template", "registrationConfirmTemplate.vm");
             request.setAttribute("linkName", "Confirm Registration");
-            System.out.println("not error");
-            dest = "/WEB-INF/views/users.jsp";
+            RequestDispatcher rd = getServletContext().getRequestDispatcher("/sendRegistrationEmail.handler");
+            rd.forward(request, response);
         }
-        RequestDispatcher rd = getServletContext().getRequestDispatcher(dest);
-        rd.forward(request, response);
 
     }
 

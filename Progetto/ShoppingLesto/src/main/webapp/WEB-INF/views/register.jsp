@@ -20,19 +20,19 @@
             <table>
             <tr>
                <td>First Name</td>
-               <td><input type="text" name="firstName"/> </td>
+               <td><input type="text" name="firstName" value="${firstName}"/> </td>
             </tr>
             <tr>
                <td>Last Name</td>
-               <td><input type="text" name="lastName"/> </td>
+               <td><input type="text" name="lastName" value="${lastName}"/> </td>
             </tr>
             <tr>
                <td>Email</td>
-               <td><input type="email" name="mail"/> </td>
+               <td><input type="email" name="mail" value="${mail}"/> </td>
             </tr>
             <tr>
                <td>Password</td>
-               <td><input type="password" name="password"/> </td>
+               <td><input type="password" name="password" /> </td>
             </tr>
             <tr>
                 <td>Password Confirmation</td>

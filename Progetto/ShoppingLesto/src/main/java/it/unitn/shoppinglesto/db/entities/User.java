@@ -111,4 +111,8 @@ public class User implements Serializable {
         this.admin = admin;
     }
 
+    public String getFullName(){
+        return this.firstName + " " + this.lastName;
+    }
+
 }

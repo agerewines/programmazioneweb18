@@ -64,4 +64,11 @@ public interface UserDAO extends DAO<User, Integer> {
      */
     public User update(User user) throws DAOException;
 
+    /**
+     * This method returns the temporary activation code that the {@link User user} receives when registering or during password reset
+     * @param user the {@link User user} that receives the activation code.
+     * @return the activation key stored in the database
+     * @throws DAOException if an error occurs during the operation
+     */
+    public String getActivationKey(User user) throws DAOException;
 }
