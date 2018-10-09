@@ -144,7 +144,7 @@ public class RegistrationServlet extends HttpServlet {
             request.setAttribute("user", user);
             request.setAttribute("path", "/verification?id=");
             request.setAttribute("subject", "Confirmation Instructions");
-            request.setAttribute("template", "registrationConfirmTemplate.vm");
+            request.setAttribute("template", "confirmRegistrationTemplate.vm");
             request.setAttribute("linkName", "Confirm Registration");
             RequestDispatcher rd = getServletContext().getRequestDispatcher("/sendRegistrationEmail.handler");
             rd.forward(request, response);

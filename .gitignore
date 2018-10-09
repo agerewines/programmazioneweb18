@@ -8,56 +8,57 @@
 # Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
 
 # User-specific stuff
-.idea/**/workspace.xml
-.idea/**/tasks.xml
-.idea/**/usage.statistics.xml
-.idea/**/dictionaries
-.idea/**/shelf
+/Progetto/ShoppingLesto/.idea/**/workspace.xml
+/Progetto/ShoppingLesto/.idea/**/tasks.xml
+/Progetto/ShoppingLesto/.idea/**/usage.statistics.xml
+/Progetto/ShoppingLesto/.idea/**/dictionaries
+/Progetto/ShoppingLesto/.idea/**/shelf
 
 # Generated files
-.idea/**/contentModel.xml
+/Progetto/ShoppingLesto/.idea/**/contentModel.xml
 
 # Sensitive or high-churn files
-.idea/**/dataSources/
-.idea/**/dataSources.ids
-.idea/**/dataSources.local.xml
-.idea/**/sqlDataSources.xml
-.idea/**/dynamic.xml
-.idea/**/uiDesigner.xml
-.idea/**/dbnavigator.xml
+/Progetto/ShoppingLesto/.idea/**/dataSources/
+/Progetto/ShoppingLesto/.idea/**/dataSources.ids
+/Progetto/ShoppingLesto/.idea/**/dataSources.local.xml
+/Progetto/ShoppingLesto/.idea/**/sqlDataSources.xml
+/Progetto/ShoppingLesto/.idea/**/dynamic.xml
+/Progetto/ShoppingLesto/.idea/**/uiDesigner.xml
+/Progetto/ShoppingLesto/.idea/**/dbnavigator.xml
 
 # Gradle
-.idea/**/gradle.xml
-.idea/**/libraries
+/Progetto/ShoppingLesto/.idea/**/gradle.xml
+/Progetto/ShoppingLesto/.idea/**/libraries
 
 # Gradle and Maven with auto-import
 # When using Gradle or Maven with auto-import, you should exclude module files,
 # since they will be recreated, and may cause churn.  Uncomment if using
 # auto-import.
-.idea/modules.xml
-.idea/*.iml
-.idea/modules
+/Progetto/ShoppingLesto/.idea/modules.xml
+/Progetto/ShoppingLesto/.idea/*.iml
+/Progetto/ShoppingLesto/.idea/modules
 
 # CMake
 cmake-build-*/
 
 # Mongo Explorer plugin
-.idea/**/mongoSettings.xml
+/Progetto/ShoppingLesto/idea/**/mongoSettings.xml
 
 # File-based project format
 *.iws
+*.iml
 
 # IntelliJ
-out/
+/Progetto/ShoppingLesto/out/
 
 # mpeltonen/sbt-idea plugin
-.idea_modules/
+/Progetto/ShoppingLesto/.idea_modules/
 
 # JIRA plugin
 atlassian-ide-plugin.xml
 
 # Cursive Clojure plugin
-.idea/replstate.xml
+/Progetto/ShoppingLesto/.idea/replstate.xml
 
 # Crashlytics plugin (for Android Studio and IntelliJ)
 com_crashlytics_export_strings.xml
@@ -66,16 +67,16 @@ crashlytics-build.properties
 fabric.properties
 
 # Editor-based Rest Client
-.idea/httpRequests
+/Progetto/ShoppingLesto/.idea/httpRequests
 
 # NETBEANS GITIGNORE
 
-nbproject/private/
-build/
-nbbuild/
-dist/
-nbdist/
-.nb-gradle/
+/Progetto/ShoppingLesto/nbproject/private/
+/Progetto/ShoppingLesto/build/
+/Progetto/ShoppingLesto/nbbuild/
+/Progetto/ShoppingLesto/dist/
+/Progetto/ShoppingLesto/nbdist/
+/Progetto/ShoppingLesto/.nb-gradle/
 
 # Custom add to avoid problem with different web server
-nb-configuration.xml
+/Progetto/ShoppingLesto/nb-configuration.xml
