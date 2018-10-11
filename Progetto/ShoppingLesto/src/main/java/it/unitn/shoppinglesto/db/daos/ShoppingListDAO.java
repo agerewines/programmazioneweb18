@@ -52,4 +52,20 @@ public interface ShoppingListDAO extends DAO<ShoppingList, Integer> {
      *
      */
     public List<ShoppingList> getByUserId(Integer userId) throws DAOException;
+
+    /**
+     * Returns the temporary {@link ShoppingList list}  of an anonymous user identified by the unique {@link String uuid}.
+     * @param uuid the {@link String uuid} stored in the cookie and database which identifies the inactive {@link ShoppingList list}
+     * @return the inactive {@link ShoppingList list}
+     * @throws DAOException if an error occurs during the retrieving of the list.
+     */
+    public ShoppingList getTemporaryList(String uuid) throws DAOException;
+
+    /**
+     * Returns all entities of type {@code ShoppingList} belonging or shared with specific {@link User user}.
+     * @param user the {@link User user} who owns or shares the lists.
+     * @return all entities of type {@code ShoppingList} belonging to the user.
+     * @throws DAOException if an error occurs during the retrieving of the lists.
+     */
+    public List<ShoppingList> getUserLists(User user) throws DAOException;
 }

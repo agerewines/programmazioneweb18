@@ -13,6 +13,7 @@ import it.unitn.shoppinglesto.db.exceptions.DAOException;
  * All concrete DAOs must implement this interface to handle the persistence
  * system that interact with {@link User users}.
  *
+ * @author alessandrogerevini
  */
 public interface UserDAO extends DAO<User, Integer> {
 
@@ -71,4 +72,19 @@ public interface UserDAO extends DAO<User, Integer> {
      * @throws DAOException if an error occurs during the operation
      */
     public String getActivationKey(User user) throws DAOException;
+    /**
+     * Returns the user id associated with the activation key
+     * @param activationKey the activation key used to check for the userId.
+     * @return the id of the {@code User} that has the activation key.
+     * @throws DAOException if an error occurred during the operation.
+     */
+    public Integer getUserIdByActKey(String activationKey) throws DAOException;
+
+    /**
+     * Deletes the activation keys associated with this {@code User}.
+     * @param user the {@link User user} whose activation key will be deleted.
+     * @return the result of the delete operation.
+     * @throws DAOException if an error occurs during the operation.
+     */
+    public Integer deleteActKey(User user) throws DAOException;
 }

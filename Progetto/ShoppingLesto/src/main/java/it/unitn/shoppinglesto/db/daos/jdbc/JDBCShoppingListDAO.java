@@ -73,15 +73,17 @@ public class JDBCShoppingListDAO extends JDBCDAO<ShoppingList, Integer> implemen
         if (primaryKey == null) {
             throw new DAOException("primaryKey is null");
         }
-        try (PreparedStatement stm = CON.prepareStatement("SELECT * FROM List WHERE id = ?")) {
+        try (PreparedStatement stm = CON.prepareStatement("SELECT * FROM List WHERE list_id = ?")) {
             stm.setInt(1, primaryKey);
             try (ResultSet rs = stm.executeQuery()) {
 
                 rs.next();
                 ShoppingList shoppingList = new ShoppingList();
-                shoppingList.setId(rs.getInt("id"));
+                shoppingList.setId(rs.getInt("list_id"));
                 shoppingList.setName(rs.getString("name"));
                 shoppingList.setDescription(rs.getString("description"));
+                shoppingList.setCategoryId(rs.getInt("category_id"));
+                shoppingList.setCategoryId(rs.getInt("user_id"));
 
                 return shoppingList;
             }
@@ -106,14 +108,17 @@ public class JDBCShoppingListDAO extends JDBCDAO<ShoppingList, Integer> implemen
 
         try (Statement stm = CON.createStatement()) {
             try (ResultSet rs = stm.executeQuery("SELECT * FROM List ORDER BY name")) {
-
                 while (rs.next()) {
                     ShoppingList shoppingList = new ShoppingList();
-                    shoppingList.setId(rs.getInt("id"));
+                    shoppingList.setId(rs.getInt("list_id"));
                     shoppingList.setName(rs.getString("name"));
                     shoppingList.setDescription(rs.getString("description"));
+                    shoppingList.setCategoryId(rs.getInt("category_id"));
+                    shoppingList.setCategoryId(rs.getInt("user_id"));
 
                     shoppingLists.add(shoppingList);
+
+                    String str = null;
                 }
             }
         } catch (SQLException ex) {
@@ -201,42 +206,74 @@ public class JDBCShoppingListDAO extends JDBCDAO<ShoppingList, Integer> implemen
         List<ShoppingList> shoppingLists = new ArrayList<>();
         try (PreparedStatement stm = CON.prepareStatement("SELECT * FROM List WHERE user_id = ? ORDER BY name")) {
             stm.setInt(1, userId);
-            try (ResultSet rs = stm.executeQuery()) {
-                while (rs.next()) {
-                    ShoppingList shoppingList = new ShoppingList();
-                    shoppingList.setId(rs.getInt("id"));
-                    shoppingList.setName(rs.getString("name"));
-                    shoppingList.setDescription(rs.getString("description"));
-
-                    shoppingLists.add(shoppingList);
-                }
-
-                
-            }
+            getLists(shoppingLists, stm);
         } catch (SQLException ex) {
             throw new DAOException("Impossible to get the list of users", ex);
         }
-        try (PreparedStatement stm = CON.prepareStatement("SELECT * FROM List WHERE list_id IN (SELECT sharedList FROM UserList WHERE invitedUser = ?) ORDER BY name")) {
+        try (PreparedStatement stm = CON.prepareStatement("SELECT * FROM List WHERE list_id IN (SELECT sharedListId FROM UserList WHERE invitedUser = ?) ORDER BY name")) {
             stm.setInt(1, userId);
-            try (ResultSet rs = stm.executeQuery()) {
-                while (rs.next()) {
-                    ShoppingList shoppingList = new ShoppingList();
-                    shoppingList.setId(rs.getInt("id"));
-                    shoppingList.setName(rs.getString("name"));
-                    shoppingList.setDescription(rs.getString("description"));
-
-                    shoppingLists.add(shoppingList);
-                }
-            }
+            getLists(shoppingLists, stm);
         } catch (SQLException ex) {
             throw new DAOException("Impossible to get the list of users", ex);
         }
         return shoppingLists;
     }
 
+    private void getLists(List<ShoppingList> shoppingLists, PreparedStatement stm) throws SQLException {
+        try (ResultSet rs = stm.executeQuery()) {
+            while (rs.next()) {
+                ShoppingList shoppingList = new ShoppingList();
+                shoppingList.setId(rs.getInt("list_id"));
+                shoppingList.setName(rs.getString("name"));
+                shoppingList.setDescription(rs.getString("description"));
+                shoppingList.setCategoryId(rs.getInt("category_id"));
+                shoppingList.setCategoryId(rs.getInt("user_id"));
+                shoppingLists.add(shoppingList);
+            }
+        }
+    }
+
+    @Override
+    public ShoppingList getTemporaryList(String uuid) throws DAOException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
+    }
+
+    @Override
+    public List<ShoppingList> getUserLists(User user) throws DAOException {
+        if(user == null){
+            throw new DAOException("parameter not valid", new IllegalArgumentException("The passed user is null."));
+        }
+        // Find all list listed in List table
+        // Find all list listed in UserList table
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
+    }
+
     @Override
     public Integer save(ShoppingList entity) throws DAOException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(entity == null){
+            throw new DAOException("parameter not valid", new IllegalArgumentException("The shopping list is null."));
+        }
+        String insert = "INSERT INTO `List`(`name`, `description`, `image`, `category_id`, `user_id`)"
+                + "VALUES (?,?,?,?,?)";
+        try(PreparedStatement preparedStatement  = CON.prepareStatement(insert, Statement.RETURN_GENERATED_KEYS)){
+            preparedStatement.setString(1, entity.getName());
+            preparedStatement.setString(2, entity.getDescription());
+            preparedStatement.setString(3, entity.getImage());
+            preparedStatement.setInt(4, entity.getCategoryId());
+            preparedStatement.setInt(5, entity.getUserId());
+            preparedStatement.executeUpdate();
+            try(ResultSet rs  = preparedStatement.getGeneratedKeys()){
+                if(rs.next()){
+                    entity.setId(rs.getInt(1));
+                }
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+            throw new DAOException("Impossible to insert shopping list.", ex);
+        }
+        return entity.getId();
     }
 
     @Override

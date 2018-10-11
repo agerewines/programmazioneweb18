@@ -277,7 +277,7 @@ public class JDBCUserDAO extends JDBCDAO<User, Integer> implements UserDAO {
             throw new DAOException("User null, not valid.", new IllegalArgumentException("User null."));
         }
 
-        try (PreparedStatement prepStm = CON.prepareStatement("UPDATE User SET mail = ?, password = ?, fisrtName = ?, lastName = ?, avatar = ?, active = ? WHERE id = ?")) {
+        try (PreparedStatement prepStm = CON.prepareStatement("UPDATE `User` SET `mail` = ?, `password` = ?, `firstName` = ?, `lastName` = ?, `avatar` = ?, `active` = ? WHERE `id` = ?")) {
             prepStm.setString(1, user.getMail());
             prepStm.setString(2, user.getPassword());
             prepStm.setString(3, user.getFirstName());
@@ -288,7 +288,7 @@ public class JDBCUserDAO extends JDBCDAO<User, Integer> implements UserDAO {
             if (prepStm.executeUpdate() == 1) {
                 return user;
             } else {
-                throw new DAOException("Error while updatting the user");
+                throw new DAOException("Error while updating the user");
             }
         } catch (SQLException ex) {
             throw new DAOException("Error while updating the user!", ex);
@@ -312,6 +312,48 @@ public class JDBCUserDAO extends JDBCDAO<User, Integer> implements UserDAO {
             throw new DAOException("Could not retrieve activation key", ex);
         }
         return activationKey;
+    }
+
+    @Override
+    public Integer getUserIdByActKey(String activationKey) throws DAOException {
+        if(activationKey == null){
+            throw new DAOException("The parameter is wrong", new IllegalArgumentException("The passed key is null"));
+        }
+        Integer id = null;
+        String query = "SELECT userId FROM UserActivationKeys WHERE activationKey = ?";
+        try(PreparedStatement preparedStatement = CON.prepareStatement(query)){
+            preparedStatement.setString(1, activationKey);
+            try(ResultSet rs = preparedStatement.executeQuery()){
+                if(rs.next())
+                    id = rs.getInt(1);
+            }
+        } catch (SQLException ex) {
+            throw new DAOException("Error retrieving user id", ex);
+        }
+        return id;
+    }
+
+    /**
+     * Deletes the activation keys associated with this {@code User}.
+     * @param user the {@link User user} whose activation key will be deleted.
+     * @return the result of the delete operation.
+     * @throws DAOException if an error occurs during the operation.
+     */
+    @Override
+    public Integer deleteActKey(User user) throws DAOException {
+        if(user == null)
+            throw new DAOException("User not valid", new IllegalArgumentException("The passed user is null"));
+
+        Integer ret = null;
+        String query = "DELETE FROM UserActivationKeys WHERE userId = ?";
+        try(PreparedStatement preparedStatement = CON.prepareStatement(query)){
+            preparedStatement.setInt(1, user.getId());
+            ret = preparedStatement.executeUpdate();
+        } catch (SQLException ex) {
+            throw new DAOException("Could not delete record.", ex);
+        }
+
+        return ret;
     }
 
     @Override

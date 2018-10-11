@@ -17,6 +17,7 @@ import java.util.List;
  * @param <PRIMARY_KEY_CLASS> the class of the primary key of the entity the DAO
  * handle.
  *
+ * @author alessandrogerevini
  */
 public interface DAO<ENTITY_CLASS, PRIMARY_KEY_CLASS> {
 

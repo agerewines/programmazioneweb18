@@ -132,14 +132,15 @@ public class RegistrationServlet extends HttpServlet {
             }
 
         }
-        String dest;
+
         if (hasError) {
             request.setAttribute("errorMessage", message);
             request.setAttribute("firstName", firstName);
             request.setAttribute("lastName", lastName);
             request.setAttribute("mail", email);
             request.setAttribute("action", "registerError");
-            response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath() + "/home"));
+            RequestDispatcher rd = getServletContext().getRequestDispatcher("/WEB-INF/views/register.jsp");
+            rd.forward(request, response);
         } else {
             request.setAttribute("user", user);
             request.setAttribute("path", "/verification?id=");

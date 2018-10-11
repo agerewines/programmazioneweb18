@@ -45,9 +45,10 @@ public class SecurityFilter implements Filter {
         if(request instanceof HttpServletRequest){
             HttpServletRequest req = (HttpServletRequest) request;
             if(request.getParameter("password") != null && request.getParameter("confirmation") !=null){
-                req.setAttribute("password", DigestUtils.md5Hex(request.getParameter("password")));
-                req.setAttribute("confirmation", DigestUtils.md5Hex(request.getParameter("confirmation")));
+                req.setAttribute("password", request.getParameter("password").equals("") ? null : DigestUtils.md5Hex(request.getParameter("password")));
+                req.setAttribute("confirmation", request.getParameter("confirmation").equals("") ? null : DigestUtils.md5Hex(request.getParameter("confirmation")));
             }
+
         }
     }    
     
@@ -60,20 +61,7 @@ public class SecurityFilter implements Filter {
         // Write code here to process the request and/or response after
         // the rest of the filter chain is invoked.
         // For example, a logging filter might log the attributes on the
-        // request object after the request has been processed. 
-        /*
-	for (Enumeration en = request.getAttributeNames(); en.hasMoreElements(); ) {
-	    String name = (String)en.nextElement();
-	    Object value = request.getAttribute(name);
-	    log("attribute: " + name + "=" + value.toString());
-
-	}
-         */
-        // For example, a filter might append something to the response.
-        /*
-	PrintWriter respOut = new PrintWriter(response.getWriter());
-	respOut.println("<P><B>This has been appended by an intrusive filter.</B>");
-         */
+        // request object after the request has been processed.
     }
 
     /**
