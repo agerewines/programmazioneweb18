@@ -77,6 +77,7 @@ public class JDBCUserDAO extends JDBCDAO<User, Integer> implements UserDAO {
                 user.setFirstName(rs.getString("firstName"));
                 user.setLastName(rs.getString("lastName"));
                 user.setAvatar(rs.getString("avatar"));
+                user.setUuid(rs.getString("uuid"));
                 user.setActive(Boolean.getBoolean(rs.getString("active")));
                 user.setAdmin(Boolean.getBoolean(rs.getString("admin")));
                 return user;
@@ -139,6 +140,7 @@ public class JDBCUserDAO extends JDBCDAO<User, Integer> implements UserDAO {
                     user.setFirstName(rs.getString("firstName"));
                     user.setLastName(rs.getString("lastName"));
                     user.setAvatar(rs.getString("avatar"));
+                    user.setUuid(rs.getString("uuid"));
                     user.setActive(Boolean.getBoolean(rs.getString("active")));
                     user.setAdmin(Boolean.getBoolean(rs.getString("admin")));
                     users.add(user);
@@ -188,8 +190,9 @@ public class JDBCUserDAO extends JDBCDAO<User, Integer> implements UserDAO {
                 user.setFirstName(rs.getString("firstName"));
                 user.setLastName(rs.getString("lastName"));
                 user.setAvatar(rs.getString("avatar"));
-                user.setActive(Boolean.getBoolean(rs.getString("active")));
-                user.setAdmin(Boolean.getBoolean(rs.getString("admin")));
+                user.setUuid(rs.getString("uuid"));
+                user.setActive(rs.getBoolean("active"));
+                user.setAdmin(rs.getBoolean("admin"));
 
                 return user;
             }
@@ -233,8 +236,8 @@ public class JDBCUserDAO extends JDBCDAO<User, Integer> implements UserDAO {
             throw new DAOException("parameter not valid", new IllegalArgumentException("The passed user is null"));
         }
         if (!emailExists(user.getMail())) {
-            String insert = "INSERT INTO `User`(`firstName`, `lastName`, `mail`, `password`, `admin`, `active`)"
-                    + " VALUES (?,?,?,?,?,?)";
+            String insert = "INSERT INTO `User`(`firstName`, `lastName`, `mail`, `password`, `admin`, `active`, `uuid`)"
+                    + " VALUES (?,?,?,?,?,?,?)";
             try (PreparedStatement prepStm = CON.prepareStatement(insert, Statement.RETURN_GENERATED_KEYS)) {
                 prepStm.setString(1, user.getFirstName());
                 prepStm.setString(2, user.getLastName());
@@ -242,6 +245,7 @@ public class JDBCUserDAO extends JDBCDAO<User, Integer> implements UserDAO {
                 prepStm.setString(4, user.getPassword());
                 prepStm.setBoolean(5, user.isAdmin());
                 prepStm.setBoolean(6, user.isActive());
+                prepStm.setString(7, user.getUuid());
                 prepStm.executeUpdate();
                 try (ResultSet rs = prepStm.getGeneratedKeys()) {
                     if (rs.next()) {
@@ -277,18 +281,19 @@ public class JDBCUserDAO extends JDBCDAO<User, Integer> implements UserDAO {
             throw new DAOException("User null, not valid.", new IllegalArgumentException("User null."));
         }
 
-        try (PreparedStatement prepStm = CON.prepareStatement("UPDATE `User` SET `mail` = ?, `password` = ?, `firstName` = ?, `lastName` = ?, `avatar` = ?, `active` = ? WHERE `id` = ?")) {
+        try (PreparedStatement prepStm = CON.prepareStatement("UPDATE `User` SET `mail` = ?, `password` = ?, `firstName` = ?, `lastName` = ?, `avatar` = ?, `active` = ?, `uuid` = ? WHERE `id` = ?")) {
             prepStm.setString(1, user.getMail());
             prepStm.setString(2, user.getPassword());
             prepStm.setString(3, user.getFirstName());
             prepStm.setString(4, user.getLastName());
             prepStm.setString(5, user.getAvatar());
             prepStm.setBoolean(6, user.isActive());
-            prepStm.setInt(7, user.getId());
+            prepStm.setString(7, user.getUuid());
+            prepStm.setInt(8, user.getId());
             if (prepStm.executeUpdate() == 1) {
                 return user;
             } else {
-                throw new DAOException("Error while updating the user");
+                throw new DAOException("Error while saving the user");
             }
         } catch (SQLException ex) {
             throw new DAOException("Error while updating the user!", ex);
@@ -354,6 +359,70 @@ public class JDBCUserDAO extends JDBCDAO<User, Integer> implements UserDAO {
         }
 
         return ret;
+    }
+
+    /**
+     * Checks to see if an {@link User user } is administrator
+     * @param user {@link User user} to check.
+     * @return 0 if user is not administrator.
+     * @throws DAOException if an error occurs during the operation.
+     */
+    @Override
+    public Integer checkStatus(User user) throws DAOException{
+        if(user == null)
+            throw new DAOException("parameter not valid", new IllegalArgumentException("The passed user is null"));
+
+        Integer status = null;
+        String query = "SELECT admin FROM User WHERE id = ?";
+        try(PreparedStatement pstm = CON.prepareStatement(query)){
+            pstm.setInt(1, user.getId());
+            try(ResultSet rs = pstm.executeQuery()){
+                if(rs.next())
+                    return status = rs.getInt(1);
+            }
+        } catch (SQLException ex) {
+            throw new DAOException("Could not retrieve id.", ex);
+        }
+        return status;
+    }
+
+    /**
+     * Gets the {@code User} associated with the unique {@code salt}
+     * @param uuid the {@link String uuid} used to retrieve the {@code User}
+     * @return the user that has the uuid
+     * @throws DAOException if an error occurred during the operation.
+     */
+    @Override
+    public User getByUuid(String uuid) throws DAOException{
+        if(uuid == null){
+            throw new DAOException("parameter not valid", new IllegalArgumentException("The passed salt is null"));
+        }
+        String query = "SELECT * From User WHERE uuid = ?";
+        try(PreparedStatement pstm = CON.prepareStatement(query)){
+            pstm.setString(1, uuid);
+
+            try(ResultSet rs = pstm.executeQuery()){
+
+                if(rs.next()){
+                    User user = new User();
+                    user.setId(rs.getInt("id"));
+                    user.setMail(rs.getString("mail"));
+                    user.setPassword(rs.getString("password"));
+                    user.setFirstName(rs.getString("firstName"));
+                    user.setLastName(rs.getString("lastName"));
+                    user.setAvatar(rs.getString("avatar"));
+                    user.setUuid(rs.getString("uuid"));
+                    user.setActive(rs.getBoolean("active"));
+                    user.setAdmin(rs.getBoolean("admin"));
+
+                    return user;
+
+                }
+            }
+            return null;
+        } catch (SQLException ex) {
+            throw new DAOException("Could not retrieve user", ex);
+        }
     }
 
     @Override

@@ -22,5 +22,6 @@
 </c:choose>
 
 Benvenuto su ShoppingLesto - Home
+<a href="login.jsp">Login</a>
 </body>
 </html>

@@ -87,4 +87,20 @@ public interface UserDAO extends DAO<User, Integer> {
      * @throws DAOException if an error occurs during the operation.
      */
     public Integer deleteActKey(User user) throws DAOException;
+
+    /**
+     * Checks to see if an {@link User user } is administrator
+     * @param user {@link User user} to check.
+     * @return 0 if user is not administrator.
+     * @throws DAOException if an error occurs during the operation.
+     */
+    public Integer checkStatus(User user) throws DAOException;
+
+    /**
+     * Gets the {@code User} associated with the unique {@code salt}
+     * @param salt the {@link String salt} used to retrieve the {@code User}
+     * @return the user that has the salt
+     * @throws DAOException if an error occurred during the operation.
+     */
+    public User getByUuid(String salt) throws DAOException;
 }

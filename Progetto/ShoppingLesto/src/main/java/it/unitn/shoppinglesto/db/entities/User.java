@@ -18,6 +18,7 @@ public class User implements Serializable {
 
     private String mail, firstName, lastName, avatar;
     private String password; // Cripted
+    private String uuid;
     private boolean active, admin;
 
     public User() {
@@ -25,7 +26,7 @@ public class User implements Serializable {
         this.admin = false;
     }
 
-    public User(Integer id, String mail, String firstName, String lastName, String avatar, String password) {
+    public User(Integer id, String mail, String firstName, String lastName, String avatar, String password, String uuid) {
         super();
         this.id = id;
         this.mail = mail;
@@ -35,6 +36,7 @@ public class User implements Serializable {
         this.password = password;
         this.active = false;
         this.admin = false;
+        this.uuid = uuid;
     }
 
     public User(Integer id, String mail, String firstName, String lastName, String password) {
@@ -46,6 +48,7 @@ public class User implements Serializable {
         this.password = password;
         this.active = false;
         this.admin = false;
+        this.uuid = null;
     }
     public Integer getId() {
         return id;
@@ -114,5 +117,14 @@ public class User implements Serializable {
     public String getFullName(){
         return this.firstName + " " + this.lastName;
     }
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
+
 
 }
