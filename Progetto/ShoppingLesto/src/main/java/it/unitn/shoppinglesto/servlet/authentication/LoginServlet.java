@@ -137,7 +137,7 @@ public class LoginServlet extends HttpServlet {
             rd.forward(request, response);
         } else {
             String message = "You are already logged in";
-            session.setAttribute("infoMessage", message);
+            session.setAttribute("errorMessage", message);
             response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath() + "/home"));
         }
     }

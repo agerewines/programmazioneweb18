@@ -89,7 +89,7 @@ public class HomeServlet extends HttpServlet {
             }
 
         }*/
-        dispatchPath = "/WEB-INF/views/home.jsp";
+        dispatchPath = "/WEB-INF/views/index.jsp";
         RequestDispatcher rd = request.getRequestDispatcher(dispatchPath);
         rd.forward(request, response);
     }
