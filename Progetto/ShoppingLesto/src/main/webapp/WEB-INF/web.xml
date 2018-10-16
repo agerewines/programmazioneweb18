@@ -56,6 +56,10 @@
         <servlet-name>LoginServlet</servlet-name>
         <servlet-class>it.unitn.shoppinglesto.servlet.authentication.LoginServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>LogoutServlet</servlet-name>
+        <servlet-class>it.unitn.shoppinglesto.servlet.authentication.LogoutServlet</servlet-class>
+    </servlet>
     <listener>
         <description>ServletContextListener</description>
         <listener-class>it.unitn.shoppinglesto.listeners.WebAppContextListener</listener-class>
@@ -83,6 +87,10 @@
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
         <url-pattern>/login</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LogoutServlet</servlet-name>
+        <url-pattern>/logout</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

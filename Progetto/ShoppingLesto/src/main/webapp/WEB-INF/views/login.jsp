@@ -14,12 +14,12 @@
 </head>
 
 <body>
-<p style="color: red;">${message}</p><br/>
+<p style="color: red;">${errorMessage}</p><br/>
 <form method="POST" action="${pageContext.request.contextPath}/login">
     <table border="0">
         <tr>
             <td>Email</td>
-            <td><input type="email" name="email" value= "${user.email}" /> </td>
+            <td><input type="email" name="email" value= "${user.mail}" /> </td>
         </tr>
         <tr>
             <td>Password</td>

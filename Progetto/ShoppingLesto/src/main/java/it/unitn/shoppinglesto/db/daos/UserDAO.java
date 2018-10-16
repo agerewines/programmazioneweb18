@@ -103,4 +103,12 @@ public interface UserDAO extends DAO<User, Integer> {
      * @throws DAOException if an error occurred during the operation.
      */
     public User getByUuid(String salt) throws DAOException;
+
+    /**
+     * Deletes remember token used for the remember me feature when the user logs out.
+     * @param user the {@link User user} whose token will be deleted.
+     * @return the result of the delete operation.
+     * @throws DAOException if an error occurs during the operation.
+     */
+    public Integer deleteUuidToken(User user) throws DAOException;
 }
