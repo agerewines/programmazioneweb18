@@ -426,6 +426,22 @@ public class JDBCUserDAO extends JDBCDAO<User, Integer> implements UserDAO {
     }
 
     @Override
+    public Integer deleteUuidToken(User user) throws DAOException {
+        if(user == null)
+            throw new DAOException("User not valid", new IllegalArgumentException("The passed user is null"));
+        String operation = "UPDATE User SET uuid = ? WHERE id = ?";
+        Integer res = null;
+        try(PreparedStatement pstm = CON.prepareStatement(operation)){
+            pstm.setString(1, null);
+            pstm.setInt(2, user.getId());
+            res = pstm.executeUpdate();
+        } catch (SQLException ex) {
+            throw new DAOException("Could not delete remember me token.", ex);
+        }
+        return res;
+    }
+
+    @Override
     public Integer delete(Integer primaryKey) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }

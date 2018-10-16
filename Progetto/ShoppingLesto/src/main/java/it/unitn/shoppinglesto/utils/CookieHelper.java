@@ -19,10 +19,10 @@ public class CookieHelper {
         cookieId.setMaxAge(24*60*60);
         cookieId.setPath("/");
         cookieId.setHttpOnly(true);
-        //cookieId.setSecure(true);
         response.addCookie(cookieId);
-
     }
+
+
 
     /**
      * Checks for the cookie containing the user's unique salt
@@ -39,5 +39,12 @@ public class CookieHelper {
 
         }
         return null;
+    }
+
+    public static void deleteUserCookie(HttpServletResponse response) {
+        Cookie cookieId = new Cookie(IDENTIFIER, null);
+        cookieId.setMaxAge(0);
+        cookieId.setPath("/");
+        response.addCookie(cookieId);
     }
 }
