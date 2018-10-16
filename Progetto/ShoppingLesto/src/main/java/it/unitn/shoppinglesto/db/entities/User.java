@@ -24,6 +24,7 @@ public class User implements Serializable {
     public User() {
         this.active = false;
         this.admin = false;
+        this.uuid = null;
     }
 
     public User(Integer id, String mail, String firstName, String lastName, String avatar, String password, String uuid) {

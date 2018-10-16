@@ -25,7 +25,7 @@ import java.util.logging.Logger;
  * @since 2018.03.31
  */
 public class JDBCDAOFactory implements DAOFactory {
-    private final String driver = "com.mysql.jdbc.Driver";
+    private final String driver = "com.mysql.cj.jdbc.Driver";
     private final transient Connection CON;
     private final transient HashMap<Class, DAO> DAO_CACHE;
     private static JDBCDAOFactory instance;
