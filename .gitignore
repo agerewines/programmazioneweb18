@@ -7,11 +7,7 @@
 # Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
 
 # User-specific stuff
-/Progetto/ShoppingLesto/.idea/**/workspace.xml
-/Progetto/ShoppingLesto/.idea/**/tasks.xml
-/Progetto/ShoppingLesto/.idea/**/usage.statistics.xml
-/Progetto/ShoppingLesto/.idea/**/dictionaries
-/Progetto/ShoppingLesto/.idea/**/shelf
+/Progetto/ShoppingLesto/.idea/
 
 # Generated files
 /Progetto/ShoppingLesto/.idea/**/contentModel.xml
@@ -45,6 +41,7 @@ cmake-build-*/
 
 # File-based project format
 *.iws
+*.iml
 
 # IntelliJ
 /Progetto/ShoppingLesto/out/
