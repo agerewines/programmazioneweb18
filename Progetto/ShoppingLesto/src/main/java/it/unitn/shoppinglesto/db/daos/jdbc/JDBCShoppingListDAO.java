@@ -7,6 +7,7 @@
 package it.unitn.shoppinglesto.db.daos.jdbc;
 
 import it.unitn.shoppinglesto.db.daos.ShoppingListDAO;
+import it.unitn.shoppinglesto.db.daos.UserDAO;
 import it.unitn.shoppinglesto.db.entities.ShoppingList;
 import it.unitn.shoppinglesto.db.entities.User;
 import it.unitn.shoppinglesto.db.exceptions.DAOException;
@@ -24,7 +25,6 @@ import java.util.List;
  * @author alessandrogerevini
  */
 public class JDBCShoppingListDAO extends JDBCDAO<ShoppingList, Integer> implements ShoppingListDAO {
-    
 
     public JDBCShoppingListDAO(Connection con) {
         super(con);
@@ -219,7 +219,7 @@ public class JDBCShoppingListDAO extends JDBCDAO<ShoppingList, Integer> implemen
         return shoppingLists;
     }
 
-    private void getLists(List<ShoppingList> shoppingLists, PreparedStatement stm) throws SQLException {
+    private void getLists(List<ShoppingList> shoppingLists, PreparedStatement stm) throws SQLException, DAOException {
         try (ResultSet rs = stm.executeQuery()) {
             while (rs.next()) {
                 ShoppingList shoppingList = new ShoppingList();
@@ -227,9 +227,41 @@ public class JDBCShoppingListDAO extends JDBCDAO<ShoppingList, Integer> implemen
                 shoppingList.setName(rs.getString("name"));
                 shoppingList.setDescription(rs.getString("description"));
                 shoppingList.setCategoryId(rs.getInt("category_id"));
-                shoppingList.setCategoryId(rs.getInt("user_id"));
+                shoppingList.setUserId(rs.getInt("user_id"));
+                shoppingList.setUser(getUserAssociatedToList(rs.getInt("user_id")));
                 shoppingLists.add(shoppingList);
             }
+        }
+    }
+
+    private User getUserAssociatedToList(Integer id) throws DAOException {
+        if (id == null) {
+            throw new DAOException("Id is null");
+        }
+        try (PreparedStatement stm = CON.prepareStatement("SELECT * FROM User WHERE id= ?")) {
+            stm.setInt(1, id);
+            User user = new User();
+            try (ResultSet rs = stm.executeQuery()) {
+                int count = 0;
+                while (rs.next()) {
+                    count++;
+                    if (count > 1) {
+                        throw new DAOException("Unique constraint violated! There are more than one user with the same email! WHY???");
+                    }
+                    user.setId(rs.getInt("id"));
+                    user.setMail(rs.getString("mail"));
+                    user.setPassword(rs.getString("password"));
+                    user.setFirstName(rs.getString("firstName"));
+                    user.setLastName(rs.getString("lastName"));
+                    user.setAvatar(rs.getString("avatar"));
+                    user.setUuid(rs.getString("uuid"));
+                    user.setActive(rs.getBoolean("active"));
+                    user.setAdmin(rs.getBoolean("admin"));
+                }
+            }
+            return user;
+        } catch (SQLException ex) {
+            throw new DAOException("Impossible to get the list of users", ex);
         }
     }
 
@@ -245,8 +277,10 @@ public class JDBCShoppingListDAO extends JDBCDAO<ShoppingList, Integer> implemen
             throw new DAOException("parameter not valid", new IllegalArgumentException("The passed user is null."));
         }
         // Find all list listed in List table
+        List<ShoppingList> shoppingLists = new ArrayList<>();
+        shoppingLists.addAll(getByUserId(user.getId()));
         // Find all list listed in UserList table
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return shoppingLists;
 
     }
 

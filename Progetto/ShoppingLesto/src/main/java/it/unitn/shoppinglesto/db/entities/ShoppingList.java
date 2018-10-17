@@ -14,17 +14,19 @@ public class ShoppingList {
     private String name, description, image;
     private int categoryId; // chiave esterna per la categoria di lista
     private int userId; // chiave esterna per la mail dell'utente
+    private User user;
 
     public ShoppingList() {
     }
 
-    public ShoppingList(int id, String name, String description, String image, int categoryId, int userId) {
+    public ShoppingList(int id, String name, String description, String image, int categoryId, int userId, User user) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.image = image;
         this.categoryId = categoryId;
         this.userId = userId;
+        this.user = user;
     }
 
     public int getCategoryId() {
@@ -74,5 +76,10 @@ public class ShoppingList {
     public void setImage(String image) {
         this.image = image;
     }
-    
+
+    public User getUser(){
+        return user;
+    }
+
+    public void setUser(User user){ this.user = user; }
 }

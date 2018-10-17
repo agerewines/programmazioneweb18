@@ -57,13 +57,13 @@ public class HomeServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session = request.getSession();
+        HttpSession session = request.getSession(false);
         User user = (User) session.getAttribute("user");
         String dispatchPath = null;
-        /*if (user == null) {
+        if (user == null) {
             String uuidStr = UtilityHelper.getCookieValue(request, TEMPLISTCOOKIENAME);
 
-            if (uuidStr != null) {
+            /*if (uuidStr != null) {
                 try {
                     ShoppingList list = shoppingListDAO.getTemporaryList(uuidStr);
                     request.setAttribute("shoppingList", list); //maybe should change it to session.
@@ -71,8 +71,8 @@ public class HomeServlet extends HttpServlet {
                 } catch (DAOException ex) {
                     response.sendError(500, ex.getMessage()); //gives error if cookie present but db record is cancelled.
                 }
-            }
-            dispatchPath = "/WEB-INF/views/home.jsp";
+            }*/
+            dispatchPath = "/WEB-INF/views/index.jsp";
         } else {
             if (user.isAdmin()) {
                 dispatchPath = "/WEB-INF/views/adminViews/adminHome.jsp";
@@ -88,10 +88,11 @@ public class HomeServlet extends HttpServlet {
                 dispatchPath = "/WEB-INF/views/home.jsp";
             }
 
-        }*/
-        dispatchPath = "/WEB-INF/views/index.jsp";
-        RequestDispatcher rd = request.getRequestDispatcher(dispatchPath);
-        rd.forward(request, response);
+        }
+        if(!response.isCommitted()) {
+            RequestDispatcher rd = request.getRequestDispatcher(dispatchPath);
+            rd.forward(request, response);
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

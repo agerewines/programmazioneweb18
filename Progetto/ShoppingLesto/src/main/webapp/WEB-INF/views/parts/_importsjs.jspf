@@ -12,3 +12,6 @@
 
 <!-- Custom scripts for this template -->
 <script src="${pageContext.request.contextPath}/assets/js/agency.min.js"></script>
+<script>
+    $("#errorModal").modal('show');
+</script>

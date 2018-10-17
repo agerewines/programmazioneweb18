@@ -26,7 +26,7 @@
     <div class="row">
         <div class="col">
         </div>
-        <div class="col-6" style="margin:7%;">
+        <div class="col-6">
             <h2>Register</h2>
             <%@include file="parts/_navigation.jspf" %>
             <c:if test="${not empty errorMessage}">

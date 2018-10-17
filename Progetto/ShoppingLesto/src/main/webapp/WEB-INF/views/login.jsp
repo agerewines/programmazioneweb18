@@ -25,15 +25,14 @@
 <body id="page-top">
 
 <%@include file="parts/_navigation.jspf" %>
+<%@include file="parts/_errors.jspf" %>
+
 <div class="container-fluid">
     <div class="row">
         <div class="col">
         </div>
-        <div class="col-6"  style="margin:7%;">
+        <div class="col-6">
             <h2>Login</h2>
-            <c:if test="${not empty errorMessage}">
-                <p style="color: red;">${errorMessage}</p><br/>
-            </c:if>
             <form  method="POST" action="${pageContext.request.contextPath}/login">
                 <div class="form-group">
                     <label for="email">Email address</label>

@@ -115,6 +115,19 @@ public class JDBCUserDAO extends JDBCDAO<User, Integer> implements UserDAO {
         }
     }
 
+    @Override
+    public User getById(Integer id) throws DAOException {
+        if (id == null) {
+            throw new DAOException("Id is null");
+        }
+        try (PreparedStatement stm = CON.prepareStatement("SELECT * FROM User WHERE id= ?")) {
+            stm.setInt(1, id);
+            return getUser(stm);
+        } catch (SQLException ex) {
+            throw new DAOException("Impossible to get the list of users", ex);
+        }
+    }
+
     /**
      * Returns the list of all the valid {@link User users} stored by the
      * storage system.

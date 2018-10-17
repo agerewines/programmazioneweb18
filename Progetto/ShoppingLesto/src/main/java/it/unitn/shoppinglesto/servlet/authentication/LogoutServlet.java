@@ -60,7 +60,7 @@ public class LogoutServlet extends HttpServlet {
             }
         }
 
-        response.sendRedirect(getServletContext().getContextPath() + "/home");
+        response.sendRedirect(getServletContext().getContextPath() + "/");
 
 
     }

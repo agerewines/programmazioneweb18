@@ -35,8 +35,20 @@ public interface UserDAO extends DAO<User, Integer> {
      * Returns the {@link User user} with the given {@code email} and
      * {@code password}.
      *
-     * @param email the email of the user to get.
-     * @param password the password of the user to get.
+     * @param id the id of the user to get.
+     * @return the {@link User user} with the given {@code username} and
+     * {@code password}..
+     * @throws DAOException if an error occurred during the information
+     * retrieving.
+     *
+     */
+    public User getById(Integer id) throws DAOException;
+
+    /**
+     * Returns the {@link User user} with the given {@code email} and
+     * {@code password}.
+     *
+     * @param mail the email of the user to get.
      * @return the {@link User user} with the given {@code username} and
      * {@code password}..
      * @throws DAOException if an error occurred during the information
@@ -48,7 +60,7 @@ public interface UserDAO extends DAO<User, Integer> {
     /**
      * Checks whether an {@code mail} exists in the database.
      *
-     * @param email the {@code mail} to check.
+     * @param mail the {@code mail} to check.
      * @return true if the email passed as parameter exists in the database, if
      * not false.
      * @throws DAOException if an error occurred during the operation.
