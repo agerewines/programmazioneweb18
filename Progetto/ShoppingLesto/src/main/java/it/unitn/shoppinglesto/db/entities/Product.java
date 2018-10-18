@@ -12,16 +12,29 @@ package it.unitn.shoppinglesto.db.entities;
 public class Product {
     private int prodId; //chiave primaria di un prodotto
     private String name, description, logo;
-    private int listId; //chiave esterna se il prodotto é in una lista // NOTA BENE FORSE É SBAGLIATO
     private int categoryId; // chiave esterna per la categoria
+    private boolean custom;
 
-    public Product(int prodId, String name, String description, String logo, int listId, int categoryId) {
+    public Product(){
+        this.custom = false;
+    }
+
+    public Product(int prodId, String name, String description, int categoryId){
+        this.prodId = prodId;
+        this.name = name;
+        this.description = description;
+        this.logo = null;
+        this.categoryId = categoryId;
+        this.custom = false;
+    }
+
+    public Product(int prodId, String name, String description, String logo, int categoryId, boolean custom) {
         this.prodId = prodId;
         this.name = name;
         this.description = description;
         this.logo = logo;
-        this.listId = listId;
         this.categoryId = categoryId;
+        this.custom = custom;
     }
 
     public int getProdId() {
@@ -56,14 +69,6 @@ public class Product {
         this.logo = logo;
     }
 
-    public int getListId() {
-        return listId;
-    }
-
-    public void setListId(int listId) {
-        this.listId = listId;
-    }
-
     public int getCategoryId() {
         return categoryId;
     }
@@ -71,6 +76,13 @@ public class Product {
     public void setCategoryId(int categoryId) {
         this.categoryId = categoryId;
     }
-    
-    
+
+    public boolean isCustom() {
+        return custom;
+    }
+
+    public void setCustom(boolean custom) {
+        this.custom = custom;
+    }
+
 }

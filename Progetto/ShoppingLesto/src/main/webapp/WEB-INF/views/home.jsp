@@ -33,7 +33,7 @@
             <h2>Lists</h2>
             <div class="list-group">
                 <c:forEach items="${userLists}" var="list">
-                    <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+                    <a href="${pageContext.request.contextPath}/list?id=${list.id}" class="list-group-item list-group-item-action flex-column align-items-start">
                         <div class="d-flex w-100 justify-content-between">
                             <h5 class="mb-1">${list.name}</h5>
                             <small>${list.user.firstName} ${list.user.lastName}</small>
@@ -45,6 +45,7 @@
             </div>
         </div>
         <div class="col">
+            <button type="button" class="btn btn-outline-primary" href="${pageContext.request.contextPath}/">Add new list</button>
         </div>
     </div>
 </div>

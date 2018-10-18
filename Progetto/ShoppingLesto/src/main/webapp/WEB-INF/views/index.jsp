@@ -22,7 +22,7 @@
 <!-- Navigation -->
 <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
     <div class="container">
-        <a class="navbar-brand js-scroll-trigger" href="#page-top">ShoppingLesto</a>
+        <a class="navbar-brand js-scroll-trigger" href="${pageContext.request.contextPath}/home">ShoppingLesto</a>
         <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
                 data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false"
                 aria-label="Toggle navigation">
@@ -43,11 +43,11 @@
             <div class="intro-heading text-uppercase">Benvenuto su ShoppingLesto</div>
             <div class="intro-lead-in">Compri male ma compri presto</div>
             <a class="btn btn-primary btn-xl text-uppercase js-scroll-trigger" style="margin: 1%"
-               href="<c:url value="/login"/>">Login</a>
+               href="${pageContext.request.contextPath}/login">Login</a>
             <a class="btn btn-primary btn-xl text-uppercase js-scroll-trigger" style="margin: 1%"
-               href="<c:url value="/register"/>">Register</a>
+               href="${pageContext.request.contextPath}/register">Register</a>
             <a class="btn btn-primary btn-xl text-uppercase js-scroll-trigger" style="margin: 1%"
-               href="<c:url value="/home"/>">Anonimo</a>
+               href="${pageContext.request.contextPath}/home">Anonimo</a>
         </div>
     </div>
 </header>
