@@ -26,11 +26,13 @@
 
 <%@include file="parts/_navigation.jspf" %>
 <%@include file="parts/_errors.jspf" %>
+
 <div class="container-fluid">
     <div class="row justify-content-md-center">
         <div class="col">
         </div>
         <div class="col-md-8">
+            <%@include file="parts/_successMessage.jspf" %>
             <h2>
                 <ul class="list-inline">
                     <li class="list-inline-item">List: </li>

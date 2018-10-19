@@ -39,6 +39,7 @@
     <filter-mapping>
         <filter-name>AuthenticationFilter</filter-name>
         <url-pattern>/home</url-pattern>
+        <url-pattern>/user/profile</url-pattern>
     </filter-mapping>
     <servlet>
         <servlet-name>UsersListServlet</servlet-name>
@@ -75,6 +76,10 @@
     <servlet>
         <servlet-name>IndexServlet</servlet-name>
         <servlet-class>it.unitn.shoppinglesto.servlet.IndexServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>UserProfileServlet</servlet-name>
+        <servlet-class>it.unitn.shoppinglesto.servlet.UserProfileServlet</servlet-class>
     </servlet>
     <listener>
         <description>ServletContextListener</description>
@@ -116,7 +121,10 @@
         <servlet-name>IndexServlet</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>
-
+    <servlet-mapping>
+        <servlet-name>UserProfileServlet</servlet-name>
+        <url-pattern>/user/profile</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             30

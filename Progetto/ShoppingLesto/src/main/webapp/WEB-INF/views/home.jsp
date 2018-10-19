@@ -25,11 +25,13 @@
 <body id="page-top">
 <%@include file="parts/_navigation.jspf" %>
 <%@include file="parts/_errors.jspf" %>
+
 <div class="container-fluid">
     <div class="row justify-content-md-center">
         <div class="col">
         </div>
         <div class="col-md-8">
+            <%@include file="parts/_successMessage.jspf" %>
             <h2>Lists</h2>
             <div class="list-group">
                 <c:forEach items="${userLists}" var="list">
