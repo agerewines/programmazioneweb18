@@ -37,7 +37,7 @@
             </div>
             <div class="form-group">
                 <label for="image">Immagine</label>
-                <input type="text" class="form-control">
+                <input type="file" class="form-control-file">
             </div>
             <button type="submit" class="btn btn-primary">Crea lista</button>
         </form>
