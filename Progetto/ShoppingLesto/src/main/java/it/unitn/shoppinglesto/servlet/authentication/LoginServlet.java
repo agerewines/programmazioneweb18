@@ -114,7 +114,7 @@ public class LoginServlet extends HttpServlet {
             if(status != null && !status.equals(0))
                 user.setAdmin(true);
             session.setAttribute("user", user);
-            session.setAttribute("welcomeMessage", message);
+            session.setAttribute("successMessage", message);
             response.sendRedirect(response.encodeRedirectURL(returnUrl));
 
         }

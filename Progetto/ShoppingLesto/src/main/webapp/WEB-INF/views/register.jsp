@@ -51,7 +51,6 @@
                         <input type="email" class="form-control" id="mail" placeholder="Email" name="mail"
                                value="${mail}">
                     </div>
-
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-5">
