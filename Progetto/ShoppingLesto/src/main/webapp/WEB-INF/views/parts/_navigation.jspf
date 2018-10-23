@@ -20,7 +20,6 @@
                             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                                 <a class="dropdown-item" href="${pageContext.request.contextPath}/user/profile">Your account</a>
                                 <a class="dropdown-item" href="${pageContext.request.contextPath}/logout">Logout</a>
-                                <a class="dropdown-item" href="#">Something else here</a>
                             </div>
                         </li>
                     </c:when>

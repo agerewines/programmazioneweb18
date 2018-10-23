@@ -5,6 +5,9 @@
  */
 package it.unitn.shoppinglesto.db.entities;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author alessandrogerevini
@@ -14,6 +17,7 @@ public class Product {
     private String name, description, logo;
     private int categoryId; // chiave esterna per la categoria
     private boolean custom;
+    private List<String> imagePaths;
 
     public Product(){
         this.custom = false;
@@ -35,6 +39,7 @@ public class Product {
         this.logo = logo;
         this.categoryId = categoryId;
         this.custom = custom;
+        this.imagePaths = new ArrayList<>();
     }
 
     public int getProdId() {
@@ -85,4 +90,11 @@ public class Product {
         this.custom = custom;
     }
 
+    public List<String> getImagePaths() {
+        return imagePaths;
+    }
+
+    public void setImagePaths(List<String> imagePaths) {
+        this.imagePaths = imagePaths;
+    }
 }

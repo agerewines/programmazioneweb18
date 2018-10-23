@@ -50,7 +50,7 @@ public class UtilityHelper {
         return null;
     }
 
-    public static String renameImageToOwner(String originalName, String newName){
+    public static String renameImage(String originalName, String newName){
         return newName + originalName.substring(originalName.lastIndexOf(".", originalName.length()));
     }
 

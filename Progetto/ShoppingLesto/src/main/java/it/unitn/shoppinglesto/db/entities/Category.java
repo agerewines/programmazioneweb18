@@ -3,7 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package it.unitn.shoppinglesto.db;
+package it.unitn.shoppinglesto.db.entities;
+
+import java.util.List;
 
 /**
  *
@@ -11,16 +13,17 @@ package it.unitn.shoppinglesto.db;
  */
 public class Category {
     private int id;
-    private String name, description, image;
+    private String name, description;
+    private List<String> photo;
 
     public Category() {
     }
 
-    public Category(int id, String name, String description, String image) {
+    public Category(int id, String name, String description, List<String> photo) {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.image = image;
+        this.photo = photo;
     }
 
     public int getId() {
@@ -47,14 +50,11 @@ public class Category {
         this.description = description;
     }
 
-    public String getImage() {
-        return image;
+    public List<String> getPhoto() {
+        return photo;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setPhoto(List<String> photo) {
+        this.photo = photo;
     }
-    
-    
-    
 }

@@ -16,6 +16,11 @@
         <param-name>smtp-password</param-name>
         <param-value>wxosbrxukguhigey</param-value>
     </context-param>
+    <context-param>
+        <description>The folder where avatars are stored</description>
+        <param-name>avatarsFolder</param-name>
+        <param-value>webapps/images/avatars/</param-value>
+    </context-param>
     <filter>
         <filter-name>SecurityFilter</filter-name>
         <filter-class>it.unitn.shoppinglesto.filters.SecurityFilter</filter-class>
@@ -74,12 +79,20 @@
         <servlet-class>it.unitn.shoppinglesto.servlet.lists.ShowListServlet</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>NewListServlet</servlet-name>
+        <servlet-class>it.unitn.shoppinglesto.servlet.lists.NewListServlet</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>IndexServlet</servlet-name>
         <servlet-class>it.unitn.shoppinglesto.servlet.IndexServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>UserProfileServlet</servlet-name>
         <servlet-class>it.unitn.shoppinglesto.servlet.UserProfileServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ImageServlet</servlet-name>
+        <servlet-class>it.unitn.shoppinglesto.servlet.ImageServlet</servlet-class>
     </servlet>
     <listener>
         <description>ServletContextListener</description>
@@ -124,6 +137,14 @@
     <servlet-mapping>
         <servlet-name>UserProfileServlet</servlet-name>
         <url-pattern>/user/profile</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ImageServlet</servlet-name>
+        <url-pattern>/images</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>NewListServlet</servlet-name>
+        <url-pattern>/list/new</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

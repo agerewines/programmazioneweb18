@@ -26,6 +26,7 @@
 
 <%@include file="parts/_navigation.jspf" %>
 <%@include file="parts/_errors.jspf" %>
+
 <div class="container-fluid">
     <div class="row justify-content-md-center">
         <div class="col">
@@ -33,11 +34,11 @@
         <div class="col-md-8">
             <%@include file="parts/_successMessage.jspf" %>
             <h2>
-                Your account <a href="#" class="badge badge-primary">Modify</a>
+                Your account
             </h2>
             <div class="row">
                 <div class="col-4">
-                    Avatar: ${user.avatar}
+                    Avatar:
                 </div>
                 <div class="col-4">
                     Nome:
@@ -48,6 +49,7 @@
             </div>
             <div class="row">
                 <div class="col-4">
+                    <img id="profilePic" height="195" width="195" src="${pageContext.request.contextPath}/images?id=${user.id}&resource=user" onerror="this.onerror=null;this.src='${pageContext.request.contextPath}/images/avatars/Users/default.jpeg';"/>
                 </div>
                 <div class="col-4">
                     Cognome:
@@ -68,23 +70,23 @@
             </div>
 
             <h2>Modifica</h2>
-            <form action="${pageContext.request.contextPath}/user/profile" method="POST">
+            <form action="${pageContext.request.contextPath}/user/profile" method="POST" enctype="multipart/form-data">
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <label for="firstName">First Name</label>
                         <input type="text" class="form-control" id="firstName" placeholder="First Name" name="firstName"
-                               value="${firstName}">
+                               value="${user.firstName}">
                     </div>
                     <div class="form-group col-md-6">
                         <label for="lastName">Last Name</label>
                         <input type="text" class="form-control" id="lastName" placeholder="Last Name" name="lastName"
-                               value="${lastName}">
+                               value="${user.lastName}">
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group  col-md-6">
                         <label for="avatar">Add your avatar</label>
-                        <input type="file" class="form-control-file" id="avatar">
+                        <input type="file" class="form-control-file" id="avatar" name="avatar">
                     </div>
                 </div>
                 <button type="submit" class="btn btn-primary">Modify</button>

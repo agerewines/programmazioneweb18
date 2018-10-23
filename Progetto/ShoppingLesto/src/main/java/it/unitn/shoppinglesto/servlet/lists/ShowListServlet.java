@@ -102,8 +102,7 @@ public class ShowListServlet extends HttpServlet {
         request.getSession().setAttribute("productsList", productList);
         //request.getSession().setAttribute("customProductsOfList", customproductList);
 
-        RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/list.jsp");
-        rd.forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/views/list.jsp").forward(request, response);
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

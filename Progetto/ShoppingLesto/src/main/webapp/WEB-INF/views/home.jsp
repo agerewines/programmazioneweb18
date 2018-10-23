@@ -32,10 +32,20 @@
         </div>
         <div class="col-md-8">
             <%@include file="parts/_successMessage.jspf" %>
-            <h2>Lists</h2>
+
+            <h2>
+                <ul class="list-inline">
+                    <li class="list-inline-item">Lists</li>
+                    <li class="list-inline-item"><a class="btn btn-primary"
+                                                    href="${pageContext.request.contextPath}/list/new">Add new list</a>
+                    </li>
+                </ul>
+            </h2>
+
             <div class="list-group">
                 <c:forEach items="${userLists}" var="list">
-                    <a href="${pageContext.request.contextPath}/list?id=${list.id}" class="list-group-item list-group-item-action flex-column align-items-start">
+                    <a href="${pageContext.request.contextPath}/list?id=${list.id}"
+                       class="list-group-item list-group-item-action flex-column align-items-start">
                         <div class="d-flex w-100 justify-content-between">
                             <h5 class="mb-1">${list.name}</h5>
                             <small>${list.user.firstName} ${list.user.lastName}</small>
@@ -47,7 +57,7 @@
             </div>
         </div>
         <div class="col">
-            <button type="button" class="btn btn-outline-primary" href="${pageContext.request.contextPath}/">Add new list</button>
+
         </div>
     </div>
 </div>
