@@ -47,10 +47,15 @@
                     <a href="${pageContext.request.contextPath}/list?id=${list.id}"
                        class="list-group-item list-group-item-action flex-column align-items-start">
                         <div class="d-flex w-100 justify-content-between">
-                            <h5 class="mb-1">${list.name}</h5>
-                            <small>${list.user.firstName} ${list.user.lastName}</small>
+                            <div class="media">
+                                <img id="listPic" class="align-self-center mr-3 rounded" height="64" width="64" src="${pageContext.request.contextPath}/images?id=${list.id}&resource=shoppingLists" onerror="this.onerror=null;this.src='${pageContext.request.contextPath}/images/avatars/Lists/default.png';"/>
+                                <div class="media-body">
+                                    <h5 class="mb-1">${list.name}</h5>
+                                    <p class="mb-1">${list.description}</p>
+                                </div>
+                            </div>
+                            <small>${list.user.fullName}</small>
                         </div>
-                        <p class="mb-1">${list.description}</p>
                         <small></small>
                     </a>
                 </c:forEach>

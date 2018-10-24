@@ -82,8 +82,8 @@ public class JDBCShoppingListDAO extends JDBCDAO<ShoppingList, Integer> implemen
                 shoppingList.setName(rs.getString("name"));
                 shoppingList.setDescription(rs.getString("description"));
                 shoppingList.setCategoryId(rs.getInt("category_id"));
-                shoppingList.setCategoryId(rs.getInt("user_id"));
-
+                shoppingList.setUserId(rs.getInt("user_id"));
+                shoppingList.setImage(rs.getString("image"));
                 return shoppingList;
             }
         } catch (SQLException ex) {
@@ -114,7 +114,7 @@ public class JDBCShoppingListDAO extends JDBCDAO<ShoppingList, Integer> implemen
                     shoppingList.setDescription(rs.getString("description"));
                     shoppingList.setCategoryId(rs.getInt("category_id"));
                     shoppingList.setCategoryId(rs.getInt("user_id"));
-
+                    shoppingList.setImage(rs.getString("image"));
                     shoppingLists.add(shoppingList);
                 }
             }
@@ -222,6 +222,7 @@ public class JDBCShoppingListDAO extends JDBCDAO<ShoppingList, Integer> implemen
                 ShoppingList shoppingList = new ShoppingList();
                 shoppingList.setId(rs.getInt("list_id"));
                 shoppingList.setName(rs.getString("name"));
+                shoppingList.setImage(rs.getString("image"));
                 shoppingList.setDescription(rs.getString("description"));
                 shoppingList.setCategoryId(rs.getInt("category_id"));
                 shoppingList.setUserId(rs.getInt("user_id"));
@@ -292,6 +293,28 @@ public class JDBCShoppingListDAO extends JDBCDAO<ShoppingList, Integer> implemen
             }
         } catch (SQLException ex) {
             throw new DAOException("Impossible to know if the user is in the list", ex);
+        }
+    }
+
+    @Override
+    public ShoppingList update(ShoppingList list) throws DAOException {
+        if(list == null){
+            throw new DAOException("list is null, not valid", new IllegalArgumentException("User null."));
+        }
+        try (PreparedStatement prepStm = CON.prepareStatement("UPDATE `List` SET `name` = ?, `description` = ?, `image` = ?, `user_id` = ?, `category_id` = ?  WHERE `list_id` = ?")) {
+            prepStm.setString(1, list.getName());
+            prepStm.setString(2, list.getDescription());
+            prepStm.setString(3, list.getImage());
+            prepStm.setInt(4, list.getUserId());
+            prepStm.setInt(5, list.getCategoryId());
+            prepStm.setInt(6,list.getId());
+            if (prepStm.executeUpdate() == 1) {
+                return list;
+            } else {
+                throw new DAOException("Error while saving the list");
+            }
+        } catch (SQLException ex) {
+            throw new DAOException("Error while updating the shopping list!", ex);
         }
     }
 

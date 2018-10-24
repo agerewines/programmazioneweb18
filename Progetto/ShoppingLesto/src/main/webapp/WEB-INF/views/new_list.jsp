@@ -55,8 +55,7 @@
                 <div class="form-row">
                     <div class="form-group col-md-12">
                         <label for="description">Description</label>
-                        <input type="text" class="form-control" id="description" placeholder="Description"
-                               name="description">
+                        <textarea class="form-control" id="description" rows="3" placeholder="Description">${list.description}</textarea>
                     </div>
                 </div>
                 <div class="form-row">

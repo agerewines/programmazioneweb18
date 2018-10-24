@@ -77,4 +77,14 @@ public interface ShoppingListDAO extends DAO<ShoppingList, Integer> {
      * @throws DAOException if an error occurs during the operation.
      */
     public boolean isUserInList(User user, ShoppingList shoppingList) throws DAOException;
+
+    /**
+     * Update the @{link ShoppingList list} passed as parameter and returns it.
+     *
+     * @param list the @{link ShoppingList list} used to update the persistence system.
+     * @return the updated list.
+     * @throws DAOException if an error occurred during the action.
+     *
+     */
+    public ShoppingList update(ShoppingList list) throws DAOException;
 }

@@ -15,6 +15,7 @@ public class ShoppingList {
     private Integer categoryId; // chiave esterna per la categoria di lista
     private Integer userId; // chiave esterna per la mail dell'utente
     private User user;
+    private Category category;
 
     public ShoppingList() {
     }
@@ -82,4 +83,12 @@ public class ShoppingList {
     }
 
     public void setUser(User user){ this.user = user; }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
 }

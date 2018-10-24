@@ -83,6 +83,10 @@
         <servlet-class>it.unitn.shoppinglesto.servlet.lists.NewListServlet</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>ModifyListServlet</servlet-name>
+        <servlet-class>it.unitn.shoppinglesto.servlet.lists.ModifyListServlet</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>IndexServlet</servlet-name>
         <servlet-class>it.unitn.shoppinglesto.servlet.IndexServlet</servlet-class>
     </servlet>
@@ -145,6 +149,10 @@
     <servlet-mapping>
         <servlet-name>NewListServlet</servlet-name>
         <url-pattern>/list/new</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ModifyListServlet</servlet-name>
+        <url-pattern>/list/modify</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

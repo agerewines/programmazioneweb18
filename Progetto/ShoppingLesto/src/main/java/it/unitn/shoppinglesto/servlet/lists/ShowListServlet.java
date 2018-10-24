@@ -1,8 +1,10 @@
 package it.unitn.shoppinglesto.servlet.lists;
 
+import it.unitn.shoppinglesto.db.daos.ListCategoryDAO;
 import it.unitn.shoppinglesto.db.daos.ProductDAO;
 import it.unitn.shoppinglesto.db.daos.ShoppingListDAO;
 import it.unitn.shoppinglesto.db.daos.UserDAO;
+import it.unitn.shoppinglesto.db.entities.Category;
 import it.unitn.shoppinglesto.db.entities.Product;
 import it.unitn.shoppinglesto.db.entities.ShoppingList;
 import it.unitn.shoppinglesto.db.entities.User;
@@ -11,6 +13,7 @@ import it.unitn.shoppinglesto.db.exceptions.DAOFactoryException;
 import it.unitn.shoppinglesto.db.factories.DAOFactory;
 import it.unitn.shoppinglesto.utils.CookieHelper;
 
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
@@ -28,6 +31,7 @@ public class ShowListServlet extends HttpServlet {
     private UserDAO userDAO;
     private ShoppingListDAO shoppingListDAO;
     private ProductDAO productDAO;
+    private ListCategoryDAO listCategoryDAO;
 
     @Override
     public void init() throws ServletException {
@@ -40,7 +44,11 @@ public class ShowListServlet extends HttpServlet {
         } catch (DAOFactoryException ex) {
             throw new ServletException("Impossible to get user dao from dao factory!", ex);
         }
-
+        try {
+            listCategoryDAO = daoFactory.getDAO(ListCategoryDAO.class);
+        } catch (DAOFactoryException ex) {
+            throw new ServletException("Impossible to get list category dao from dao factory!", ex);
+        }
         try {
             shoppingListDAO = daoFactory.getDAO(ShoppingListDAO.class);
         } catch (DAOFactoryException ex) {
@@ -71,6 +79,8 @@ public class ShowListServlet extends HttpServlet {
         if (user != null) {
             try {
                 list = shoppingListDAO.getByPrimaryKey(listId);
+                list.setUser(userDAO.getById(list.getUserId()));
+                list.setCategory(listCategoryDAO.getByPrimaryKey(list.getCategoryId()));
                 if (list == null) {
                     response.sendError(500, "There is no list selected!");
                     return;
@@ -100,6 +110,13 @@ public class ShowListServlet extends HttpServlet {
 
         request.getSession().setAttribute("list", list);
         request.getSession().setAttribute("productsList", productList);
+        List<Category> categories = new ArrayList<>();
+        try {
+            categories = listCategoryDAO.getAll();
+        } catch (DAOException e) {
+            e.printStackTrace();
+        }
+        request.setAttribute("listCategories", categories);
         //request.getSession().setAttribute("customProductsOfList", customproductList);
 
         request.getRequestDispatcher("/WEB-INF/views/list.jsp").forward(request, response);

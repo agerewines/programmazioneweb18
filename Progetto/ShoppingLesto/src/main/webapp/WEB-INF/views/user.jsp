@@ -17,7 +17,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>ShoppingLesto | User ${user.firstName} ${user.lastName}- Webprogramming18</title>
+    <title>ShoppingLesto | User ${user.fullName} - Webprogramming18</title>
 
     <%@include file="parts/_imports.jspf" %>
 
@@ -34,41 +34,18 @@
         <div class="col-md-8">
             <%@include file="parts/_successMessage.jspf" %>
             <h2>
-                Your account
+                ${user.fullName}
             </h2>
-            <div class="row">
-                <div class="col-4">
-                    Avatar:
-                </div>
-                <div class="col-4">
-                    Nome:
-                </div>
-                <div class="col-4">
-                    ${user.firstName}
+            <div class="media">
+                <img  class="align-self-center mr-3 rounded" id="profilePic" height="150" width="150" src="${pageContext.request.contextPath}/images?id=${user.id}&resource=user" onerror="this.onerror=null;this.src='${pageContext.request.contextPath}/images/avatars/Users/default.jpeg';"/>
+                <div class="media-body">
+                    <ul class="list-inline">
+                        <li class="list-inline-item"><h5>Mail:</h5></li>
+                        <li class="list-inline-item">${user.mail}</li>
+                    </ul>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-4">
-                    <img id="profilePic" height="195" width="195" src="${pageContext.request.contextPath}/images?id=${user.id}&resource=user" onerror="this.onerror=null;this.src='${pageContext.request.contextPath}/images/avatars/Users/default.jpeg';"/>
-                </div>
-                <div class="col-4">
-                    Cognome:
-                </div>
-                <div class="col-4">
-                    ${user.lastName}
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-4">
-                </div>
-                <div class="col-4">
-                    mail:
-                </div>
-                <div class="col-4">
-                    ${user.mail}
-                </div>
-            </div>
-
+            <br/>
             <h2>Modifica</h2>
             <form action="${pageContext.request.contextPath}/user/profile" method="POST" enctype="multipart/form-data">
                 <div class="form-row">
