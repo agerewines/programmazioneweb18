@@ -16,6 +16,7 @@ public class ShoppingList {
     private Integer userId; // chiave esterna per la mail dell'utente
     private User user;
     private Category category;
+    private boolean add, edit, share;
 
     public ShoppingList() {
     }
@@ -90,5 +91,35 @@ public class ShoppingList {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public boolean isAdd() {
+        return add;
+    }
+
+    public void setAdd(boolean add) {
+        this.add = add;
+    }
+
+    public boolean isEdit() {
+        return edit;
+    }
+
+    public void setEdit(boolean edit) {
+        this.edit = edit;
+    }
+
+    public boolean isShare() {
+        return share;
+    }
+
+    public void setShare(boolean share) {
+        this.share = share;
+    }
+
+    public void setPermissions(boolean value){
+        this.edit = value;
+        this.share = value;
+        this.add = value;
     }
 }

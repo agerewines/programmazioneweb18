@@ -79,6 +79,8 @@ public class ShowListServlet extends HttpServlet {
         if (user != null) {
             try {
                 list = shoppingListDAO.getByPrimaryKey(listId);
+                shoppingListDAO.getPermissions(user, list);
+
                 list.setUser(userDAO.getById(list.getUserId()));
                 list.setCategory(listCategoryDAO.getByPrimaryKey(list.getCategoryId()));
                 if (list == null) {
@@ -111,12 +113,18 @@ public class ShowListServlet extends HttpServlet {
         request.getSession().setAttribute("list", list);
         request.getSession().setAttribute("productsList", productList);
         List<Category> categories = new ArrayList<>();
+        List<User> listUsers = new ArrayList<>();
+        List<User> sharedWith = new ArrayList<>();
         try {
             categories = listCategoryDAO.getAll();
+            listUsers = shoppingListDAO.getSharableUsers(list);
+            sharedWith = shoppingListDAO.getSharedUser(list);
         } catch (DAOException e) {
             e.printStackTrace();
         }
         request.setAttribute("listCategories", categories);
+        request.setAttribute("listUsers", listUsers);
+        request.setAttribute("sharedWith", sharedWith);
         //request.getSession().setAttribute("customProductsOfList", customproductList);
 
         request.getRequestDispatcher("/WEB-INF/views/list.jsp").forward(request, response);

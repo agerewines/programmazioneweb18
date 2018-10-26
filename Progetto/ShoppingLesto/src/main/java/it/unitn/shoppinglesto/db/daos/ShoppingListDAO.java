@@ -87,4 +87,43 @@ public interface ShoppingListDAO extends DAO<ShoppingList, Integer> {
      *
      */
     public ShoppingList update(ShoppingList list) throws DAOException;
+
+    /**
+     * Checks the {@link User user} permissions of the {@link ShoppingList list}
+     * @param user the {@link User user} to check.
+     * @param shoppingList the {@link ShoppingList list} to check.
+     * @return {@link ShoppingList} updated with {@link User} permissions
+     * @throws DAOException if an error occurs during the operation.
+     */
+    public ShoppingList getPermissions(User user, ShoppingList shoppingList) throws DAOException;
+
+    /**
+     * Get a list of {@link User user} available to be shared with
+     * @param shoppingList the {@link ShoppingList list} to check.
+     * @return List of {@link User user} available
+     * @throws DAOException if an error occurs during the operation.
+     */
+    public List<User> getSharableUsers(ShoppingList shoppingList) throws DAOException;
+
+    /**
+     * Share a list and permission to a given {@link User user}
+     * @param list the {@link ShoppingList list} to share.
+     * @param userToShare the {@link User user} shared with.
+     * @param edit edit list permission
+     * @param add add product into the list permission
+     * @param share share list to someone else permission
+     * @throws DAOException if an error occurs during the operation.
+     */
+    public boolean shareListTo(ShoppingList list, User userToShare, boolean edit, boolean add, boolean share) throws DAOException;
+
+
+    public Integer getListOwner(ShoppingList shoppingList) throws DAOException;
+
+    /**
+     * Get a list of {@link User user} that the {@link ShoppingList shoppingList} is shared with
+     * @param shoppingList the {@link ShoppingList list} to check.
+     * @return List of shared {@link User user}
+     * @throws DAOException if an error occurs during the operation.
+     */
+    public List<User> getSharedUser(ShoppingList shoppingList) throws DAOException;
 }
