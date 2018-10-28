@@ -123,4 +123,14 @@ public interface UserDAO extends DAO<User, Integer> {
      * @throws DAOException if an error occurs during the operation.
      */
     public Integer deleteUuidToken(User user) throws DAOException;
+
+    /**
+     * Creates an instance of an anonym {@link User user}
+     *
+     * @param user the {@link User user} to add into the User table
+     * @return the anonymous user id.
+     * @throws DAOException if an error occurred during the action.
+     *
+     */
+    public Integer createAnonymUser(User user) throws DAOException;
 }

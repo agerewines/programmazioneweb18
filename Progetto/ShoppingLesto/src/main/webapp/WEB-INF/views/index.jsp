@@ -47,7 +47,7 @@
             <a class="btn btn-primary btn-xl text-uppercase js-scroll-trigger" style="margin: 1%"
                href="${pageContext.request.contextPath}/register">Register</a>
             <a class="btn btn-primary btn-xl text-uppercase js-scroll-trigger" style="margin: 1%"
-               href="${pageContext.request.contextPath}/home">Anonimo</a>
+               href="${pageContext.request.contextPath}/home?anonymous=true">Anonimo</a>
         </div>
     </div>
 </header>

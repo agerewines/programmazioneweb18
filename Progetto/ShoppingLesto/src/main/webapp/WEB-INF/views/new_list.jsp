@@ -40,10 +40,6 @@
                     </div>
                     <div class="form-group col-md-6">
                         <label for="category">Category</label>
-                        <!-- Button trigger modal
-                        <button type="button" class="btn btn-primary float-right" style="padding: 0 .375rem 0 .375rem;" data-toggle="modal" data-target="#categoryModal">
-                            <i class="fas fa-edit"></i>
-                        </button> -->
                         <select id="category" name="category" class="form-control">
                             <option selected>Choose...</option>
                             <c:forEach items="${listCategories}" var="category">
@@ -55,7 +51,7 @@
                 <div class="form-row">
                     <div class="form-group col-md-12">
                         <label for="description">Description</label>
-                        <textarea class="form-control" id="description" rows="3" placeholder="Description">${list.description}</textarea>
+                        <textarea class="form-control" id="description" name="description " rows="3" placeholder="Description">${list.description}</textarea>
                     </div>
                 </div>
                 <div class="form-row">
@@ -69,63 +65,6 @@
         </div>
         <div class="col">
         </div>
-    </div>
-
-
-    <!-- Modal
-    <div class="modal fade" id="categoryModal" tabindex="-1" role="dialog" aria-labelledby="categoryModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="categoryModalLabel">Category maganer</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <table class="table">
-                        <thead>
-                        <tr>
-                            <th scope="col">Name</th>
-                            <th scope="col">Description</th>
-                            <th scope="col">Photo</th>
-                            <th scope="col">Modify</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <c:forEach items="${listCategories}" var="category">
-                            <tr>
-                                <td>${category.name}</td>
-                                <td>${category.description}</td>
-                                <td>null</td>
-                                <td><i class="fas fa-pen"></i></td>
-                            </tr>
-                        </c:forEach>
-                        </tbody>
-                    </table>
-                    <form action="${pageContext.request.contextPath}/list/category/new" method="POST">
-                        <div class="form-row">
-                            <div class="form-group col-md-12">
-                                <label for="nameCat">Name</label>
-                                <input type="text" class="form-control" id="nameCat" placeholder="Name" name="nameCat">
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group col-md-12">
-                                <label for="descriptionCat">Description</label>
-                                <input type="text" class="form-control" id="descriptionCat" placeholder="Description"
-                                       name="descriptionCat">
-                            </div>
-                        </div>
-                        <button type="submit" class="btn btn-primary">New list category</button>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
-                </div>
-            </div>
-        </div>-->
     </div>
 </div>
 <%@include file="parts/_footer.jspf" %>

@@ -19,7 +19,7 @@ public class User implements Serializable {
     private String mail, firstName, lastName, avatar;
     private String password; // Cripted
     private String uuid;
-    private boolean active, admin;
+    private boolean active, admin, anonymous;
 
     public User() {
         this.active = false;
@@ -127,5 +127,11 @@ public class User implements Serializable {
         this.uuid = uuid;
     }
 
+    public boolean isAnonymous() {
+        return anonymous;
+    }
 
+    public void setAnonymous(boolean anonymous) {
+        this.anonymous = anonymous;
+    }
 }

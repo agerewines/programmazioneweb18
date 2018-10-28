@@ -90,7 +90,7 @@ public class MailSenderServlet extends HttpServlet {
 
                 String infoMessage = "We have sent an email to the address you gave us. Please check your email and follow the instructions.";
                 request.getSession().setAttribute("infoMessage", infoMessage);
-                response.sendRedirect(getServletContext().getContextPath() + "/home");
+                response.sendRedirect(getServletContext().getContextPath() + "/");
 
             }catch(MessagingException | UnsupportedEncodingException me) {
                 response.sendError(500, me.getMessage());

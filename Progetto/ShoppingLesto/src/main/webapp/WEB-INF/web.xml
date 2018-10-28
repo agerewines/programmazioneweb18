@@ -43,7 +43,6 @@
     </filter-mapping>
     <filter-mapping>
         <filter-name>AuthenticationFilter</filter-name>
-        <url-pattern>/home</url-pattern>
         <url-pattern>/user/profile</url-pattern>
     </filter-mapping>
     <servlet>

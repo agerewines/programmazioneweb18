@@ -49,6 +49,11 @@
                 </div>
                 <button type="submit" class="btn btn-primary">Login</button>
             </form>
+            <div class="mt-4">
+                <hr/>
+                If you are not registered yet, you can do it <a class="badge-pill btn-primary" href="${pageContext.request.contextPath}/register">here</a>!
+            </div>
+
         </div>
         <div class="col">
         </div>

@@ -70,7 +70,12 @@
                 </div>
                 <button type="submit" class="btn btn-primary">Register</button>
             </form>
+            <div class="mt-4">
+                <hr/>
+                If you are already registered, you can log in <a class="badge-pill btn-primary" href="${pageContext.request.contextPath}/login">here</a>!
+            </div>
         </div>
+
         <div class="col">
         </div>
     </div>

@@ -13,7 +13,7 @@ import java.util.List;
  * @author alessandrogerevini
  */
 public class Product {
-    private int prodId; //chiave primaria di un prodotto
+    private int id; //chiave primaria di un prodotto
     private String name, description, logo;
     private int categoryId; // chiave esterna per la categoria
     private boolean custom;
@@ -23,8 +23,8 @@ public class Product {
         this.custom = false;
     }
 
-    public Product(int prodId, String name, String description, int categoryId){
-        this.prodId = prodId;
+    public Product(int id, String name, String description, int categoryId){
+        this.id = id;
         this.name = name;
         this.description = description;
         this.logo = null;
@@ -32,8 +32,8 @@ public class Product {
         this.custom = false;
     }
 
-    public Product(int prodId, String name, String description, String logo, int categoryId, boolean custom) {
-        this.prodId = prodId;
+    public Product(int id, String name, String description, String logo, int categoryId, boolean custom) {
+        this.id = id;
         this.name = name;
         this.description = description;
         this.logo = logo;
@@ -42,12 +42,12 @@ public class Product {
         this.imagePaths = new ArrayList<>();
     }
 
-    public int getProdId() {
-        return prodId;
+    public int getId() {
+        return id;
     }
 
-    public void setProdId(int prodId) {
-        this.prodId = prodId;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {

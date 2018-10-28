@@ -40,7 +40,7 @@ public class JDBCProductDAO extends JDBCDAO<Product, Integer> implements Product
             try (ResultSet rs = stm.executeQuery()) {
                 rs.next();
                 Product product = new Product();
-                product.setProdId(rs.getInt("prod_id"));
+                product.setId(rs.getInt("prod_id"));
                 product.setName(rs.getString("name"));
                 product.setDescription(rs.getString("description"));
                 product.setLogo(rs.getString("logo"));
@@ -60,7 +60,7 @@ public class JDBCProductDAO extends JDBCDAO<Product, Integer> implements Product
             try (ResultSet rs = stm.executeQuery("SELECT * FROM List ORDER BY name")) {
                 while (rs.next()) {
                     Product product = new Product();
-                    product.setProdId(rs.getInt("prod_id"));
+                    product.setId(rs.getInt("prod_id"));
                     product.setName(rs.getString("name"));
                     product.setDescription(rs.getString("description"));
                     product.setLogo(rs.getString("logo"));
@@ -91,14 +91,14 @@ public class JDBCProductDAO extends JDBCDAO<Product, Integer> implements Product
             preparedStatement.executeUpdate();
             try(ResultSet rs  = preparedStatement.getGeneratedKeys()){
                 if(rs.next()){
-                    prod.setProdId(rs.getInt(1));
+                    prod.setId(rs.getInt(1));
                 }
             }
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
             throw new DAOException("Impossible to insert shopping list.", ex);
         }
-        return prod.getProdId();
+        return prod.getId();
     }
 
     @Override
@@ -115,7 +115,7 @@ public class JDBCProductDAO extends JDBCDAO<Product, Integer> implements Product
             try (ResultSet rs = stm.executeQuery()) {
                 while (rs.next()) {
                     Product product = new Product();
-                    product.setProdId(rs.getInt("prod_id"));
+                    product.setId(rs.getInt("prod_id"));
                     product.setName(rs.getString("name"));
                     product.setDescription(rs.getString("description"));
                     product.setLogo(rs.getString("logo"));
