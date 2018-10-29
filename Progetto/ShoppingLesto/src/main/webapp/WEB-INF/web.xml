@@ -78,6 +78,10 @@
         <servlet-class>it.unitn.shoppinglesto.servlet.lists.ShowListServlet</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>DeleteListServlet</servlet-name>
+        <servlet-class>it.unitn.shoppinglesto.servlet.lists.DeleteListServlet</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>NewListServlet</servlet-name>
         <servlet-class>it.unitn.shoppinglesto.servlet.lists.NewListServlet</servlet-class>
     </servlet>
@@ -160,6 +164,10 @@
     <servlet-mapping>
         <servlet-name>ShareListServlet</servlet-name>
         <url-pattern>/list/share</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DeleteListServlet</servlet-name>
+        <url-pattern>/list/delete</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

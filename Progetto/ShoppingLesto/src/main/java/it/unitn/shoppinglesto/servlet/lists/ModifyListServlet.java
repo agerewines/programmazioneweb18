@@ -66,6 +66,7 @@ public class ModifyListServlet extends HttpServlet {
             response.sendError(500, "Avatars folder not configured");
             return;
         }
+
         Integer listId = null;
         try {
             listId = Integer.valueOf(request.getParameter("listId"));
@@ -126,7 +127,7 @@ public class ModifyListServlet extends HttpServlet {
 
         if (hasError) {
             session.setAttribute("errorMessage", message);
-            session.setAttribute("action", "newList");
+            session.setAttribute("action", "editList");
             response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath() + "/home"));
         } else {
             message = "List was successfully updated";

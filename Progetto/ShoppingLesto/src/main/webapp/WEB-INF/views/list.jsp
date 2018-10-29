@@ -63,13 +63,15 @@
                                     </button>
                                 </li>
                             </c:if>
-                            <li class="list-inline-item">
-                                <button type="button" class="btn btn-primary"
-                                        style="padding: 0 .375rem 0 .375rem;"
-                                        data-toggle="modal" data-target="#deleteListModal">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </li>
+                            <c:if test="${list.user.id eq user.id}">
+                                <li class="list-inline-item">
+                                    <button type="button" class="btn btn-primary"
+                                            style="padding: 0 .375rem 0 .375rem;"
+                                            data-toggle="modal" data-target="#deleteListModal">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </li>
+                            </c:if>
                         </ul>
                     </h2>
                     <ul class="list-group list-group-flush">
@@ -256,6 +258,16 @@
             <div class="modal-body">
                 <form action="${pageContext.request.contextPath}/list/delete" method="POST">
                     <label>Are you sure you want to delete ${list.name}?</label> <br/>
+                    <c:if test="${not empty sharedWith}">
+                        <label>
+                            This will delete the list even for:
+                            <ul>
+                                <c:forEach items="${sharedWith}" var="sharedUser">
+                                    <li>${sharedUser.fullName}</li>
+                                </c:forEach>
+                            </ul>
+                        </label> <br/>
+                    </c:if>
                     <input type="hidden" id="listIdDelete" name="listId" value="${list.id}">
                     <button type="submit" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                     <button type="submit" class="btn btn-primary">Delete list</button>
@@ -264,7 +276,7 @@
         </div>
     </div>
 </div>
-<!-- Modal -->
+<!-- Modal shared user -->
 <div class="modal fade" id="sharedUserModal" tabindex="-1" role="dialog" aria-labelledby="sharedUserModalTitle"
      aria-hidden="true">
     <div class="modal-dialog" role="document">

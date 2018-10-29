@@ -498,7 +498,33 @@ public class JDBCShoppingListDAO extends JDBCDAO<ShoppingList, Integer> implemen
 
     @Override
     public Integer delete(Integer primaryKey) throws DAOException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(primaryKey == null){
+            throw  new DAOException("primaryKey is null", new IllegalArgumentException("list id is null"));
+        }
+        // check if is shared
+        // if it is delete in UserList
+        // delete linked product
+        // delete list
+
+        try(PreparedStatement stm = CON.prepareStatement("DELETE FROM UserList WHERE sharedListId = ?")) {
+            stm.setInt(1, primaryKey);
+            stm.executeUpdate();
+        } catch (SQLException e) {
+            throw new DAOException("Error deleting userlist");
+        }
+        try(PreparedStatement stm = CON.prepareStatement("DELETE FROM ListProduct WHERE listId = ?")){
+            stm.setInt(1, primaryKey);
+            stm.executeUpdate();
+        } catch (SQLException e) {
+            throw new DAOException("Error deleting list products");
+        }
+        try(PreparedStatement stm = CON.prepareStatement("DELETE FROM List WHERE list_Id = ?")){
+            stm.setInt(1, primaryKey);
+            stm.executeUpdate();
+        } catch (SQLException e) {
+            throw new DAOException("Error deleting list");
+        }
+        return 1;
     }
 
 }
