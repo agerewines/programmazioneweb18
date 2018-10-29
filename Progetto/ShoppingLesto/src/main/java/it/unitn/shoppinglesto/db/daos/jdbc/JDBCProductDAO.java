@@ -24,7 +24,7 @@ public class JDBCProductDAO extends JDBCDAO<Product, Integer> implements Product
             }
 
         } catch (SQLException ex) {
-            throw new DAOException("Impossible to count lists", ex);
+            throw new DAOException("Impossible to count products", ex);
         }
 
         return 0L;
@@ -48,7 +48,7 @@ public class JDBCProductDAO extends JDBCDAO<Product, Integer> implements Product
                 return product;
             }
         } catch (SQLException ex) {
-            throw new DAOException("Impossible to get the shopping_list for the passed primary key", ex);
+            throw new DAOException("Impossible to get the product for the passed primary key", ex);
         }
     }
 
@@ -57,7 +57,7 @@ public class JDBCProductDAO extends JDBCDAO<Product, Integer> implements Product
         List<Product> products = new ArrayList<>();
 
         try (Statement stm = CON.createStatement()) {
-            try (ResultSet rs = stm.executeQuery("SELECT * FROM List ORDER BY name")) {
+            try (ResultSet rs = stm.executeQuery("SELECT * FROM Product ORDER BY name")) {
                 while (rs.next()) {
                     Product product = new Product();
                     product.setId(rs.getInt("prod_id"));
@@ -65,11 +65,13 @@ public class JDBCProductDAO extends JDBCDAO<Product, Integer> implements Product
                     product.setDescription(rs.getString("description"));
                     product.setLogo(rs.getString("logo"));
                     product.setCustom(rs.getBoolean("custom"));
+                    product.setCategoryId(rs.getInt("category_id"));
+
                     products.add(product);
                 }
             }
         } catch (SQLException ex) {
-            throw new DAOException("Impossible to get the list of shopping_lists", ex);
+            throw new DAOException("Impossible to get all the products", ex);
         }
 
         return products;
@@ -96,7 +98,7 @@ public class JDBCProductDAO extends JDBCDAO<Product, Integer> implements Product
             }
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
-            throw new DAOException("Impossible to insert shopping list.", ex);
+            throw new DAOException("Impossible to insert products.", ex);
         }
         return prod.getId();
     }
@@ -124,7 +126,7 @@ public class JDBCProductDAO extends JDBCDAO<Product, Integer> implements Product
                 }
             }
         } catch (SQLException ex) {
-            throw new DAOException("Impossible to get the list of shopping_lists", ex);
+            throw new DAOException("Error getting products associated to the list", ex);
         }
 
         return products;

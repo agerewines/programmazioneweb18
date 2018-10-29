@@ -17,9 +17,18 @@
             <ul class="navbar-nav text-uppercase ml-auto">
                 <c:choose>
                     <c:when test="${not empty user}">
-                        <li class="nav-item">
-                            <a class="nav-link js-scroll-trigger" href="${pageContext.request.contextPath}/home">Your lists</a>
-                        </li>
+                    <c:choose>
+                        <c:when test="${user.admin}">
+                            <li class="nav-item">
+                                <a class="nav-link js-scroll-trigger" href="${pageContext.request.contextPath}/home">Admin panel</a>
+                            </li>
+                        </c:when>
+                        <c:otherwise>
+                            <li class="nav-item">
+                                <a class="nav-link js-scroll-trigger" href="${pageContext.request.contextPath}/home">Your lists</a>
+                            </li>
+                        </c:otherwise>
+                    </c:choose>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 ${user.firstName} ${user.lastName}

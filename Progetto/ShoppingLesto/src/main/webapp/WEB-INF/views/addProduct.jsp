@@ -17,7 +17,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>ShoppingLesto | List ${list.name} - Webprogramming18</title>
+    <title>ShoppingLesto | Add Product - Webprogramming18</title>
 
     <%@include file="parts/_imports.jspf" %>
 

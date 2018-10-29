@@ -23,7 +23,7 @@ public class JDBCListCategoryDAO extends JDBCDAO<Category, Integer> implements L
             }
 
         } catch (SQLException ex) {
-            throw new DAOException("Impossible to count lists", ex);
+            throw new DAOException("Impossible to count list category", ex);
         }
 
         return 0L;
@@ -42,11 +42,12 @@ public class JDBCListCategoryDAO extends JDBCDAO<Category, Integer> implements L
                 category.setId(rs.getInt("category_id"));
                 category.setName(rs.getString("name"));
                 category.setDescription(rs.getString("description"));
+                category.setPhoto(rs.getString("photo"));
 
                 return category;
             }
         } catch (SQLException ex) {
-            throw new DAOException("Impossible to get the shopping_list for the passed primary key", ex);
+            throw new DAOException("Impossible to get the list category for the passed primary key", ex);
         }
     }
 
@@ -61,11 +62,12 @@ public class JDBCListCategoryDAO extends JDBCDAO<Category, Integer> implements L
                     category.setId(rs.getInt("category_id"));
                     category.setName(rs.getString("name"));
                     category.setDescription(rs.getString("description"));
+                    category.setPhoto(rs.getString("photo"));
                     categories.add(category);
                 }
             }
         } catch (SQLException ex) {
-            throw new DAOException("Impossible to get the list of shopping_lists", ex);
+            throw new DAOException("Impossible to get all the list category", ex);
         }
 
         return categories;
@@ -76,11 +78,12 @@ public class JDBCListCategoryDAO extends JDBCDAO<Category, Integer> implements L
         if(cat == null){
             throw new DAOException("parameter not valid", new IllegalArgumentException("The shopping list is null."));
         }
-        String insert = "INSERT INTO `ListCategory`(`name`, `description`)"
-                + "VALUES (?,?)";
+        String insert = "INSERT INTO `ListCategory`(`name`, `description`, `photo`)"
+                + "VALUES (?,?,?)";
         try(PreparedStatement preparedStatement  = CON.prepareStatement(insert, Statement.RETURN_GENERATED_KEYS)){
             preparedStatement.setString(1, cat.getName());
             preparedStatement.setString(2, cat.getDescription());
+            preparedStatement.setString(3, cat.getPhoto());
             preparedStatement.executeUpdate();
             try(ResultSet rs  = preparedStatement.getGeneratedKeys()){
                 if(rs.next()){
@@ -89,7 +92,7 @@ public class JDBCListCategoryDAO extends JDBCDAO<Category, Integer> implements L
             }
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
-            throw new DAOException("Impossible to insert shopping list.", ex);
+            throw new DAOException("Impossible to insert list category.", ex);
         }
         return cat.getId();
     }

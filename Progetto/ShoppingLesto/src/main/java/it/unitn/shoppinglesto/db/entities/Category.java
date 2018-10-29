@@ -5,8 +5,6 @@
  */
 package it.unitn.shoppinglesto.db.entities;
 
-import java.util.List;
-
 /**
  *
  * @author alessandrogerevini
@@ -14,12 +12,12 @@ import java.util.List;
 public class Category {
     private int id;
     private String name, description;
-    private List<String> photo;
+    private String photo;
 
     public Category() {
     }
 
-    public Category(int id, String name, String description, List<String> photo) {
+    public Category(int id, String name, String description, String photo) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -50,11 +48,11 @@ public class Category {
         this.description = description;
     }
 
-    public List<String> getPhoto() {
+    public String getPhoto() {
         return photo;
     }
 
-    public void setPhoto(List<String> photo) {
+    public void setPhoto(String photo) {
         this.photo = photo;
     }
 }
