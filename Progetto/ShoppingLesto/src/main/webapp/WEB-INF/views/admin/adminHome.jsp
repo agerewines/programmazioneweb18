@@ -60,10 +60,14 @@
                         </thead>
                         <tbody>
                         <c:forEach items="${listCategory}" var="listCat">
+
                             <tr>
-                                <td><img class="rounded shadow mb-3 bg-white rounded" height="65" width="65"
-                                         src="${pageContext.request.contextPath}/images?id=${listCat.id}&resource=listCategory"
-                                         onerror="this.onerror=null;this.src='${pageContext.request.contextPath}/images/avatars/Products/default.png';"/>
+                                <td>
+                                    <c:forEach items="${listCat.photos}" var="photo">
+                                        <img class="rounded shadow mb-3 bg-white rounded" height="65" width="65"
+                                             src="${pageContext.request.contextPath}/images?id=${photo.id}&resource=listCatPhoto"
+                                             onerror="this.onerror=null;this.src='${pageContext.request.contextPath}/images/avatars/Products/default.png';"/>
+                                    </c:forEach>
                                 </td>
                                 <td>${listCat.name}</td>
                                 <td>${listCat.description}</td>
@@ -126,9 +130,12 @@
                         <tbody>
                         <c:forEach items="${prodCategory}" var="prodCat">
                             <tr>
-                                <td><img class="rounded shadow mb-3 bg-white rounded" height="65" width="65"
-                                         src="${pageContext.request.contextPath}/images?id=${prodCat.id}&resource=prodCategory"
+                                <td>
+                                    <c:forEach items="${prodCat.photos}" var="photo">
+                                    <img class="rounded shadow mb-3 bg-white rounded" height="65" width="65"
+                                         src="${pageContext.request.contextPath}/images?id=${photo.id}&resource=listCatPhoto"
                                          onerror="this.onerror=null;this.src='${pageContext.request.contextPath}/images/avatars/Products/default.png';"/>
+                                </c:forEach>
                                 </td>
                                 <td>${prodCat.name}</td>
                                 <td>${prodCat.description}</td>
