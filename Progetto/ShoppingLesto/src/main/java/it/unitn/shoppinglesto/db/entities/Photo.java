@@ -1,15 +1,15 @@
 package it.unitn.shoppinglesto.db.entities;
 
 public class Photo {
-    private Integer id, catId;
+    private Integer id, itemId;
     private String path;
 
     public Photo(){ }
 
-    public Photo(int id, String path, int catId){
+    public Photo(int id, String path, int itemId){
         this.id = id;
         this.path = path;
-        this.catId = catId;
+        this.itemId = itemId;
     }
 
     public Integer getId() {
@@ -20,12 +20,12 @@ public class Photo {
         this.id = id;
     }
 
-    public Integer getCatId() {
-        return catId;
+    public Integer getItemId() {
+        return itemId;
     }
 
-    public void setCatId(Integer catId) {
-        this.catId = catId;
+    public void setItemId(Integer itemId) {
+        this.itemId = itemId;
     }
 
     public String getPath() {

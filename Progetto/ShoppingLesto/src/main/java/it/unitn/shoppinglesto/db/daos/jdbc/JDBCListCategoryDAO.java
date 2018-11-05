@@ -114,7 +114,7 @@ public class JDBCListCategoryDAO extends JDBCDAO<Category, Integer> implements L
                 Photo p = new Photo();
                 p.setId(rs.getInt("id"));
                 p.setPath(rs.getString("path"));
-                p.setCatId(rs.getInt("listCatId"));
+                p.setItemId(rs.getInt("listCatId"));
                 photos.add(p);
             }
         }catch (SQLException e){
@@ -131,7 +131,7 @@ public class JDBCListCategoryDAO extends JDBCDAO<Category, Integer> implements L
         try(PreparedStatement preparedStatement  = CON.prepareStatement(insert, Statement.RETURN_GENERATED_KEYS)){
             for (Photo photo: photos) {
                 preparedStatement.setString(1, photo.getPath());
-                preparedStatement.setInt(2, photo.getCatId());
+                preparedStatement.setInt(2, photo.getItemId());
                 try(ResultSet rs  = preparedStatement.getGeneratedKeys()){
                     if(rs.next()){
                         photo.setId(rs.getInt(1));

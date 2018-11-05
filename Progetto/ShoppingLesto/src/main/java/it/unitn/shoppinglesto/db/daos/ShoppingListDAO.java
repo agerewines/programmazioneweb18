@@ -6,6 +6,7 @@
  */
 package it.unitn.shoppinglesto.db.daos;
 
+import it.unitn.shoppinglesto.db.entities.Product;
 import it.unitn.shoppinglesto.db.entities.ShoppingList;
 import it.unitn.shoppinglesto.db.entities.User;
 import it.unitn.shoppinglesto.db.exceptions.DAOException;
@@ -126,4 +127,12 @@ public interface ShoppingListDAO extends DAO<ShoppingList, Integer> {
      * @throws DAOException if an error occurs during the operation.
      */
     public List<User> getSharedUser(ShoppingList shoppingList) throws DAOException;
+
+    /**
+     * Add product to certain list
+     * @param listId shoppinglist thats gonna be modified
+     * @param productId product to add
+     * @throws DAOException if an error occurs during the operation.
+     */
+    public void addProductToList(Integer listId, Integer productId) throws DAOException;
 }

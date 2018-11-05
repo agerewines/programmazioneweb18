@@ -7,6 +7,7 @@
 package it.unitn.shoppinglesto.db.daos.jdbc;
 
 import it.unitn.shoppinglesto.db.daos.ShoppingListDAO;
+import it.unitn.shoppinglesto.db.entities.Product;
 import it.unitn.shoppinglesto.db.entities.ShoppingList;
 import it.unitn.shoppinglesto.db.entities.User;
 import it.unitn.shoppinglesto.db.exceptions.DAOException;
@@ -377,7 +378,7 @@ public class JDBCShoppingListDAO extends JDBCDAO<ShoppingList, Integer> implemen
     public List<User> getSharableUsers(ShoppingList shoppingList) throws DAOException {
         List<User> users = new ArrayList<>();
 
-        try (PreparedStatement stm = CON.prepareStatement("SELECT * FROM User WHERE anonymous = 0 AND active = 1 AND admin = 0 AND id NOT IN ((SELECT user_id FROM list WHERE list_id = ?) UNION (SELECT inviteduser FROM UserList WHERE sharedListid = ?))")) {
+        try (PreparedStatement stm = CON.prepareStatement("SELECT * FROM User WHERE anonymous = 0 AND active = 1 AND admin = 0 AND id NOT IN ((SELECT user_id FROM List WHERE list_id = ?) UNION (SELECT inviteduser FROM UserList WHERE sharedListid = ?))")) {
             stm.setInt(1, shoppingList.getId());
             stm.setInt(2, shoppingList.getId());
             try (ResultSet rs = stm.executeQuery()) {
@@ -392,6 +393,7 @@ public class JDBCShoppingListDAO extends JDBCDAO<ShoppingList, Integer> implemen
                     user.setUuid(rs.getString("uuid"));
                     user.setActive(Boolean.getBoolean(rs.getString("active")));
                     user.setAdmin(Boolean.getBoolean(rs.getString("admin")));
+                    user.setAnonymous(Boolean.getBoolean(rs.getString("anonymous")));
                     users.add(user);
                 }
             }
@@ -468,6 +470,29 @@ public class JDBCShoppingListDAO extends JDBCDAO<ShoppingList, Integer> implemen
             throw new DAOException("Impossible to get the user that the list is shared with", e);
         }
         return sharedWith;
+    }
+
+    /**
+     * Add product to certain list
+     *
+     * @param listId shoppinglist thats gonna be modified
+     * @param productId      product to add
+     * @throws DAOException if an error occurs during the operation.
+     */
+    @Override
+    public void addProductToList(Integer listId, Integer productId) throws DAOException {
+        if(listId == null || productId == null){
+            throw new DAOException("Parameter not valid", new IllegalArgumentException("Shoppinglist or product are nulls"));
+        }
+        String insert = "INSERT INTO ListProduct (`prodId`, `listId`) VALUES (?,?)";
+        try (PreparedStatement preparedStatement = CON.prepareStatement(insert, Statement.RETURN_GENERATED_KEYS)){
+            preparedStatement.setInt(1, productId);
+            preparedStatement.setInt(2, listId);
+            preparedStatement.executeUpdate();
+        }catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+            throw new DAOException("Impossible to insert product in the list.", ex);
+        }
     }
 
     @Override

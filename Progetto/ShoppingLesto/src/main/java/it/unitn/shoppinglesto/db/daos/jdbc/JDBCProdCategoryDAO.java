@@ -157,7 +157,7 @@ public class JDBCProdCategoryDAO extends JDBCDAO<Category, Integer> implements P
                 Photo p = new Photo();
                 p.setId(rs.getInt("id"));
                 p.setPath(rs.getString("path"));
-                p.setCatId(rs.getInt("listCatId"));
+                p.setItemId(rs.getInt("listCatId"));
                 photos.add(p);
             }
         }catch (SQLException e){
@@ -175,7 +175,7 @@ public class JDBCProdCategoryDAO extends JDBCDAO<Category, Integer> implements P
         try(PreparedStatement preparedStatement  = CON.prepareStatement(insert, Statement.RETURN_GENERATED_KEYS)){
             for (Photo photo: photos) {
                 preparedStatement.setString(1, photo.getPath());
-                preparedStatement.setInt(2, photo.getCatId());
+                preparedStatement.setInt(2, photo.getItemId());
                 try(ResultSet rs  = preparedStatement.getGeneratedKeys()){
                     if(rs.next()){
                         photo.setId(rs.getInt(1));
@@ -184,7 +184,7 @@ public class JDBCProdCategoryDAO extends JDBCDAO<Category, Integer> implements P
                 preparedStatement.executeUpdate();
             }
         }catch (SQLException e){
-            throw new DAOException("Impossible to get photos.", e);
+            throw new DAOException("Impossible to set photos.", e);
         }
     }
 

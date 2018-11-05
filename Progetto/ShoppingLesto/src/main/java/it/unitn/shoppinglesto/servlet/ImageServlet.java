@@ -93,7 +93,6 @@ public class ImageServlet extends HttpServlet {
 
             String path = null;
             boolean validResource = true;
-            Product product;
 
             if (resource != null && id != null) {
                 try {
@@ -103,12 +102,13 @@ public class ImageServlet extends HttpServlet {
                             path = user.getAvatar();
                             break;
                         case "products":
-                            product = productDAO.getByPrimaryKey(id);
+                            Product product = productDAO.getByPrimaryKey(id);
                             if (product != null) {
-                                if (contentIndex == null)
-                                    path = product.getLogo();
-                                else
-                                    path = product.getImagePaths().get(contentIndex);
+                                if (product.getPhotos().size() > 1){
+
+                                }else{
+                                    path = product.getPhotos().get(0).getPath();
+                                }
                             }
                             break;
                         /*case "customproducts":
@@ -144,7 +144,6 @@ public class ImageServlet extends HttpServlet {
             } else {
                 response.sendError(404);
             }
-
 
             if (!validResource || path == null) {
                 response.sendError(404);

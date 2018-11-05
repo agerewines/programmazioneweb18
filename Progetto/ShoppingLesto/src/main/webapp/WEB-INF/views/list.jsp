@@ -137,7 +137,7 @@
                 </tbody>
             </table>
             <a class="btn btn-primary"
-               href="${pageContext.request.contextPath}/product/add">Add new product</a>
+               href="${pageContext.request.contextPath}/product/add?listId=${list.id}">Add new product</a>
         </div>
         <div class="col">
         </div>

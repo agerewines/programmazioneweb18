@@ -14,10 +14,10 @@ import java.util.List;
  */
 public class Product {
     private int id; //chiave primaria di un prodotto
-    private String name, description, logo;
+    private String name, description;
     private int categoryId; // chiave esterna per la categoria
     private boolean custom;
-    private List<String> imagePaths;
+    private List<Photo> photos;
 
     public Product(){
         this.custom = false;
@@ -27,19 +27,17 @@ public class Product {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.logo = null;
         this.categoryId = categoryId;
         this.custom = false;
     }
 
-    public Product(int id, String name, String description, String logo, int categoryId, boolean custom) {
+    public Product(int id, String name, String description, int categoryId, boolean custom) {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.logo = logo;
         this.categoryId = categoryId;
         this.custom = custom;
-        this.imagePaths = new ArrayList<>();
+        this.photos = new ArrayList<>();
     }
 
     public int getId() {
@@ -66,14 +64,6 @@ public class Product {
         this.description = description;
     }
 
-    public String getLogo() {
-        return logo;
-    }
-
-    public void setLogo(String logo) {
-        this.logo = logo;
-    }
-
     public int getCategoryId() {
         return categoryId;
     }
@@ -90,11 +80,11 @@ public class Product {
         this.custom = custom;
     }
 
-    public List<String> getImagePaths() {
-        return imagePaths;
+    public List<Photo> getPhotos() {
+        return photos;
     }
 
-    public void setImagePaths(List<String> imagePaths) {
-        this.imagePaths = imagePaths;
+    public void setPhotos(List<Photo> photos) {
+        this.photos = photos;
     }
 }

@@ -22,4 +22,19 @@ public interface ProductDAO extends DAO<Product, Integer> {
      */
     public List<Product> getProductsByList(ShoppingList shoppingList) throws DAOException;
 
+    /**
+     * Retrieve all products that can be added into the list
+     * @param shoppingList list that i wanna view
+     * @return list of products able to be added to this list
+     * @throws DAOException if an error occurred during the operation.
+     */
+    public List<Product> getAvailableProduct(ShoppingList shoppingList) throws DAOException;
+
+    /**
+     * Retrieve photo path
+     * @param photoId that im looking for
+     * @return path of the photo
+     * @throws DAOException if an error occurred during the operation.
+     */
+    public String getSinglePhoto(Integer photoId) throws DAOException;
 }
