@@ -74,12 +74,9 @@
                                 <td>
                                     <ul class="list-inline">
                                             <li class="list-inline-item">
-                                                <button type="button" class="btn btn-primary modifyList"
+                                                <button type="button" class="btn btn-primary"
                                                         style="padding: 0 .375rem 0 .375rem;"
-                                                        data-toggle="modal" data-target="#modifyListCatModal"
-                                                        data-id="${listCat.id}"
-                                                        data-name="${listCat.name}"
-                                                        data-desc="${listCat.description}">
+                                                        data-toggle="modal" data-target="#modifyListCatModal" data-id-listCat="${listCat.id}">
                                                     <i class="fas fa-edit"></i>
                                                 </button>
                                             </li>
@@ -180,7 +177,7 @@
                         <div class="form-group col-md-12">
                             <label for="descriptionListCat">Description</label>
                             <textarea class="form-control" id="descriptionListCat" name="descriptionListCat" rows="3"
-                                      placeholder="Description"></textarea>
+                                      placeholder="Description">${list.description}</textarea>
                         </div>
                     </div>
                     <div class="form-row">
@@ -190,7 +187,7 @@
                                    value="${list.image}">
                         </div>
                     </div>
-                    <input id="hiddenListCatId" type="hidden" name="listId">
+                    <input type="text" name="listCatIdHidden">
                     <button type="submit" class="btn btn-primary">Edit list category</button>
                 </form>
             </div>
@@ -202,13 +199,17 @@
 <%@include file="../parts/_footer.jspf" %>
 <%@include file="../parts/_importsjs.jspf" %>
 <script type="text/javascript">
-    // language=JQuery-CSS
-    $('.modifyList').click(function () {
-        $('#hiddenListCatId').val($(this).data('id'));
-        $('#descriptionListCat').html($(this).data('desc'));
-        $('#nameListCat').val($(this).data('name'));
+/*
+    $('#modifyListCatModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget); // Button that triggered the modal
+        var idListCat = button.data('id-listCat');// Extract info from data-* attributes
+        // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+        // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+        var modal = $(this);
+        // language=JQuery-CSS
+        $("#listCatIdHidden").val("valore");
     })
-
+*/
 
 </script>
 </body>

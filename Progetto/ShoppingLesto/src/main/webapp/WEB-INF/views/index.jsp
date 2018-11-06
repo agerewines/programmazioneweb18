@@ -1,7 +1,11 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<c:set var="language" value="${not empty param.language ? param.language : not empty language ? language : pageContext.request.locale}" scope="session" />
+<fmt:setLocale value="${language}" />
+<fmt:setBundle basename="i18n.text" />
 <!DOCTYPE html>
-<html lang="en">
+<html lang="${language}">
 
 <head>
 
@@ -40,14 +44,14 @@
 <header class="masthead">
     <div class="container">
         <div class="intro-text">
-            <div class="intro-heading text-uppercase">Benvenuto su ShoppingLesto</div>
-            <div class="intro-lead-in">Compri male ma compri presto</div>
+            <div class="intro-heading text-uppercase"><fmt:message key="index.div.shopping_lesto" /></div>
+            <div class="intro-lead-in"><fmt:message key="index.div.compri" /></div>
             <a class="btn btn-primary btn-xl text-uppercase js-scroll-trigger" style="margin: 1%"
-               href="${pageContext.request.contextPath}/login">Login</a>
+               href="${pageContext.request.contextPath}/login"><fmt:message key="index.div.login" /></a>
             <a class="btn btn-primary btn-xl text-uppercase js-scroll-trigger" style="margin: 1%"
-               href="${pageContext.request.contextPath}/register">Register</a>
+               href="${pageContext.request.contextPath}/register"><fmt:message key="index.div.register" /></a>
             <a class="btn btn-primary btn-xl text-uppercase js-scroll-trigger" style="margin: 1%"
-               href="${pageContext.request.contextPath}/home?anonymous=true">Anonimo</a>
+               href="${pageContext.request.contextPath}/home?anonymous=true"><fmt:message key="index.div.anonymous" /></a>
         </div>
     </div>
 </header>

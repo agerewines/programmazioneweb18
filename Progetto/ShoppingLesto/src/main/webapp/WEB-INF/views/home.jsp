@@ -7,8 +7,12 @@
 --%>
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<c:set var="language" value="${not empty param.language ? param.language : not empty language ? language : pageContext.request.locale}" scope="session" />
+<fmt:setLocale value="${language}" />
+<fmt:setBundle basename="i18n.text" />
 <!DOCTYPE html>
-<html lang="en">
+<html lang="${language}">
 
 <head>
 
@@ -35,9 +39,9 @@
 
             <h2>
                 <ul class="list-inline">
-                    <li class="list-inline-item">Lists</li>
+                    <li class="list-inline-item"><fmt:message key="home.li.lists" /></li>
                     <li class="list-inline-item"><a class="btn btn-primary"
-                                                    href="${pageContext.request.contextPath}/list/new">Add new list</a>
+                                                    href="${pageContext.request.contextPath}/list/new"><fmt:message key="home.li.new_list" /></a>
                     </li>
                 </ul>
             </h2>

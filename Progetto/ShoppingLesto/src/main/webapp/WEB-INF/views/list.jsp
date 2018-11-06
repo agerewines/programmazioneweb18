@@ -1,15 +1,11 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: alessandrogerevini
-  Date: 18/10/2018
-  Time: 16:00
-  To change this template use File | Settings | File Templates.
---%>
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<c:set var="language" value="${not empty param.language ? param.language : not empty language ? language : pageContext.request.locale}" scope="session" />
+<fmt:setLocale value="${language}" />
+<fmt:setBundle basename="i18n.text" />
 <!DOCTYPE html>
-<html lang="en">
+<html lang="${language}">
 
 <head>
 
@@ -43,7 +39,7 @@
                 <div class="p-2 flex-fill">
                     <h2>
                         <ul class="list-inline">
-                            <li class="list-inline-item">List:</li>
+                            <li class="list-inline-item"><fmt:message key="list.li.list" /></li>
                             <li class="list-inline-item">${list.name}</li>
                             <c:if test="${list.edit}">
                                 <li class="list-inline-item">
@@ -77,13 +73,13 @@
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item">
                             <ul class="list-inline">
-                                <li class="list-inline-item"><h5>Description:</h5></li>
+                                <li class="list-inline-item"><h5><fmt:message key="list.li.description" /></h5></li>
                                 <li class="list-inline-item">${list.description}</li>
                             </ul>
                         </li>
                         <li class="list-group-item">
                             <ul class="list-inline">
-                                <li class="list-inline-item"><h5>Owner:</h5></li>
+                                <li class="list-inline-item"><h5><fmt:message key="list.li.owner" /></h5></li>
                                 <li class="list-inline-item">${list.user.fullName}</li>
                             </ul>
                         </li>
@@ -92,14 +88,14 @@
                                 <button type="button" class="btn btn-primary"
                                         style="padding: 0 .375rem 0 .375rem;"
                                         data-toggle="modal" data-target="#sharedUserModal">
-                                    See who this list is shared with
+                                    <fmt:message key="list.button.shared" />
                                     <span class="badge badge-dark badge-pill">${fn:length(sharedWith)}</span>
                                 </button>
                             </li>
                         </c:if>
                         <li class="list-group-item">
                             <ul class="list-inline">
-                                <li class="list-inline-item"><h5>Category:</h5></li>
+                                <li class="list-inline-item"><h5><fmt:message key="list.li.category" /></h5></li>
                                 <li class="list-inline-item">${list.category.name}</li>
                             </ul>
                         </li>
@@ -118,8 +114,8 @@
                 <thead class="thead-light">
                 <tr>
                     <th scope="col" width="70px">#</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Description</th>
+                    <th scope="col"><fmt:message key="list.th.name" /></th>
+                    <th scope="col"><fmt:message key="list.th.description" /></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -137,7 +133,7 @@
                 </tbody>
             </table>
             <a class="btn btn-primary"
-               href="${pageContext.request.contextPath}/product/add?listId=${list.id}">Add new product</a>
+               href="${pageContext.request.contextPath}/product/add"><fmt:message key="list.a.add_product" /></a>
         </div>
         <div class="col">
         </div>
@@ -149,7 +145,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modifyListModalLabel">Edit List</h5>
+                <h5 class="modal-title" id="modifyListModalLabel"><fmt:message key="list.h.edit_list" /></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -159,22 +155,22 @@
                       enctype='multipart/form-data'>
                     <div class="form-row">
                         <div class="form-group col-md-12">
-                            <label for="nameList">Name</label>
+                            <label for="nameList"><fmt:message key="list.label.name" /></label>
                             <input type="text" class="form-control" id="nameList" placeholder="Name" name="nameList"
                                    value="${list.name}">
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-12">
-                            <label for="descriptionList">Description</label>
+                            <label for="descriptionList"><fmt:message key="list.label.description" /></label>
                             <textarea class="form-control" id="descriptionList" name="descriptionList" rows="3"
                                       placeholder="Description">${list.description}</textarea>
                         </div>
                     </div>
                     <div class="form-row">
-                        <label for="avatar">Choose Category</label>
+                        <label for="avatar"><fmt:message key="list.label.choose_category" /></label>
                         <select id="category" name="category" class="form-control">
-                            <option selected value="-1">Choose...</option>
+                            <option selected value="-1"><fmt:message key="list.option.choose" /></option>
                             <c:forEach items="${listCategories}" var="category">
                                 <option value="${category.id}">${category.name}</option>
                             </c:forEach>
@@ -182,14 +178,14 @@
                     </div>
                     <div class="form-row">
                         <div class="form-group  col-md-6">
-                            <label for="avatar">Add your avatar</label>
+                            <label for="avatar"><fmt:message key="list.label.add_avatar" /></label>
                             <input type="file" class="form-control-file" id="avatar" name="avatar"
                                    value="${list.image}">
                         </div>
                     </div>
                     <input type="hidden" id="listId" name="listId" value="${list.id}">
 
-                    <button type="submit" class="btn btn-primary">Edit list</button>
+                    <button type="submit" class="btn btn-primary"><fmt:message key="list.h.edit_list" /></button>
                 </form>
             </div>
         </div>
@@ -201,7 +197,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="shareListModalLabel">Share list</h5>
+                <h5 class="modal-title" id="shareListModalLabel"><fmt:message key="list.h.share_list" /></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -209,9 +205,9 @@
             <div class="modal-body">
                 <form action="${pageContext.request.contextPath}/list/share" method="POST">
                     <div class="form-row">
-                        <label for="user">Choose user to share with</label>
+                        <label for="user"><fmt:message key="list.label.chose_user" /></label>
                         <select id="user" name="user" class="form-control">
-                            <option selected value="-1">Choose...</option>
+                            <option selected value="-1"><fmt:message key="list.option.choose" /></option>
                             <c:forEach items="${listUsers}" var="user">
                                 <option value="${user.id}">${user.fullName}</option>
                             </c:forEach>
@@ -219,26 +215,26 @@
                     </div>
                     <br/>
                     <div class="form-row">
-                        <label>Choose permissions</label>
+                        <label><fmt:message key="list.label.chose_permission" /></label>
                     </div>
                     <div class="form-row">
                         <div class="form-check form-check-inline">
                             <input class="form-check-input" type="checkbox" id="checkAdd" name="add" value="add">
-                            <label class="form-check-label" for="checkAdd">Add</label>
+                            <label class="form-check-label" for="checkAdd"><fmt:message key="list.label.add" /></label>
                         </div>
                         <div class="form-check form-check-inline">
                             <input class="form-check-input" type="checkbox" id="checkEdit" name="edit" value="edit">
-                            <label class="form-check-label" for="checkEdit">Edit</label>
+                            <label class="form-check-label" for="checkEdit"><fmt:message key="list.label.edit" /></label>
                         </div>
                         <div class="form-check form-check-inline">
                             <input class="form-check-input" type="checkbox" id="checkShare" name="share"
                                    value="share">
-                            <label class="form-check-label" for="checkShare">Share</label>
+                            <label class="form-check-label" for="checkShare"><fmt:message key="list.label.share" /></label>
                         </div>
                     </div>
                     <br/>
                     <input type="hidden" id="listIdShare" name="listId" value="${list.id}">
-                    <button type="submit" class="btn btn-primary">Share list</button>
+                    <button type="submit" class="btn btn-primary"><fmt:message key="list.button.share_list" /></button>
                 </form>
             </div>
         </div>
@@ -250,17 +246,17 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="deleteListModalLabel">Delete list</h5>
+                <h5 class="modal-title" id="deleteListModalLabel"><fmt:message key="list.h.delete_list" /></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
                 <form action="${pageContext.request.contextPath}/list/delete" method="POST">
-                    <label>Are you sure you want to delete ${list.name}?</label> <br/>
+                    <label><fmt:message key="list.label.sure" /> ${list.name}?</label> <br/>
                     <c:if test="${not empty sharedWith}">
                         <label>
-                            This will delete the list even for:
+                            <fmt:message key="list.label.even" />
                             <ul>
                                 <c:forEach items="${sharedWith}" var="sharedUser">
                                     <li>${sharedUser.fullName}</li>
@@ -270,7 +266,7 @@
                     </c:if>
                     <input type="hidden" id="listIdDelete" name="listId" value="${list.id}">
                     <button type="submit" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Delete list</button>
+                    <button type="submit" class="btn btn-primary"><fmt:message key="list.h.delete_list" /></button>
                 </form>
             </div>
         </div>
@@ -282,7 +278,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="sharedUserModalTitle">Shared users</h5>
+                <h5 class="modal-title" id="sharedUserModalTitle"><fmt:message key="list.h.shared_users" /></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -295,7 +291,7 @@
                 </ul>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal"><fmt:message key="list.button.close" /></button>
             </div>
         </div>
     </div>

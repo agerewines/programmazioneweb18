@@ -1,10 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: alessandrogerevini
-  Date: 12/10/2018
-  Time: 09:38
-  To change this template use File | Settings | File Templates.
---%>
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -40,22 +33,22 @@
             <form  method="POST" action="${pageContext.request.contextPath}/login">
                 <div class="form-group">
                     <label for="email"><fmt:message key="login.label.email" /></label>
-                    <input type="email" class="form-control" id="email" name="email" aria-describedby="emailHelp" placeholder="Enter email"  value="${user.mail}">
-                    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                    <input type="email" class="form-control" id="email" name="email" aria-describedby="emailHelp" placeholder="<fmt:message key="login.label.email" />"  value="${user.mail}">
+                    <small id="emailHelp" class="form-text text-muted"><fmt:message key="login.label.never" /></small>
                 </div>
                 <div class="form-group">
                     <label for="password"><fmt:message key="login.label.password" /></label>
-                    <input type="password" class="form-control" id="password" name="password" value="${user.password}" placeholder="Password">
+                    <input type="password" class="form-control" id="password" name="password" value="${user.password}" placeholder="<fmt:message key="login.label.password" />">
                 </div>
                 <div class="form-group form-check">
                     <input type="checkbox" class="form-check-input" id="rememberMe"  name="rememberMe" value="Y">
-                    <label class="form-check-label" for="rememberMe" >Remember me</label>
+                    <label class="form-check-label" for="rememberMe" ><fmt:message key="login.label.remember" /></label>
                 </div>
                 <button type="submit" class="btn btn-primary"><fmt:message key="login.button.submit" /></button>
             </form>
             <div class="mt-4">
                 <hr/>
-                If you are not registered yet, you can do it <a class="badge-pill btn-primary" href="${pageContext.request.contextPath}/register">here</a>!
+                <fmt:message key="login.h.if" /> <a class="badge-pill btn-primary" href="${pageContext.request.contextPath}/register"><fmt:message key="register.h.here" /></a>!
             </div>
 
         </div>
