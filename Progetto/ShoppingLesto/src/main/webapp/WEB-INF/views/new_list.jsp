@@ -33,7 +33,7 @@
             <form action="${pageContext.request.contextPath}/list/new" method="POST" enctype="multipart/form-data">
                 <div class="form-row">
                     <div class="form-group col-md-6">
-                        <label for="name"><fmt:message key="list.li.name" /></label>
+                        <label for="name"><fmt:message key="list.label.name" /></label>
                         <input type="text" class="form-control" id="name" placeholder="Name" name="name">
                     </div>
                     <div class="form-group col-md-6">

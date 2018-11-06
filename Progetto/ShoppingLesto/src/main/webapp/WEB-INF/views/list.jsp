@@ -1,6 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <c:set var="language" value="${not empty param.language ? param.language : not empty language ? language : pageContext.request.locale}" scope="session" />
 <fmt:setLocale value="${language}" />
 <fmt:setBundle basename="i18n.text" />
@@ -114,7 +115,7 @@
                 <thead class="thead-light">
                 <tr>
                     <th scope="col" width="70px">#</th>
-                    <th scope="col"><fmt:message key="list.th.name" /></th>
+                        <th scope="col"><fmt:message key="list.th.name" /></th>
                     <th scope="col"><fmt:message key="list.th.description" /></th>
                 </tr>
                 </thead>
@@ -133,7 +134,7 @@
                 </tbody>
             </table>
             <a class="btn btn-primary"
-               href="${pageContext.request.contextPath}/product/add"><fmt:message key="list.a.add_product" /></a>
+               href="${pageContext.request.contextPath}/product/add?listId=${list.id}"><fmt:message key="list.a.add_product" /></a>
         </div>
         <div class="col">
         </div>

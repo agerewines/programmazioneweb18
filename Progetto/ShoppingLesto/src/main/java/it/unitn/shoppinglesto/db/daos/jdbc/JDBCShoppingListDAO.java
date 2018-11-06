@@ -378,7 +378,7 @@ public class JDBCShoppingListDAO extends JDBCDAO<ShoppingList, Integer> implemen
     public List<User> getSharableUsers(ShoppingList shoppingList) throws DAOException {
         List<User> users = new ArrayList<>();
 
-        try (PreparedStatement stm = CON.prepareStatement("SELECT * FROM User WHERE anonymous = 0 AND active = 1 AND admin = 0 AND id NOT IN ((SELECT user_id FROM List WHERE list_id = ?) UNION (SELECT inviteduser FROM UserList WHERE sharedListid = ?))")) {
+        try (PreparedStatement stm = CON.prepareStatement("SELECT * FROM User WHERE anonymous = 0 AND active = 1 AND admin = 0 AND id NOT IN (SELECT user_id FROM List WHERE list_id = ?) AND id NOT IN (SELECT invitedUser FROM UserList WHERE sharedListid = ?)")) {
             stm.setInt(1, shoppingList.getId());
             stm.setInt(2, shoppingList.getId());
             try (ResultSet rs = stm.executeQuery()) {
