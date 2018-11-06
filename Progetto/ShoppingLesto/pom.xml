@@ -96,7 +96,7 @@
               <artifactId>tomcat7-maven-plugin</artifactId>
               <version>2.2</version>
               <configuration>
-                  <url>http://localhost:8080/manager/text</url>
+                  <url>http://164.132.195.86:8080/manager/text</url>
                   <server>TomcatServer</server>
                   <username>admin</username>
                   <password>Pasto_Lesto22</password>
