@@ -86,7 +86,7 @@ public class NewListServlet extends HttpServlet {
                 // int id, String name, String description, String image, int categoryId, int userId, User user
                 ShoppingList list = new ShoppingList(null, name, description, null, categoryId, user.getId(), user);
                 try {
-                    shoppingListDAO.save(list);
+                    list.setId(shoppingListDAO.save(list));
                 } catch (DAOException e) {
                     e.printStackTrace();
                 }

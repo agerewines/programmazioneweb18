@@ -137,6 +137,6 @@ public class ModifyListServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        throw new ServletException("You can't access this page via get");
     }
 }

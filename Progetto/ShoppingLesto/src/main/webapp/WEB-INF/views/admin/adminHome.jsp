@@ -74,9 +74,12 @@
                                 <td>
                                     <ul class="list-inline">
                                             <li class="list-inline-item">
-                                                <button type="button" class="btn btn-primary"
+                                                <button type="button" class="btn btn-primary modifyList"
                                                         style="padding: 0 .375rem 0 .375rem;"
-                                                        data-toggle="modal" data-target="#modifyListCatModal" data-id-listCat="${listCat.id}">
+                                                        data-toggle="modal" data-target="#modifyListCatModal"
+                                                        data-id="${listCat.id}"
+                                                        data-name="${listCat.name}"
+                                                        data-desc="${listCat.description}">
                                                     <i class="fas fa-edit"></i>
                                                 </button>
                                             </li>
@@ -122,6 +125,7 @@
                     <table class="table table-striped">
                         <thead>
                         <tr>
+                            <th scope="col">Images</th>
                             <th scope="col">Name</th>
                             <th scope="col">Description</th>
                             <th scope="col">Edit</th>
@@ -135,7 +139,7 @@
                                     <img class="rounded shadow mb-3 bg-white rounded" height="65" width="65"
                                          src="${pageContext.request.contextPath}/images?id=${photo.id}&resource=listCatPhoto"
                                          onerror="this.onerror=null;this.src='${pageContext.request.contextPath}/images/avatars/Products/default.png';"/>
-                                </c:forEach>
+                                    </c:forEach>
                                 </td>
                                 <td>${prodCat.name}</td>
                                 <td>${prodCat.description}</td>
@@ -187,7 +191,6 @@
                                    value="${list.image}">
                         </div>
                     </div>
-                    <input type="text" name="listCatIdHidden">
                     <button type="submit" class="btn btn-primary">Edit list category</button>
                 </form>
             </div>
@@ -199,18 +202,12 @@
 <%@include file="../parts/_footer.jspf" %>
 <%@include file="../parts/_importsjs.jspf" %>
 <script type="text/javascript">
-/*
-    $('#modifyListCatModal').on('show.bs.modal', function (event) {
-        var button = $(event.relatedTarget); // Button that triggered the modal
-        var idListCat = button.data('id-listCat');// Extract info from data-* attributes
-        // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
-        // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
-        var modal = $(this);
         // language=JQuery-CSS
-        $("#listCatIdHidden").val("valore");
-    })
-*/
-
+        $('.modifyList').click(function () {
+            $('#hiddenListCatId').val($(this).data('id'));
+            $('#descriptionListCat').html($(this).data('desc'));
+            $('#nameListCat').val($(this).data('name'));
+        })
 </script>
 </body>
 
