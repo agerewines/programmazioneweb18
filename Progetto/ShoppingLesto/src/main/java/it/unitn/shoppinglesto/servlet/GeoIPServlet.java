@@ -6,6 +6,7 @@ import it.unitn.shoppinglesto.geolocation.GeoIP;
 import it.unitn.shoppinglesto.geolocation.RawDBDemoGeoIPLocationService;
 
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -24,8 +25,8 @@ public class GeoIPServlet extends HttpServlet {
         System.out.println(ip);
 
         if (ip != null) {
-
-            RawDBDemoGeoIPLocationService rdb = new RawDBDemoGeoIPLocationService();
+            ServletContext context = this.getServletContext();
+            RawDBDemoGeoIPLocationService rdb = new RawDBDemoGeoIPLocationService(context);
             try {
                 JsonNode myCity = rdb.getLocation(ip);
 

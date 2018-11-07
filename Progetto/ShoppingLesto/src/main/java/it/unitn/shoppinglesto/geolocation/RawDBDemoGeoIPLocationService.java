@@ -6,6 +6,7 @@ import com.maxmind.geoip2.DatabaseReader;
 import com.maxmind.geoip2.exception.GeoIp2Exception;
 import com.maxmind.geoip2.model.CityResponse;
 
+import javax.servlet.ServletContext;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,11 +17,12 @@ import java.net.URL;
 public class RawDBDemoGeoIPLocationService {
     private Reader dbReader;
 
-    public RawDBDemoGeoIPLocationService() throws IOException {
-        String dbLoc = "/home/samuele/Downloads/programmazioneweb18/Progetto/ShoppingLesto/src/main/webapp/WEB-INF/GeoLite2-City.mmdb";
+    public RawDBDemoGeoIPLocationService(ServletContext context) throws IOException {
+
+        String dbLoc = context.getRealPath("/WEB-INF/GeoLite2-City.mmdb");
         //URL database = getClass().getResource(dbLoc);
 
-        //InputStream database = getClass().getResourceAsStream("/main/webapp/WEB-INF/GeoLite2-City.mmdb");
+        //InputStream database = getClass().getResourceAsStream("/WEB-INF/GeoLite2-City.mmdb");
         File database = new File(dbLoc);
         dbReader = new Reader(database);
 

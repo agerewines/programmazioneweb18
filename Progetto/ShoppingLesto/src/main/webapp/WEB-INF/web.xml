@@ -110,6 +110,10 @@
         <servlet-class>it.unitn.shoppinglesto.servlet.lists.AddProductToListServlet</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>EditCategoryServlet</servlet-name>
+        <servlet-class>it.unitn.shoppinglesto.servlet.lists.category.EditCategoryServlet</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>ImageServlet</servlet-name>
         <servlet-class>it.unitn.shoppinglesto.servlet.ImageServlet</servlet-class>
     </servlet>
@@ -180,6 +184,10 @@
     <servlet-mapping>
         <servlet-name>DeleteListServlet</servlet-name>
         <url-pattern>/list/delete</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EditCategoryServlet</servlet-name>
+        <url-pattern>/list/editCategory</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>AddProductToListServlet</servlet-name>
