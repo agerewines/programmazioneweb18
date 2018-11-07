@@ -1,6 +1,11 @@
+<%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<c:set var="language" value="${not empty param.language ? param.language : not empty language ? language : pageContext.request.locale}" scope="session" />
+<fmt:setLocale value="${language}" />
+<fmt:setBundle basename="i18n.text" />
 <!DOCTYPE html>
-<html lang="en">
+<html lang="${language}">
 
 <head>
 
@@ -14,12 +19,14 @@
     <%@include file="parts/_imports.jspf" %>
 
 </head>
-<body id="page-top">
+<body id="page-top" style="margin-top: 0%">
+
+<%@include file="parts/_errors.jspf" %>
 
 <!-- Navigation -->
 <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
     <div class="container">
-        <a class="navbar-brand js-scroll-trigger" href="#page-top">ShoppingLesto</a>
+        <a class="navbar-brand js-scroll-trigger" href="${pageContext.request.contextPath}/home">ShoppingLesto</a>
         <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
                 data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false"
                 aria-label="Toggle navigation">
@@ -28,71 +35,30 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav text-uppercase ml-auto">
-                <li class="nav-item">
-                    <a class="nav-link js-scroll-trigger" href="#services">Services</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link js-scroll-trigger" href="#portfolio">Portfolio</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link js-scroll-trigger" href="#about">About</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link js-scroll-trigger" href="#team">Team</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link js-scroll-trigger" href="#contact">Contact</a>
-                </li>
             </ul>
         </div>
     </div>
 </nav>
 
-<div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="errorModalLabel">There has been an error!</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <c:if test="${not empty errorMessage}">
-                    <c:out value="${errorMessage}"/>
-                </c:if>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-
 <!-- Header -->
 <header class="masthead">
     <div class="container">
         <div class="intro-text">
-            <div class="intro-heading text-uppercase">Benvenuto su ShoppingLesto</div>
-            <div class="intro-lead-in">Compri male ma compri presto</div>
-
+            <div class="intro-heading text-uppercase"><fmt:message key="index.div.shopping_lesto" /></div>
+            <div class="intro-lead-in"><fmt:message key="index.div.compri" /></div>
             <a class="btn btn-primary btn-xl text-uppercase js-scroll-trigger" style="margin: 1%"
-               href="<c:url value="/login"/>">Login</a>
+               href="${pageContext.request.contextPath}/login"><fmt:message key="index.div.login" /></a>
             <a class="btn btn-primary btn-xl text-uppercase js-scroll-trigger" style="margin: 1%"
-               href="<c:url value="/register"/>">Register</a>
+               href="${pageContext.request.contextPath}/register"><fmt:message key="index.div.register" /></a>
             <a class="btn btn-primary btn-xl text-uppercase js-scroll-trigger" style="margin: 1%"
-               href="<c:url value="/home"/>">Anonimo</a>
+               href="${pageContext.request.contextPath}/home?anonymous=true"><fmt:message key="index.div.anonymous" /></a>
         </div>
     </div>
 </header>
 
 <%@include file="parts/_footer.jspf" %>
 <%@include file="parts/_importsjs.jspf" %>
-<c:if test="${not empty errorMessage}">
-    <script type="application/javascript">
-        $("#errorModal").modal('show');
-    </script>
-</c:if>
+
 </body>
 
 </html>

@@ -1,9 +1,9 @@
 <!-- Footer -->
 <footer class="footer-sticky">
-    <div class="container">
+    <div class="container-fluid">
         <div class="row">
             <div class="col-md-4">
-                <span class="copyright">Copyright &copy; ShoppingLesto 2018</span>
+                <span class="copyright">ShoppingLesto 2018</span>
             </div>
             <div class="col-md-4">
             </div>

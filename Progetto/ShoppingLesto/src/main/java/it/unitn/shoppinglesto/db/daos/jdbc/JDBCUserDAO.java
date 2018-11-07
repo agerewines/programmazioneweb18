@@ -80,6 +80,7 @@ public class JDBCUserDAO extends JDBCDAO<User, Integer> implements UserDAO {
                 user.setUuid(rs.getString("uuid"));
                 user.setActive(Boolean.getBoolean(rs.getString("active")));
                 user.setAdmin(Boolean.getBoolean(rs.getString("admin")));
+                user.setAnonymous(Boolean.getBoolean(rs.getString("anonymous")));
                 return user;
             }
         } catch (SQLException ex) {
@@ -115,6 +116,19 @@ public class JDBCUserDAO extends JDBCDAO<User, Integer> implements UserDAO {
         }
     }
 
+    @Override
+    public User getById(Integer id) throws DAOException {
+        if (id == null) {
+            throw new DAOException("Id is null");
+        }
+        try (PreparedStatement stm = CON.prepareStatement("SELECT * FROM User WHERE id= ? AND anonymous = false")) {
+            stm.setInt(1, id);
+            return getUser(stm);
+        } catch (SQLException ex) {
+            throw new DAOException("Impossible to get the list of users", ex);
+        }
+    }
+
     /**
      * Returns the list of all the valid {@link User users} stored by the
      * storage system.
@@ -130,7 +144,7 @@ public class JDBCUserDAO extends JDBCDAO<User, Integer> implements UserDAO {
         List<User> users = new ArrayList<>();
 
         try (Statement stm = CON.createStatement()) {
-            try (ResultSet rs = stm.executeQuery("SELECT * FROM User ORDER BY lastName")) {
+            try (ResultSet rs = stm.executeQuery("SELECT * FROM User WHERE anonymous = FALSE ORDER BY lastName")) {
 
                 while (rs.next()) {
                     User user = new User();
@@ -143,6 +157,7 @@ public class JDBCUserDAO extends JDBCDAO<User, Integer> implements UserDAO {
                     user.setUuid(rs.getString("uuid"));
                     user.setActive(Boolean.getBoolean(rs.getString("active")));
                     user.setAdmin(Boolean.getBoolean(rs.getString("admin")));
+                    user.setAnonymous(Boolean.getBoolean(rs.getString("anonymous")));
                     users.add(user);
                 }
             }
@@ -193,7 +208,7 @@ public class JDBCUserDAO extends JDBCDAO<User, Integer> implements UserDAO {
                 user.setUuid(rs.getString("uuid"));
                 user.setActive(rs.getBoolean("active"));
                 user.setAdmin(rs.getBoolean("admin"));
-
+                user.setAnonymous(Boolean.getBoolean(rs.getString("anonymous")));
                 return user;
             }
             return null;
@@ -236,8 +251,8 @@ public class JDBCUserDAO extends JDBCDAO<User, Integer> implements UserDAO {
             throw new DAOException("parameter not valid", new IllegalArgumentException("The passed user is null"));
         }
         if (!emailExists(user.getMail())) {
-            String insert = "INSERT INTO `User`(`firstName`, `lastName`, `mail`, `password`, `admin`, `active`, `uuid`)"
-                    + " VALUES (?,?,?,?,?,?,?)";
+            String insert = "INSERT INTO `User`(`firstName`, `lastName`, `mail`, `password`, `admin`, `active`, `uuid`, `anonymous`)"
+                    + " VALUES (?,?,?,?,?,?,?,?)";
             try (PreparedStatement prepStm = CON.prepareStatement(insert, Statement.RETURN_GENERATED_KEYS)) {
                 prepStm.setString(1, user.getFirstName());
                 prepStm.setString(2, user.getLastName());
@@ -246,6 +261,7 @@ public class JDBCUserDAO extends JDBCDAO<User, Integer> implements UserDAO {
                 prepStm.setBoolean(5, user.isAdmin());
                 prepStm.setBoolean(6, user.isActive());
                 prepStm.setString(7, user.getUuid());
+                prepStm.setBoolean(8,user.isAnonymous());
                 prepStm.executeUpdate();
                 try (ResultSet rs = prepStm.getGeneratedKeys()) {
                     if (rs.next()) {
@@ -281,7 +297,7 @@ public class JDBCUserDAO extends JDBCDAO<User, Integer> implements UserDAO {
             throw new DAOException("User null, not valid.", new IllegalArgumentException("User null."));
         }
 
-        try (PreparedStatement prepStm = CON.prepareStatement("UPDATE `User` SET `mail` = ?, `password` = ?, `firstName` = ?, `lastName` = ?, `avatar` = ?, `active` = ?, `uuid` = ? WHERE `id` = ?")) {
+        try (PreparedStatement prepStm = CON.prepareStatement("UPDATE `User` SET `mail` = ?, `password` = ?, `firstName` = ?, `lastName` = ?, `avatar` = ?, `active` = ?, `uuid` = ?, `anonymous` = ? WHERE `id` = ?")) {
             prepStm.setString(1, user.getMail());
             prepStm.setString(2, user.getPassword());
             prepStm.setString(3, user.getFirstName());
@@ -289,7 +305,8 @@ public class JDBCUserDAO extends JDBCDAO<User, Integer> implements UserDAO {
             prepStm.setString(5, user.getAvatar());
             prepStm.setBoolean(6, user.isActive());
             prepStm.setString(7, user.getUuid());
-            prepStm.setInt(8, user.getId());
+            prepStm.setBoolean(8, user.isAnonymous());
+            prepStm.setInt(9, user.getId());
             if (prepStm.executeUpdate() == 1) {
                 return user;
             } else {
@@ -414,7 +431,8 @@ public class JDBCUserDAO extends JDBCDAO<User, Integer> implements UserDAO {
                     user.setUuid(rs.getString("uuid"));
                     user.setActive(rs.getBoolean("active"));
                     user.setAdmin(rs.getBoolean("admin"));
-
+                    user.setUuid(rs.getString("uuid"));
+                    user.setAnonymous(rs.getBoolean("anonymous"));
                     return user;
 
                 }
@@ -439,6 +457,45 @@ public class JDBCUserDAO extends JDBCDAO<User, Integer> implements UserDAO {
             throw new DAOException("Could not delete remember me token.", ex);
         }
         return res;
+    }
+
+    /**
+     * Creates an instance of an anonym {@link User user}
+     *
+     * @param user the {@link User user} to add into the User table
+     * @return the anonymous user id.
+     * @throws DAOException if an error occurred during the action.
+     */
+    @Override
+    public Integer createAnonymUser(User user) throws DAOException {
+        if (user == null) {
+            throw new DAOException("parameter not valid", new IllegalArgumentException("The passed user is null"));
+        }
+        if (user.isAnonymous()) {
+            String insert = "INSERT INTO `User`(`firstName`, `lastName`, `mail`, `password`, `admin`, `active`, `uuid`, `anonymous`)"
+                    + " VALUES (?,?,?,?,?,?,?,?)";
+            try (PreparedStatement prepStm = CON.prepareStatement(insert, Statement.RETURN_GENERATED_KEYS)) {
+                prepStm.setString(1, null);
+                prepStm.setString(2, null);
+                prepStm.setString(3, "anonymousUser");
+                prepStm.setString(4, "anonymousUser");
+                prepStm.setBoolean(5, user.isAdmin());
+                prepStm.setBoolean(6, user.isActive());
+                prepStm.setString(7, user.getUuid());
+                prepStm.setBoolean(8,user.isAnonymous());
+                prepStm.executeUpdate();
+                try (ResultSet rs = prepStm.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        user.setId(rs.getInt(1));
+                    }
+                }
+            } catch (SQLException ex) {
+                throw new DAOException("There was a problem saving the user into db", ex);
+            }
+        } else {
+            throw new DAOException("Violation of email constraint");
+        }
+        return user.getId();
     }
 
     @Override

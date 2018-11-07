@@ -1,13 +1,11 @@
-<%-- 
-    Document   : register
-    Created on : Oct 3, 2018, 4:37:26 PM
-    Author     : alessandrogerevini
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<c:set var="language" value="${not empty param.language ? param.language : not empty language ? language : pageContext.request.locale}" scope="session" />
+<fmt:setLocale value="${language}" />
+<fmt:setBundle basename="i18n.text" />
 <!DOCTYPE html>
-<html lang="en">
+<html lang="${language}">
 
 <head>
 
@@ -26,7 +24,7 @@
     <div class="row">
         <div class="col">
         </div>
-        <div class="col-6" style="margin:7%;">
+        <div class="col-6">
             <h2>Register</h2>
             <%@include file="parts/_navigation.jspf" %>
             <c:if test="${not empty errorMessage}">
@@ -35,43 +33,47 @@
             <form action="${pageContext.request.contextPath}/register" method="POST">
                 <div class="form-row">
                     <div class="form-group col-md-6">
-                        <label for="firstName">First Name</label>
-                        <input type="text" class="form-control" id="firstName" placeholder="First Name" name="firstName"
+                        <label for="firstName"><fmt:message key="register.label.first_name" /></label>
+                        <input type="text" class="form-control" id="firstName" placeholder="<fmt:message key="register.label.first_name" />" name="firstName"
                                value="${firstName}">
                     </div>
                     <div class="form-group col-md-6">
-                        <label for="lastName">Last Name</label>
-                        <input type="text" class="form-control" id="lastName" placeholder="Last Name" name="lastName"
+                        <label for="lastName"><fmt:message key="register.label.last_name" /></label>
+                        <input type="text" class="form-control" id="lastName" placeholder="<fmt:message key="register.label.last_name" />" name="lastName"
                                value="${lastName}">
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-12">
-                        <label for="mail">Email</label>
-                        <input type="email" class="form-control" id="mail" placeholder="Email" name="mail"
+                        <label for="mail"><fmt:message key="login.label.email" /></label>
+                        <input type="email" class="form-control" id="mail" placeholder="<fmt:message key="login.label.email" />" name="mail"
                                value="${mail}">
                     </div>
-
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-5">
-                        <label for="password">Password</label>
+                        <label for="password"><fmt:message key="login.label.password" /></label>
                         <input type="password" class="form-control" id="password" name="password"
-                               placeholder="Password">
+                               placeholder="<fmt:message key="login.label.password" />">
                     </div>
                     <div class="form-group col-md-5">
-                        <label for="confirmation">Confirm password</label>
+                        <label for="confirmation"><fmt:message key="register.label.confirm" /></label>
                         <input type="password" class="form-control" id="confirmation" name="confirmation"
-                               placeholder="Confirm Password">
+                               placeholder="<fmt:message key="register.label.confirm" />">
                     </div>
                     <div class="form-group col-md-2">
-                        <label for="checkTerms">Check terms</label>
+                        <label for="checkTerms"><fmt:message key="register.label.check" /></label>
                         <input class="form-control" type="checkbox" id="checkTerms" name="checkTerms" value="A"/>
                     </div>
                 </div>
-                <button type="submit" class="btn btn-primary">Register</button>
+                <button type="submit" class="btn btn-primary"><fmt:message key="register.button.register" /></button>
             </form>
+            <div class="mt-4">
+                <hr/>
+                <fmt:message key="register.h.if" /> <a class="badge-pill btn-primary" href="${pageContext.request.contextPath}/login"><fmt:message key="register.h.here" /></a>!
+            </div>
         </div>
+
         <div class="col">
         </div>
     </div>

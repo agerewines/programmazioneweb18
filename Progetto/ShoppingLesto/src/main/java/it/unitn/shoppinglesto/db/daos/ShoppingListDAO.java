@@ -6,6 +6,7 @@
  */
 package it.unitn.shoppinglesto.db.daos;
 
+import it.unitn.shoppinglesto.db.entities.Product;
 import it.unitn.shoppinglesto.db.entities.ShoppingList;
 import it.unitn.shoppinglesto.db.entities.User;
 import it.unitn.shoppinglesto.db.exceptions.DAOException;
@@ -68,4 +69,70 @@ public interface ShoppingListDAO extends DAO<ShoppingList, Integer> {
      * @throws DAOException if an error occurs during the retrieving of the lists.
      */
     public List<ShoppingList> getUserLists(User user) throws DAOException;
+
+    /**
+     * Checks if {@link User user} is allowed to view the {@link ShoppingList list}
+     * @param user the {@link User user} to check.
+     * @param shoppingList the {@link ShoppingList list} where to check.
+     * @return {@code true} if {@link User user} is in {@link ShoppingList list}.
+     * @throws DAOException if an error occurs during the operation.
+     */
+    public boolean isUserInList(User user, ShoppingList shoppingList) throws DAOException;
+
+    /**
+     * Update the @{link ShoppingList list} passed as parameter and returns it.
+     *
+     * @param list the @{link ShoppingList list} used to update the persistence system.
+     * @return the updated list.
+     * @throws DAOException if an error occurred during the action.
+     *
+     */
+    public ShoppingList update(ShoppingList list) throws DAOException;
+
+    /**
+     * Checks the {@link User user} permissions of the {@link ShoppingList list}
+     * @param user the {@link User user} to check.
+     * @param shoppingList the {@link ShoppingList list} to check.
+     * @return {@link ShoppingList} updated with {@link User} permissions
+     * @throws DAOException if an error occurs during the operation.
+     */
+    public ShoppingList getPermissions(User user, ShoppingList shoppingList) throws DAOException;
+
+    /**
+     * Get a list of {@link User user} available to be shared with
+     * @param shoppingList the {@link ShoppingList list} to check.
+     * @return List of {@link User user} available
+     * @throws DAOException if an error occurs during the operation.
+     */
+    public List<User> getSharableUsers(ShoppingList shoppingList) throws DAOException;
+
+    /**
+     * Share a list and permission to a given {@link User user}
+     * @param list the {@link ShoppingList list} to share.
+     * @param userToShare the {@link User user} shared with.
+     * @param edit edit list permission
+     * @param add add product into the list permission
+     * @param share share list to someone else permission
+     * @throws DAOException if an error occurs during the operation.
+     */
+    public boolean shareListTo(ShoppingList list, User userToShare, boolean edit, boolean add, boolean share) throws DAOException;
+
+
+    public Integer getListOwner(ShoppingList shoppingList) throws DAOException;
+
+    /**
+     * Get a list of {@link User user} that the {@link ShoppingList shoppingList} is shared with
+     * @param shoppingList the {@link ShoppingList list} to check.
+     * @return List of shared {@link User user}
+     * @throws DAOException if an error occurs during the operation.
+     */
+    public List<User> getSharedUser(ShoppingList shoppingList) throws DAOException;
+
+    /**
+     * Add product to certain list
+     * @param listId shoppinglist thats gonna be modified
+     * @param productId product to add
+     * @throws DAOException if an error occurs during the operation.
+     */
+    public void addProductToList(Integer listId, Integer productId) throws DAOException;
 }

@@ -16,6 +16,11 @@
         <param-name>smtp-password</param-name>
         <param-value>wxosbrxukguhigey</param-value>
     </context-param>
+    <context-param>
+        <description>The folder where avatars are stored</description>
+        <param-name>avatarsFolder</param-name>
+        <param-value>webapps/images/avatars/</param-value>
+    </context-param>
     <filter>
         <filter-name>SecurityFilter</filter-name>
         <filter-class>it.unitn.shoppinglesto.filters.SecurityFilter</filter-class>
@@ -24,6 +29,10 @@
         <filter-name>RememberMeFilter</filter-name>
         <filter-class>it.unitn.shoppinglesto.filters.RememberMeFilter</filter-class>
     </filter>
+    <filter>
+        <filter-name>AuthenticationFilter</filter-name>
+        <filter-class>it.unitn.shoppinglesto.filters.AuthenticationFilter</filter-class>
+    </filter>
     <filter-mapping>
         <filter-name>SecurityFilter</filter-name>
         <servlet-name>RegistrationServlet</servlet-name>
@@ -31,6 +40,10 @@
     <filter-mapping>
         <filter-name>RememberMeFilter</filter-name>
         <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>AuthenticationFilter</filter-name>
+        <url-pattern>/user/profile</url-pattern>
     </filter-mapping>
     <servlet>
         <servlet-name>UsersListServlet</servlet-name>
@@ -63,6 +76,42 @@
     <servlet>
         <servlet-name>GeoIPServlet</servlet-name>
         <servlet-class>it.unitn.shoppinglesto.servlet.GeoIPServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ShowListServlet</servlet-name>
+        <servlet-class>it.unitn.shoppinglesto.servlet.lists.ShowListServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DeleteListServlet</servlet-name>
+        <servlet-class>it.unitn.shoppinglesto.servlet.lists.DeleteListServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>NewListServlet</servlet-name>
+        <servlet-class>it.unitn.shoppinglesto.servlet.lists.NewListServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ModifyListServlet</servlet-name>
+        <servlet-class>it.unitn.shoppinglesto.servlet.lists.ModifyListServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ShareListServlet</servlet-name>
+        <servlet-class>it.unitn.shoppinglesto.servlet.lists.ShareListServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>IndexServlet</servlet-name>
+        <servlet-class>it.unitn.shoppinglesto.servlet.IndexServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>UserProfileServlet</servlet-name>
+        <servlet-class>it.unitn.shoppinglesto.servlet.UserProfileServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AddProductToListServlet</servlet-name>
+        <servlet-class>it.unitn.shoppinglesto.servlet.lists.AddProductToListServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ImageServlet</servlet-name>
+        <servlet-class>it.unitn.shoppinglesto.servlet.ImageServlet</servlet-class>
     </servlet>
     <listener>
         <description>ServletContextListener</description>
@@ -100,7 +149,43 @@
         <servlet-name>GeoIPServlet</servlet-name>
         <url-pattern>/geoip</url-pattern>
     </servlet-mapping>
-    <welcome-file-list>
+   <servlet-mapping>
+        <servlet-name>ShowListServlet</servlet-name>
+        <url-pattern>/list</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>IndexServlet</servlet-name>
+        <url-pattern></url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UserProfileServlet</servlet-name>
+        <url-pattern>/user/profile</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ImageServlet</servlet-name>
+        <url-pattern>/images</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>NewListServlet</servlet-name>
+        <url-pattern>/list/new</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ModifyListServlet</servlet-name>
+        <url-pattern>/list/modify</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ShareListServlet</servlet-name>
+        <url-pattern>/list/share</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DeleteListServlet</servlet-name>
+        <url-pattern>/list/delete</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddProductToListServlet</servlet-name>
+        <url-pattern>/product/add</url-pattern>
+    </servlet-mapping>
+  <welcome-file-list>
         <welcome-file>/WEB-INF/views/index.jsp</welcome-file>
     </welcome-file-list>
     <session-config>

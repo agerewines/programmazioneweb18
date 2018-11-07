@@ -5,31 +5,47 @@
  */
 package it.unitn.shoppinglesto.db.entities;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author alessandrogerevini
  */
 public class Product {
-    private int prodId; //chiave primaria di un prodotto
-    private String name, description, logo;
-    private int listId; //chiave esterna se il prodotto é in una lista // NOTA BENE FORSE É SBAGLIATO
+    private int id; //chiave primaria di un prodotto
+    private String name, description;
     private int categoryId; // chiave esterna per la categoria
+    private boolean custom;
+    private List<Photo> photos;
 
-    public Product(int prodId, String name, String description, String logo, int listId, int categoryId) {
-        this.prodId = prodId;
+    public Product(){
+        this.custom = false;
+    }
+
+    public Product(int id, String name, String description, int categoryId){
+        this.id = id;
         this.name = name;
         this.description = description;
-        this.logo = logo;
-        this.listId = listId;
         this.categoryId = categoryId;
+        this.custom = false;
     }
 
-    public int getProdId() {
-        return prodId;
+    public Product(int id, String name, String description, int categoryId, boolean custom) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.categoryId = categoryId;
+        this.custom = custom;
+        this.photos = new ArrayList<>();
     }
 
-    public void setProdId(int prodId) {
-        this.prodId = prodId;
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -48,22 +64,6 @@ public class Product {
         this.description = description;
     }
 
-    public String getLogo() {
-        return logo;
-    }
-
-    public void setLogo(String logo) {
-        this.logo = logo;
-    }
-
-    public int getListId() {
-        return listId;
-    }
-
-    public void setListId(int listId) {
-        this.listId = listId;
-    }
-
     public int getCategoryId() {
         return categoryId;
     }
@@ -71,6 +71,20 @@ public class Product {
     public void setCategoryId(int categoryId) {
         this.categoryId = categoryId;
     }
-    
-    
+
+    public boolean isCustom() {
+        return custom;
+    }
+
+    public void setCustom(boolean custom) {
+        this.custom = custom;
+    }
+
+    public List<Photo> getPhotos() {
+        return photos;
+    }
+
+    public void setPhotos(List<Photo> photos) {
+        this.photos = photos;
+    }
 }

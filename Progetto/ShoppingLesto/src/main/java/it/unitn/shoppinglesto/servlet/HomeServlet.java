@@ -1,7 +1,8 @@
 package it.unitn.shoppinglesto.servlet;
 
-import it.unitn.shoppinglesto.db.daos.ShoppingListDAO;
-import it.unitn.shoppinglesto.db.daos.UserDAO;
+import it.unitn.shoppinglesto.db.daos.*;
+import it.unitn.shoppinglesto.db.entities.Category;
+import it.unitn.shoppinglesto.db.entities.Product;
 import it.unitn.shoppinglesto.db.entities.ShoppingList;
 import it.unitn.shoppinglesto.db.entities.User;
 import it.unitn.shoppinglesto.db.exceptions.DAOException;
@@ -26,6 +27,9 @@ public class HomeServlet extends HttpServlet {
     private final String TEMPLISTCOOKIENAME = "templist_shoppingLesto_token";
     private UserDAO userDAO;
     private ShoppingListDAO shoppingListDAO;
+    private ListCategoryDAO listCategoryDAO;
+    private ProductDAO productDAO;
+    private ProdCategoryDAO prodCategoryDAO;
 
     @Override
     public void init() throws ServletException {
@@ -44,6 +48,21 @@ public class HomeServlet extends HttpServlet {
         } catch (DAOFactoryException ex) {
             throw new ServletException("Impossible to get shopping list dao from dao factory!", ex);
         }
+        try {
+            listCategoryDAO = daoFactory.getDAO(ListCategoryDAO.class);
+        } catch (DAOFactoryException ex) {
+            throw new ServletException("Impossible to get listCategory dao from dao factory!", ex);
+        }
+        try {
+            prodCategoryDAO = daoFactory.getDAO(ProdCategoryDAO.class);
+        } catch (DAOFactoryException ex) {
+            throw new ServletException("Impossible to get prodCategory dao from dao factory!", ex);
+        }
+        try {
+            productDAO = daoFactory.getDAO(ProductDAO.class);
+        } catch (DAOFactoryException ex) {
+            throw new ServletException("Impossible to get product dao from dao factory!", ex);
+        }
     }
 
     /**
@@ -57,13 +76,13 @@ public class HomeServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session = request.getSession();
+        HttpSession session = request.getSession(false);
         User user = (User) session.getAttribute("user");
         String dispatchPath = null;
-        /*if (user == null) {
+        if (user == null) {
             String uuidStr = UtilityHelper.getCookieValue(request, TEMPLISTCOOKIENAME);
 
-            if (uuidStr != null) {
+            /*if (uuidStr != null) {
                 try {
                     ShoppingList list = shoppingListDAO.getTemporaryList(uuidStr);
                     request.setAttribute("shoppingList", list); //maybe should change it to session.
@@ -71,12 +90,24 @@ public class HomeServlet extends HttpServlet {
                 } catch (DAOException ex) {
                     response.sendError(500, ex.getMessage()); //gives error if cookie present but db record is cancelled.
                 }
-            }
-            dispatchPath = "/WEB-INF/views/home.jsp";
+            }*/
+            dispatchPath = "/WEB-INF/views/index.jsp";
         } else {
             if (user.isAdmin()) {
-                dispatchPath = "/WEB-INF/views/adminViews/adminHome.jsp";
+                try {
+                    List<Category> listCategory = listCategoryDAO.getAll();
+                    List<Product> products = productDAO.getAll();
+                    List<Category> prodCategory = prodCategoryDAO.getAll();
 
+                    session.setAttribute("listCategory", listCategory);
+                    session.setAttribute("products", products);
+                    session.setAttribute("prodCategory", prodCategory);
+
+                } catch (DAOException ex) {
+                    response.sendError(500, ex.getMessage());
+                }
+
+                dispatchPath = "/WEB-INF/views/admin/adminHome.jsp";
             } else {
                 try {
                     List<ShoppingList> lists = shoppingListDAO.getUserLists(user);
@@ -88,10 +119,11 @@ public class HomeServlet extends HttpServlet {
                 dispatchPath = "/WEB-INF/views/home.jsp";
             }
 
-        }*/
-        dispatchPath = "/WEB-INF/views/index.jsp";
-        RequestDispatcher rd = request.getRequestDispatcher(dispatchPath);
-        rd.forward(request, response);
+        }
+        if(!response.isCommitted()) {
+            RequestDispatcher rd = request.getRequestDispatcher(dispatchPath);
+            rd.forward(request, response);
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
