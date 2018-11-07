@@ -74,6 +74,10 @@
         <servlet-class>it.unitn.shoppinglesto.servlet.authentication.LogoutServlet</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>GeoIPServlet</servlet-name>
+        <servlet-class>it.unitn.shoppinglesto.servlet.GeoIPServlet</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>ShowListServlet</servlet-name>
         <servlet-class>it.unitn.shoppinglesto.servlet.lists.ShowListServlet</servlet-class>
     </servlet>
@@ -142,6 +146,10 @@
         <url-pattern>/logout</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
+        <servlet-name>GeoIPServlet</servlet-name>
+        <url-pattern>/geoip</url-pattern>
+    </servlet-mapping>
+   <servlet-mapping>
         <servlet-name>ShowListServlet</servlet-name>
         <url-pattern>/list</url-pattern>
     </servlet-mapping>
@@ -177,6 +185,9 @@
         <servlet-name>AddProductToListServlet</servlet-name>
         <url-pattern>/product/add</url-pattern>
     </servlet-mapping>
+  <welcome-file-list>
+        <welcome-file>/WEB-INF/views/index.jsp</welcome-file>
+    </welcome-file-list>
     <session-config>
         <session-timeout>
             30
