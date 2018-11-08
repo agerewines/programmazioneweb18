@@ -20,12 +20,12 @@
                     <c:choose>
                         <c:when test="${user.admin}">
                             <li class="nav-item">
-                                <a class="nav-link js-scroll-trigger" href="${pageContext.request.contextPath}/home">Admin panel</a>
+                                <a class="nav-link js-scroll-trigger" href="${pageContext.request.contextPath}/home"><fmt:message key="navigation.a.admin" /></a>
                             </li>
                         </c:when>
                         <c:otherwise>
                             <li class="nav-item">
-                                <a class="nav-link js-scroll-trigger" href="${pageContext.request.contextPath}/home">Your lists</a>
+                                <a class="nav-link js-scroll-trigger" href="${pageContext.request.contextPath}/home"><fmt:message key="navigation.a.lists" /></a>
                             </li>
                         </c:otherwise>
                     </c:choose>
@@ -34,8 +34,8 @@
                                 ${user.firstName} ${user.lastName}
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                <a class="dropdown-item" href="${pageContext.request.contextPath}/user/profile">Your account</a>
-                                <a class="dropdown-item" href="${pageContext.request.contextPath}/logout">Logout</a>
+                                <a class="dropdown-item" href="${pageContext.request.contextPath}/user/profile"><fmt:message key="navigation.a.account" /></a>
+                                <a class="dropdown-item" href="${pageContext.request.contextPath}/logout"><fmt:message key="navigation.a.logout" /></a>
                             </div>
                         </li>
                     </c:when>
