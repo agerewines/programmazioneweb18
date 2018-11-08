@@ -38,10 +38,10 @@
             <table class="table table-hover table-striped">
                 <thead>
                 <tr>
-                    <th scope="col">Photo</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Description</th>
-                    <th scope="col">Add</th>
+                    <th scope="col"><fmt:message key="product.th.photo" /></th>
+                    <th scope="col"><fmt:message key="product.th.name" /></th>
+                    <th scope="col"><fmt:message key="product.th.description" /></th>
+                    <th scope="col"><fmt:message key="product.th.add" /></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -88,18 +88,18 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addProductModalLabel">Add product</h5>
+                <h5 class="modal-title" id="addProductModalLabel"><fmt:message key="product.h.add_product" /></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
                 <form action="${pageContext.request.contextPath}/product/add" method="POST">
-                    <label>Are you sure you want to add this product?</label> <br/>
+                    <label><fmt:message key="product.h.sure" /></label> <br/>
                     <input id="hiddenProdId" type="hidden" name="prodId">
                     <input id="hiddenListId" type="hidden" name="listId" value="${param.listId}">
-                    <button type="submit" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Add</button>
+                    <button type="submit" class="btn btn-secondary" data-dismiss="modal"><fmt:message key="product.button.cancel" /></button>
+                    <button type="submit" class="btn btn-primary"><fmt:message key="product.button.add" /></button>
                 </form>
             </div>
         </div>
