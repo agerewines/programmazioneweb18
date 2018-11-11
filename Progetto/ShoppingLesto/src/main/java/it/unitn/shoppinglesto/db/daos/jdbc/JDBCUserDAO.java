@@ -112,7 +112,7 @@ public class JDBCUserDAO extends JDBCDAO<User, Integer> implements UserDAO {
             stm.setString(2, password);
             return getUser(stm);
         } catch (SQLException ex) {
-            throw new DAOException("Impossible to get the list of users", ex);
+            throw new DAOException("Impossible to get the list of users by mail and pw", ex);
         }
     }
 
@@ -125,7 +125,7 @@ public class JDBCUserDAO extends JDBCDAO<User, Integer> implements UserDAO {
             stm.setInt(1, id);
             return getUser(stm);
         } catch (SQLException ex) {
-            throw new DAOException("Impossible to get the list of users", ex);
+            throw new DAOException("Impossible to get the list of users by id", ex);
         }
     }
 
@@ -162,7 +162,7 @@ public class JDBCUserDAO extends JDBCDAO<User, Integer> implements UserDAO {
                 }
             }
         } catch (SQLException ex) {
-            throw new DAOException("Impossible to get the list of users", ex);
+            throw new DAOException("Impossible to get all the of users", ex);
         }
 
         return users;
@@ -178,7 +178,7 @@ public class JDBCUserDAO extends JDBCDAO<User, Integer> implements UserDAO {
             stm.setString(1, mail);
             return getUser(stm);
         } catch (SQLException ex) {
-            throw new DAOException("Impossible to get the list of users", ex);
+            throw new DAOException("Impossible to get the list of users by mail", ex);
         }
     }
 
