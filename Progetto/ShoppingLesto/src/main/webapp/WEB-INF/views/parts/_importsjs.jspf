@@ -11,7 +11,6 @@
 <script src="${pageContext.request.contextPath}/assets/js/jqBootstrapValidation.js"></script>
 <script src="${pageContext.request.contextPath}/assets/js/contact_me.js"></script>
 
-<script src="${pageContext.request.contextPath}/assets/js/admin.js"></script>
 
 <!-- Custom scripts for this template -->
 <script src="${pageContext.request.contextPath}/assets/js/agency.min.js"></script>

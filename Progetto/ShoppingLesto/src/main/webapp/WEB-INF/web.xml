@@ -114,6 +114,18 @@
         <servlet-class>it.unitn.shoppinglesto.servlet.lists.category.EditCategoryServlet</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>EditSharePermitServlet</servlet-name>
+        <servlet-class>it.unitn.shoppinglesto.servlet.lists.EditSharePermitServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DeleteSharedUserServlet</servlet-name>
+        <servlet-class>it.unitn.shoppinglesto.servlet.lists.DeleteSharedUserServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>NewListCategoryServlet</servlet-name>
+        <servlet-class>it.unitn.shoppinglesto.servlet.lists.category.NewListCategoryServlet</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>ImageServlet</servlet-name>
         <servlet-class>it.unitn.shoppinglesto.servlet.ImageServlet</servlet-class>
     </servlet>
@@ -182,12 +194,24 @@
         <url-pattern>/list/share</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
+        <servlet-name>EditSharePermitServlet</servlet-name>
+        <url-pattern>/list/share/edit</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DeleteSharedUserServlet</servlet-name>
+        <url-pattern>/list/share/delete</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
         <servlet-name>DeleteListServlet</servlet-name>
         <url-pattern>/list/delete</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>EditCategoryServlet</servlet-name>
         <url-pattern>/list/editCategory</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>NewListCategoryServlet</servlet-name>
+        <url-pattern>/list/category/new</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>AddProductToListServlet</servlet-name>

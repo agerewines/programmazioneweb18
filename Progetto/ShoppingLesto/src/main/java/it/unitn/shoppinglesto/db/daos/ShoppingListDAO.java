@@ -118,6 +118,18 @@ public interface ShoppingListDAO extends DAO<ShoppingList, Integer> {
     public boolean shareListTo(ShoppingList list, User userToShare, boolean edit, boolean add, boolean share) throws DAOException;
 
 
+    /**
+     * Edit permit of {@link User user} in {@link ShoppingList list}
+     * @param list the {@link ShoppingList list} to share.
+     * @param userToShare the {@link User user} shared with.
+     * @param edit edit list permission
+     * @param add add product into the list permission
+     * @param share share list to someone else permission
+     * @throws DAOException if an error occurs during the operation.
+     */
+    public boolean editPermit(ShoppingList list, User userToShare, boolean edit, boolean add, boolean share) throws DAOException;
+
+
     public Integer getListOwner(ShoppingList shoppingList) throws DAOException;
 
     /**
@@ -135,4 +147,14 @@ public interface ShoppingListDAO extends DAO<ShoppingList, Integer> {
      * @throws DAOException if an error occurs during the operation.
      */
     public void addProductToList(Integer listId, Integer productId) throws DAOException;
+
+    /**
+     * Remove user list link
+     * @param listId shoppinglist thats gonna be unshared
+     * @param userId user to delete
+     * @return 1 if executed
+     * @throws DAOException if an error occurs during the operation.
+     */
+    public Integer removePermit(Integer listId, Integer userId) throws DAOException;
+
 }

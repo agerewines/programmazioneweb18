@@ -4,6 +4,7 @@ import it.unitn.shoppinglesto.db.daos.ListCategoryDAO;
 import it.unitn.shoppinglesto.db.daos.ShoppingListDAO;
 import it.unitn.shoppinglesto.db.daos.UserDAO;
 import it.unitn.shoppinglesto.db.entities.Category;
+import it.unitn.shoppinglesto.db.entities.Photo;
 import it.unitn.shoppinglesto.db.entities.User;
 import it.unitn.shoppinglesto.db.exceptions.DAOException;
 import it.unitn.shoppinglesto.db.exceptions.DAOFactoryException;
@@ -11,13 +12,16 @@ import it.unitn.shoppinglesto.db.factories.DAOFactory;
 import it.unitn.shoppinglesto.utils.UtilityHelper;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.Date;
 
-@WebServlet(name = "EditCategoryServlet")
-public class EditCategoryServlet extends HttpServlet {
+@WebServlet(name = "NewListCategoryServlet")
+@MultipartConfig
+public class NewListCategoryServlet extends HttpServlet {
     private UserDAO userDAO;
     private ShoppingListDAO shoppingListDAO;
     private ListCategoryDAO listCategoryDAO;
@@ -45,7 +49,6 @@ public class EditCategoryServlet extends HttpServlet {
         }
 
     }
-
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);
         User user = (User) session.getAttribute("user");
@@ -55,7 +58,6 @@ public class EditCategoryServlet extends HttpServlet {
         }
         String message = null;
         boolean hasError = false;
-        boolean modified = false;
         String avatarsFolder = getServletContext().getInitParameter("avatarsFolder");
         if (avatarsFolder == null) {
             response.sendError(500, "Avatars folder not configured");
@@ -67,33 +69,49 @@ public class EditCategoryServlet extends HttpServlet {
         String descriptionList = request.getParameter("descriptionListCat");
 
         Category listCat = null;
-        if ( nameList == null || descriptionList == null || nameList.equals("") || descriptionList.equals("")) {
+        if (nameList == null || descriptionList == null || nameList.equals("") || descriptionList.equals("")) {
             hasError = true;
             message = "All fields are mandatory and must be filled!";
         } else {
             listCat = new Category();
             listCat.setName(nameList);
             listCat.setDescription(descriptionList);
-            // aggiungi  a ListCategory
-            // prendi l'id, salvalo in listCat
+            try{
+                // aggiungi  a ListCategory
+                listCat.setId(listCategoryDAO.save(listCat));
+            } catch (DAOException ex) {
+                response.sendError(500, ex.toString());
+            }
             // aggiungi le foto se ci sono
+            Part filePart = request.getPart("photo");
+            if ((filePart != null) && (filePart.getSize() > 0)) {
+                Photo listPhoto = new Photo();
+                listPhoto.setId(listCat.getId());
+                listPhoto.setItemId(listCat.getId());
+                String fileName = UtilityHelper.getFilename(filePart);
+                fileName = UtilityHelper.renameImage(fileName, "ListCategory_" + listCat.getId() + "_" + (new Date().toString()).replace(":", "_").replace(" ", "_"));
+                String listCategoryUploadDir = rootPath + File.separator + avatarsFolder + "ListCategory";
+                try {
+                    listPhoto.setPath(UtilityHelper.uploadFileToDirectory(listCategoryUploadDir, fileName, filePart));
+                    listCat.addPhoto(listPhoto);
+                    listCategoryDAO.addPhoto(listPhoto);
+                } catch (DAOException | IOException ex) {
+                    response.sendError(500, ex.getMessage());
+                }
+            }
         }
 
         if (hasError) {
-            request.setAttribute("errorMessage", "errors");
-            response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath() + "/home"));
+            session.setAttribute("errorMessage", message);
+            response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath() + "/users"));
         } else {
-            if (modified) {
-                //listCat = listCategoryDAO.update(listCat);
-                message = "List was successfully updated";
-                session.setAttribute("successMessage", message);
-            }
+            message = "List was successfully updated";
+            session.setAttribute("successMessage", message);
             response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath() + "/home"));
-
         }
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        throw new ServletException("You can't access this page via get");
+        response.sendError(500, "You are not allowed to see this page");
     }
 }

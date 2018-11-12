@@ -187,7 +187,7 @@ public class JDBCProductDAO extends JDBCDAO<Product, Integer> implements Product
                 }
             }
         }catch (SQLException e){
-            throw new DAOException("Impossible to get photos.", e);
+            throw new DAOException("Impossible to get single photo of the product.", e);
         }
         return path;
     }
@@ -208,7 +208,7 @@ public class JDBCProductDAO extends JDBCDAO<Product, Integer> implements Product
                 photos.add(p);
             }
         }catch (SQLException e){
-            throw new DAOException("Impossible to get photos.", e);
+            throw new DAOException("Impossible to get photos of the product.", e);
         }
         return photos;
     }

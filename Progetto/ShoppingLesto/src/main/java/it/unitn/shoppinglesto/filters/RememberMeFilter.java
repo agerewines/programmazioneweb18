@@ -60,7 +60,7 @@ public class RememberMeFilter implements Filter {
                             user = userDAO.getByUuid(id);
                             Integer status = userDAO.checkStatus(user);
                             if(status != null && !status.equals(0))
-                                user.setAdmin(true);
+                                user.setActive(true);
                             session.setAttribute("user", user);
                         } catch (DAOException ex) {
                             ((HttpServletResponse) response).sendError(500, ex.getMessage());

@@ -5,6 +5,7 @@
  */
 package it.unitn.shoppinglesto.db.entities;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -56,5 +57,11 @@ public class Category {
 
     public void setPhoto(List<Photo> photo) {
         this.photos = photo;
+    }
+
+    public void addPhoto(Photo p) {
+        if(photos == null || photos.isEmpty())
+            photos = new ArrayList<>();
+        photos.add(p);
     }
 }

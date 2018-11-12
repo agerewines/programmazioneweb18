@@ -16,13 +16,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.Console;
 import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-@WebServlet(name = "ShareListServlet")
-public class ShareListServlet extends HttpServlet {
+@WebServlet(name = "EditSharePermitServlet")
+public class EditSharePermitServlet extends HttpServlet {
 
     private UserDAO userDAO;
     private ShoppingListDAO shoppingListDAO;
@@ -80,17 +79,24 @@ public class ShareListServlet extends HttpServlet {
 
         Integer userIdToShare = Integer.parseInt(request.getParameter("user"));
         try {
-            ShoppingList list = shoppingListDAO.getByPrimaryKey(listId);
+            if(!edit && !add && !share){
+                if(shoppingListDAO.removePermit(listId, userIdToShare) != 1)
+                    throw new DAOException("Error deleting permit");
+                else
+                    message = "User removed from this list";
+            }else{
+                ShoppingList list = shoppingListDAO.getByPrimaryKey(listId);
 
-            list.setPermissions(true);
-            User userToShare = userDAO.getById(userIdToShare);
+                list.setPermissions(true);
+                User userToShare = userDAO.getById(userIdToShare);
 
-            if (list.isShare()) {
-                shoppingListDAO.shareListTo(list, userToShare, edit, add, share);
-                message = "List successfully shared with " + userToShare.getFullName();
-            } else {
-                hasError = true;
-                message = "You need permissions to share this list";
+                if (list.isShare()) {
+                    shoppingListDAO.editPermit(list, userToShare, edit, add, share);
+                    message = "List successfully shared with " + userToShare.getFullName();
+                } else {
+                    hasError = true;
+                    message = "You need permissions to share this list";
+                }
             }
         } catch (DAOException e) {
             response.sendError(500, e.getMessage());
@@ -107,6 +113,22 @@ public class ShareListServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Integer listId = Integer.parseInt(request.getParameter("listId"));
+        Integer userId = Integer.parseInt(request.getParameter("userId"));
+        Map<String, Boolean> options = new LinkedHashMap<>();
+        try {
+            ShoppingList list = shoppingListDAO.getPermissions(userDAO.getById(userId), shoppingListDAO.getByPrimaryKey(listId));
+            options.put("edit", list.isEdit());
+            options.put("add", list.isAdd());
+            options.put("share", list.isShare());
+        } catch (DAOException e) {
+            response.sendError(500, e.getMessage());
+        }
 
+        String json = new Gson().toJson(options);
+
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter().write(json);
     }
 }

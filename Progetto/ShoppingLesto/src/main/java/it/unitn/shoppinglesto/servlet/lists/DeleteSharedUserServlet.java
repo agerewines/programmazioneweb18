@@ -1,10 +1,8 @@
 package it.unitn.shoppinglesto.servlet.lists;
 
-import com.google.gson.Gson;
 import it.unitn.shoppinglesto.db.daos.ListCategoryDAO;
 import it.unitn.shoppinglesto.db.daos.ShoppingListDAO;
 import it.unitn.shoppinglesto.db.daos.UserDAO;
-import it.unitn.shoppinglesto.db.entities.ShoppingList;
 import it.unitn.shoppinglesto.db.entities.User;
 import it.unitn.shoppinglesto.db.exceptions.DAOException;
 import it.unitn.shoppinglesto.db.exceptions.DAOFactoryException;
@@ -16,14 +14,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.Console;
 import java.io.IOException;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
-@WebServlet(name = "ShareListServlet")
-public class ShareListServlet extends HttpServlet {
-
+@WebServlet(name = "DeleteSharedUserServlet")
+public class DeleteSharedUserServlet extends HttpServlet {
     private UserDAO userDAO;
     private ShoppingListDAO shoppingListDAO;
     private ListCategoryDAO listCategoryDAO;
@@ -51,7 +45,6 @@ public class ShareListServlet extends HttpServlet {
             throw new ServletException("Impossible to get list category dao from dao factory!", ex);
         }
     }
-
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);
         User user = (User) session.getAttribute("user");
@@ -69,30 +62,22 @@ public class ShareListServlet extends HttpServlet {
             response.sendError(500, e.getMessage());
         }
 
-        boolean edit = false, add= false, share = false;
-        if(request.getParameterMap().containsKey("edit"))
-            edit = request.getParameter("edit").equals("edit");
-        if(request.getParameterMap().containsKey("add"))
-            add = request.getParameter("add").equals("add");
-        if(request.getParameterMap().containsKey("share"))
-            share = request.getParameter("share").equals("share");
-
-
-        Integer userIdToShare = Integer.parseInt(request.getParameter("user"));
+        Integer userIdToShare = null;
         try {
-            ShoppingList list = shoppingListDAO.getByPrimaryKey(listId);
+            userIdToShare = Integer.parseInt(request.getParameter("user"));
+        } catch (RuntimeException e) {
+            response.sendError(500, e.getMessage());
+        }
 
-            list.setPermissions(true);
-            User userToShare = userDAO.getById(userIdToShare);
-
-            if (list.isShare()) {
-                shoppingListDAO.shareListTo(list, userToShare, edit, add, share);
-                message = "List successfully shared with " + userToShare.getFullName();
-            } else {
+        try{
+            if(listId != null && userIdToShare != null){
+                shoppingListDAO.removePermit(listId, userIdToShare);
+            }else{
                 hasError = true;
-                message = "You need permissions to share this list";
+                message = "List or user id are nulls";
             }
-        } catch (DAOException e) {
+
+        }catch (DAOException e){
             response.sendError(500, e.getMessage());
         }
 

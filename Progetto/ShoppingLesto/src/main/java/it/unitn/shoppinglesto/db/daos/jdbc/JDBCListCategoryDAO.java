@@ -1,5 +1,6 @@
 package it.unitn.shoppinglesto.db.daos.jdbc;
 
+import it.unitn.shoppinglesto.db.daos.DAO;
 import it.unitn.shoppinglesto.db.entities.Category;
 import it.unitn.shoppinglesto.db.daos.ListCategoryDAO;
 import it.unitn.shoppinglesto.db.entities.Photo;
@@ -76,7 +77,7 @@ public class JDBCListCategoryDAO extends JDBCDAO<Category, Integer> implements L
     @Override
     public Integer save(Category cat) throws DAOException {
         if(cat == null){
-            throw new DAOException("parameter not valid", new IllegalArgumentException("The shopping list is null."));
+            throw new DAOException("parameter not valid", new IllegalArgumentException("The is null."));
         }
         String insert = "INSERT INTO `ListCategory`(`name`, `description`)"
                 + "VALUES (?,?)";
@@ -89,7 +90,8 @@ public class JDBCListCategoryDAO extends JDBCDAO<Category, Integer> implements L
                     cat.setId(rs.getInt(1));
                 }
             }
-            setPhotos(cat);
+            if(cat.getPhotos() != null && !cat.getPhotos().isEmpty())
+                setPhotos(cat);
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
             throw new DAOException("Impossible to insert list category.", ex);
@@ -112,19 +114,20 @@ public class JDBCListCategoryDAO extends JDBCDAO<Category, Integer> implements L
             ResultSet rs = preparedStatement.executeQuery();
             while (rs.next()) {
                 Photo p = new Photo();
-                p.setId(rs.getInt("id"));
+                p.setId(rs.getInt("listCategoryPhotoId"));
                 p.setPath(rs.getString("path"));
-                p.setItemId(rs.getInt("listCatId"));
+                p.setItemId(rs.getInt("listCategoryId"));
                 photos.add(p);
             }
         }catch (SQLException e){
-            throw new DAOException("Impossible to get photos.", e);
+            throw new DAOException("Impossible to get list category photos.", e);
         }
         return photos;
     }
+
     private void setPhotos(Category category) throws DAOException {
         if(category.getPhotos() == null){
-            throw new DAOException("photos empty is null");
+            throw new DAOException("photos empty");
         }
         List<Photo> photos = category.getPhotos();
         String insert = "INSERT INTO `ListCategoryPhoto`(`path`, `listCategoryId`) VALUES (?,?)";
@@ -140,7 +143,52 @@ public class JDBCListCategoryDAO extends JDBCDAO<Category, Integer> implements L
                 preparedStatement.executeUpdate();
             }
         }catch (SQLException e){
-            throw new DAOException("Impossible to get photos.", e);
+            throw new DAOException("Impossible to set photos.", e);
+        }
+    }
+
+    @Override
+    public void addPhoto(Photo photo) throws DAOException{
+        if(photo == null){
+            throw new DAOException("photo is null");
+        }
+        String insert = "INSERT INTO `ListCategoryPhoto`(`path`, `listCategoryId`) VALUES (?,?)";
+        try(PreparedStatement preparedStatement  = CON.prepareStatement(insert, Statement.RETURN_GENERATED_KEYS)){
+            preparedStatement.setString(1, photo.getPath());
+            preparedStatement.setInt(2, photo.getItemId());
+            try(ResultSet rs  = preparedStatement.getGeneratedKeys()){
+                if(rs.next()){
+                    photo.setId(rs.getInt(1));
+                }
+            }
+            preparedStatement.executeUpdate();
+        }catch (SQLException e){
+            throw new DAOException("Impossible to add photo", e);
+        }
+
+    }
+
+    /**
+     * Get path of a certain {@link Photo photo}
+     *
+     * @param photoId id of the {@link Photo photo} that i want
+     * @return path of the {@link Photo photo} that i need
+     * @throws DAOException
+     */
+    @Override
+    public String getPhotoPath(Integer photoId) throws DAOException {
+        if(photoId == null){
+            throw new DAOException("photoId is null");
+        }
+        try(PreparedStatement preparedStatement = CON.prepareStatement("SELECT path FROM ListCategoryPhoto WHERE listCategoryPhotoId = ?")){
+            preparedStatement.setInt(1, photoId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if(resultSet.next()){
+                return resultSet.getString("path");
+            }else
+                return null;
+        }catch (SQLException e){
+            throw new DAOException("Error retrieving path of photo");
         }
     }
 }

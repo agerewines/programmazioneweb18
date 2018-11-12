@@ -38,7 +38,7 @@
         <div class="col-md-8">
             <%@include file="../parts/_successMessage.jspf" %>
             <h2>Admin Panel</h2>
-            <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+            <ul class="nav nav-pills nav-fill mb-3" id="pills-tab" role="tablist">
                 <li class="nav-item">
                     <a class="nav-link" id="pills-listCat-tab" data-toggle="pill" href="#pills-listCat" role="tab" aria-controls="pills-listCat" aria-selected="true">Category of lists</a>
                 </li>
@@ -52,7 +52,18 @@
             <!-- Categoria di liste -->
             <div class="tab-content" id="pills-tabContent">
                 <div class="tab-pane fade" id="pills-listCat" role="tabpanel" aria-labelledby="pills-listCat-tab">
-                    <h5>Manage the category of lists</h5>
+                    <ul class="list-inline">
+                        <li class="list-inline-item">
+                            <h5>Manage the category of lists</h5>
+                        </li>
+                        <li class="list-inline-item">
+                            <button type="button" class="btn btn-primary addListCat"
+                                    style="padding: 0 .375rem 0 .375rem;"
+                                    data-toggle="modal" data-target="#addListCatModal">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </li>
+                    </ul>
                     <table class="table table-striped">
                         <thead>
                         <tr>
@@ -160,6 +171,45 @@
     </div>
 </div>
 
+<!-- Modal add list category button -->
+<div class="modal fade" id="addListCatModal" tabindex="-1" role="dialog" aria-labelledby="addListCatModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addListCatModalLabel">Add List Category</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="${pageContext.request.contextPath}/list/category/new" method="POST"
+                      enctype='multipart/form-data'>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label for="nameListCat">Name</label>
+                            <input type="text" class="form-control" placeholder="Name" name="nameListCat">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label for="descriptionListCat">Description</label>
+                            <textarea class="form-control" name="descriptionListCat" rows="3"
+                                      placeholder="Description"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group  col-md-6">
+                            <label for="photo">Add photo</label>
+                            <input type="file" class="form-control-file" name="photo">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Add list category</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- Modal edit list category button -->
 <div class="modal fade" id="modifyListCatModal" tabindex="-1" role="dialog" aria-labelledby="modifyListCatModalLabel"
@@ -185,14 +235,13 @@
                         <div class="form-group col-md-12">
                             <label for="descriptionListCat">Description</label>
                             <textarea class="form-control" id="descriptionListCat" name="descriptionListCat" rows="3"
-                                      placeholder="Description">${list.description}</textarea>
+                                      placeholder="Description"></textarea>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group  col-md-6">
                             <label for="photo">Add photo</label>
-                            <input type="file" class="form-control-file" id="photo" name="photo"
-                                   value="${list.image}">
+                            <input type="file" class="form-control-file" id="photo" name="photo">
                         </div>
                     </div>
                     <button type="submit" class="btn btn-primary">Edit list category</button>

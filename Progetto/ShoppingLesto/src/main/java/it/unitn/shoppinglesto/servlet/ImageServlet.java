@@ -1,11 +1,10 @@
 package it.unitn.shoppinglesto.servlet;
 
+import it.unitn.shoppinglesto.db.daos.ListCategoryDAO;
 import it.unitn.shoppinglesto.db.daos.ProductDAO;
 import it.unitn.shoppinglesto.db.daos.ShoppingListDAO;
 import it.unitn.shoppinglesto.db.daos.UserDAO;
-import it.unitn.shoppinglesto.db.entities.Product;
-import it.unitn.shoppinglesto.db.entities.ShoppingList;
-import it.unitn.shoppinglesto.db.entities.User;
+import it.unitn.shoppinglesto.db.entities.*;
 import it.unitn.shoppinglesto.db.exceptions.DAOException;
 import it.unitn.shoppinglesto.db.exceptions.DAOFactoryException;
 import it.unitn.shoppinglesto.db.factories.DAOFactory;
@@ -26,7 +25,7 @@ public class ImageServlet extends HttpServlet {
 
     private UserDAO userDAO;
     private ShoppingListDAO shoppingListDAO;
-    //private ListCategoryDAO categoryDAO;
+    private ListCategoryDAO listCategoryDAO;
     //private ProductCategoryDAO prodCategoryDAO;
     private ProductDAO productDAO;
 
@@ -46,12 +45,12 @@ public class ImageServlet extends HttpServlet {
         } catch (DAOFactoryException ex) {
             throw new ServletException("Impossible to get shopping list dao from dao factory!", ex);
         }
-        /*try{
-            categoryDAO = daoFactory.getDAO(ListCategoryDAO.class);
+        try{
+            listCategoryDAO = daoFactory.getDAO(ListCategoryDAO.class);
         } catch (DAOFactoryException ex) {
             throw new ServletException("Impossible to get list category dao from dao factory", ex);
         }
-        try{
+        /*try{
             prodCategoryDAO = daoFactory.getDAO(ProductCategoryDAO.class);
         } catch (DAOFactoryException ex) {
             throw new ServletException("Impossible to get product category dao from dao factory", ex);
@@ -122,12 +121,10 @@ public class ImageServlet extends HttpServlet {
                             if (list != null)
                                 path = list.getImage();
                             break;
-                        /*case "listCategories":
-                            ListCategory category = categoryDAO.getByPrimaryKey(id);
-                            if(category != null && !category.getImagePaths().isEmpty() && !(contentIndex >= category.getImagePaths().size()))
-                                path = category.getImagePaths().get(contentIndex);
+                        case "listCatPhoto":
+                            path = listCategoryDAO.getPhotoPath(id);
                             break;
-                        case "productCategories":
+                        /*case "productCategories":
                             ProductCategory prodCategory = prodCategoryDAO.getByPrimaryKey(id);
                             if(prodCategory != null){
                                 path = prodCategory.getLogoPath();

@@ -1,6 +1,8 @@
 package it.unitn.shoppinglesto.db.daos;
 
 import it.unitn.shoppinglesto.db.entities.Category;
+import it.unitn.shoppinglesto.db.entities.Photo;
+import it.unitn.shoppinglesto.db.exceptions.DAOException;
 
 /**
  * All concrete DAOs must implement this interface to handle the persistence
@@ -10,4 +12,13 @@ import it.unitn.shoppinglesto.db.entities.Category;
  */
 public interface ListCategoryDAO extends DAO<Category, Integer> {
 
+    public void addPhoto(Photo photo) throws DAOException;
+
+    /**
+     * Get path of a certain {@link Photo photo}
+     * @param photoId id of the {@link Photo photo} that i want
+     * @return path of the {@link Photo photo} that i need
+     * @throws DAOException
+     */
+    public String getPhotoPath(Integer photoId) throws DAOException;
 }

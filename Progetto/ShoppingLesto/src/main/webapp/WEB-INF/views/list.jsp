@@ -287,7 +287,33 @@
             <div class="modal-body">
                 <ul class="list-group">
                     <c:forEach items="${sharedWith}" var="sharedUser">
-                        <li class="list-group-item">${sharedUser.fullName}</li>
+                        <li class="list-group-item">
+                           <ul class="list-inline">
+                               <li class="list-inline-item">
+                                   ${sharedUser.fullName}
+                               </li>
+                               <c:if test="${list.share and sharedUser.id ne user.id}">
+                                   <li class="list-inline-item">
+                                       <button type="button" class="btn btn-primary editPermit"
+                                               style="padding: 0 .375rem 0 .375rem;"
+                                               data-toggle="modal" data-target="#editPermitModal"
+                                               data-id="${sharedUser.id}"
+                                               data-list-id="${list.id}">
+                                           <i class="fas fa-edit"></i>
+                                       </button>
+                                   </li>
+                                   <li class="list-inline-item">
+                                       <button type="button" class="btn btn-primary deletePermit"
+                                               style="padding: 0 .375rem 0 .375rem;"
+                                               data-toggle="modal" data-target="#deleteSharedUserModal"
+                                               data-id="${sharedUser.id}"
+                                               data-shared-name="${sharedUser.fullName}">
+                                           <i class="fas fa-trash"></i>
+                                       </button>
+                                   </li>
+                               </c:if>
+                           </ul>
+                        </li>
                     </c:forEach>
                 </ul>
             </div>
@@ -297,11 +323,101 @@
         </div>
     </div>
 </div>
+<!-- Modal edit share permit -->
+<div class="modal fade" id="editPermitModal" tabindex="-1" role="dialog" aria-labelledby="editPermitModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editPermitModalLabel">Edit Permit</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="${pageContext.request.contextPath}/list/share/edit" method="POST">
+                    <div class="form-row">
+                        <label><fmt:message key="list.label.chose_permission" /></label>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" id="editPermitAdd" type="checkbox" name="add" value="add">
+                            <label class="form-check-label" for="editPermitAdd"><fmt:message key="list.label.add" /></label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" id="editPermitEdit"  type="checkbox" name="edit" value="edit">
+                            <label class="form-check-label" for="editPermitEdit"><fmt:message key="list.label.edit" /></label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" id="editPermitShare" type="checkbox" name="share" value="share">
+                            <label class="form-check-label" for="editPermitShare"><fmt:message key="list.label.share" /></label>
+                        </div>
+                    </div>
+                    <br/>
+                    <input type="hidden" name="listId" value="${list.id}">
+                    <input type="hidden" id="userId" name="user">
+                    <button type="submit" class="btn btn-primary"><fmt:message key="list.button.share_list" /></button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal edit share permit -->
+<div class="modal fade" id="deleteSharedUserModal" tabindex="-1" role="dialog" aria-labelledby="deleteSharedUserModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteSharedUserModalLabel">Delete shared user</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="${pageContext.request.contextPath}/list/share/delete" method="POST">
+                    <label id="confirmLabelDeleteSharedUser"></label> <br/>
+                    <input type="hidden" id="listIdDeleteSharedUser" name="listId" value="${list.id}">
+                    <input type="hidden" id="userIdDeleteSharedUser" name="user">
+                    <button type="submit" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Delete shared user</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 <%@include file="parts/_footer.jspf" %>
 <%@include file="parts/_importsjs.jspf" %>
-
+<script type="text/javascript">
+    // language=JQuery-CSS
+    $('.editPermit').click(function () {
+        $('#userId').val($(this).data('id'));
+    });
+    $(document).on("click", ".editPermit", function() {        // When HTML DOM "click" event is invoked on element with ID "somebutton", execute the following function...
+        $.get("list/share/edit",
+            {
+                listId: $(this).data('list-id'),
+                userId: $(this).data('id')
+            }).done(function(responseJson) {                 // Execute Ajax GET request on URL of "someservlet" and execute the following function with Ajax response JSON...
+            $.each(responseJson, function(key, value) {               // Iterate over the JSON object.
+                switch (key){
+                    case "add" : $("#editPermitAdd").prop('checked',value);
+                        break;
+                    case "edit" : $("#editPermitEdit").prop('checked',value);
+                        break;
+                    case "share" : $("#editPermitShare").prop('checked',value);
+                        break;
+                }
+            });
+        });
+    });
+    // DELETE SHARED USER MODAL
+    $('.deletePermit').click(function () {
+        $('#confirmLabelDeleteSharedUser').html("Are you sure you want to unshare this list with " + $(this).data('shared-name') + "?");
+        $('#userIdDeleteSharedUser').val($(this).data('id'));
+    });
+</script>
 </body>
 
 </html>

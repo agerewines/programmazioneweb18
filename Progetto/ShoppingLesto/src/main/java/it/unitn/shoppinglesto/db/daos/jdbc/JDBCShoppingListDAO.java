@@ -415,6 +415,9 @@ public class JDBCShoppingListDAO extends JDBCDAO<ShoppingList, Integer> implemen
      * @throws DAOException if an error occurs during the operation.
      */
     public boolean shareListTo(ShoppingList list, User userToShare, boolean edit, boolean add, boolean share) throws DAOException {
+        if(list == null || userToShare == null){
+            throw new DAOException("list or user are nulls", new IllegalArgumentException("parameters nulls"));
+        }
         try (PreparedStatement stm = CON.prepareStatement("INSERT INTO UserList (`invitedUser`, `sharedListId`, `add`, `share`, `edit`) VALUES (?, ?, ?, ?, ?)")) {
             stm.setInt(1, userToShare.getId());
             stm.setInt(2, list.getId());
@@ -427,6 +430,32 @@ public class JDBCShoppingListDAO extends JDBCDAO<ShoppingList, Integer> implemen
         }
     }
 
+    /**
+     * Edit permit of {@link User user} in {@link ShoppingList list}
+     *
+     * @param list        the {@link ShoppingList list} to share.
+     * @param userToShare the {@link User user} shared with.
+     * @param edit        edit list permission
+     * @param add         add product into the list permission
+     * @param share       share list to someone else permission
+     * @throws DAOException if an error occurs during the operation.
+     */
+    @Override
+    public boolean editPermit(ShoppingList list, User userToShare, boolean edit, boolean add, boolean share) throws DAOException {
+        if(list == null || userToShare == null){
+            throw new DAOException("list or user are nulls", new IllegalArgumentException("parameters nulls"));
+        }
+        try (PreparedStatement stm = CON.prepareStatement("UPDATE UserList SET edit = ?, `add` = ?, share = ? WHERE invitedUser = ?  AND sharedListId = ?")) {
+            stm.setBoolean(1, edit);
+            stm.setBoolean(2, add);
+            stm.setBoolean(3, share);
+            stm.setInt(4, userToShare.getId());
+            stm.setInt(5, list.getId());
+            return stm.executeUpdate() == 1;
+        } catch (SQLException e) {
+            throw new DAOException("Impossible to update permissions");
+        }
+    }
 
     public Integer getListOwner(ShoppingList shoppingList) throws DAOException {
         Integer owner = null;
@@ -493,6 +522,29 @@ public class JDBCShoppingListDAO extends JDBCDAO<ShoppingList, Integer> implemen
             System.out.println(ex.getMessage());
             throw new DAOException("Impossible to insert product in the list.", ex);
         }
+    }
+
+    /**
+     * Remove user list link
+     *
+     * @param listId shoppinglist thats gonna be unshared
+     * @param userId user to delete
+     * @return 1 if executed
+     * @throws DAOException if an error occurs during the operation.
+     */
+    @Override
+    public Integer removePermit(Integer listId, Integer userId) throws DAOException {
+        if (listId == null || userId ==  null) {
+            throw new DAOException("parameter not valid", new IllegalArgumentException("List or user id are null."));
+        }
+        try(PreparedStatement stm = CON.prepareStatement("DELETE FROM UserList WHERE sharedListId = ? AND invitedUser = ?")) {
+            stm.setInt(1, listId);
+            stm.setInt(2, userId);
+            stm.executeUpdate();
+        } catch (SQLException e) {
+            throw new DAOException("Error deleting user list link");
+        }
+        return 1;
     }
 
     @Override

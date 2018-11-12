@@ -161,7 +161,7 @@ public class JDBCProdCategoryDAO extends JDBCDAO<Category, Integer> implements P
                 photos.add(p);
             }
         }catch (SQLException e){
-            throw new DAOException("Impossible to get photos.", e);
+            throw new DAOException("Impossible to get product category photos.", e);
         }
         return photos;
     }
