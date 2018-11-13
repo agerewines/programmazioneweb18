@@ -1,10 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: alessandrogerevini
-  Date: 28/10/2018
-  Time: 16:36
-  To change this template use File | Settings | File Templates.
---%>
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -37,17 +30,17 @@
         </div>
         <div class="col-lg-8 col-md-8 col-12">
             <%@include file="../parts/_successMessage.jspf" %>
-            <h2>Admin Panel</h2>
-            <p><small>Click on the images in order to delete them.</small></p>
+            <h2><fmt:message key="admin.h.admin_panel" /></h2>
+            <p><small><fmt:message key="admin.h.click" /></small></p>
             <ul class="nav nav-pills nav-fill mb-3" id="pills-tab" role="tablist">
                 <li class="nav-item">
-                    <a class="nav-link" id="pills-listCat-tab" data-toggle="pill" href="#pills-listCat" role="tab" aria-controls="pills-listCat" aria-selected="true">Category of lists</a>
+                    <a class="nav-link" id="pills-listCat-tab" data-toggle="pill" href="#pills-listCat" role="tab" aria-controls="pills-listCat" aria-selected="true"><fmt:message key="admin.a.lists" /></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="pills-prod-tab" data-toggle="pill" href="#pills-prod" role="tab" aria-controls="pills-prod" aria-selected="false">Products</a>
+                    <a class="nav-link" id="pills-prod-tab" data-toggle="pill" href="#pills-prod" role="tab" aria-controls="pills-prod" aria-selected="false"><fmt:message key="admin.a.products" /></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="pills-prodCat-tab" data-toggle="pill" href="#pills-prodCat" role="tab" aria-controls="pills-prodCat" aria-selected="false">Category of products</a>
+                    <a class="nav-link" id="pills-prodCat-tab" data-toggle="pill" href="#pills-prodCat" role="tab" aria-controls="pills-prodCat" aria-selected="false"><fmt:message key="admin.a.product_cat" /></a>
                 </li>
             </ul>
             <!-- Categoria di liste -->
@@ -55,7 +48,7 @@
                 <div class="tab-pane fade" id="pills-listCat" role="tabpanel" aria-labelledby="pills-listCat-tab">
                     <ul class="list-inline">
                         <li class="list-inline-item">
-                            <h5>Manage the category of lists</h5>
+                            <h5><fmt:message key="admin.h.manage" /></h5>
                         </li>
                         <li class="list-inline-item">
                             <button type="button" class="btn btn-primary addListCat"
@@ -68,10 +61,10 @@
                     <table class="table table-striped table-hover">
                         <thead>
                         <tr>
-                            <th scope="col">Photos</th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Description</th>
-                            <th scope="col">Edit</th>
+                            <th scope="col"><fmt:message key="admin.h.photos" /></th>
+                            <th scope="col"><fmt:message key="admin.h.name" /></th>
+                            <th scope="col"><fmt:message key="admin.h.description" /></th>
+                            <th scope="col"><fmt:message key="admin.h.edit" /></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -117,13 +110,13 @@
                 </div>
                 <!-- Prodotti -->
                 <div class="tab-pane fade" id="pills-prod" role="tabpanel" aria-labelledby="pills-prod-tab">
-                    <h5>Manage the available products</h5>
+                    <h5><fmt:message key="admin.h.manage_available" /></h5>
                     <table class="table table-striped">
                         <thead>
                         <tr>
-                            <th scope="col">Name</th>
-                            <th scope="col">Description</th>
-                            <th scope="col">Edit</th>
+                            <th scope="col"><fmt:message key="admin.h.name" /></th>
+                            <th scope="col"><fmt:message key="admin.h.description" /></th>
+                            <th scope="col"><fmt:message key="admin.h.edit" /></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -141,7 +134,7 @@
                 <div class="tab-pane fade" id="pills-prodCat" role="tabpanel" aria-labelledby="pills-prodCat-tab">
                     <ul class="list-inline">
                         <li class="list-inline-item">
-                            <h5>Manage the category of lists</h5>
+                            <h5><fmt:message key="admin.h.manage_lists" /></h5>
                         </li>
                         <li class="list-inline-item">
                             <button type="button" class="btn btn-primary addListCat"
@@ -154,10 +147,10 @@
                     <table class="table table-striped">
                         <thead>
                         <tr>
-                            <th scope="col">Photos</th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Description</th>
-                            <th scope="col">Edit</th>
+                            <th scope="col"><fmt:message key="admin.h.photos" /></th>
+                            <th scope="col"><fmt:message key="admin.h.name" /></th>
+                            <th scope="col"><fmt:message key="admin.h.description" /></th>
+                            <th scope="col"><fmt:message key="admin.h.edit" /></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -213,7 +206,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addListCatModalLabel">Add List Category</h5>
+                <h5 class="modal-title" id="addListCatModalLabel"><fmt:message key="admin.h.add_list" /></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -223,24 +216,24 @@
                       enctype='multipart/form-data'>
                     <div class="form-row">
                         <div class="form-group col-md-12">
-                            <label for="nameListCat">Name</label>
+                            <label for="nameListCat"><fmt:message key="admin.h.name" /></label>
                             <input type="text" class="form-control" placeholder="Name" name="nameListCat">
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-12">
-                            <label for="descriptionListCat">Description</label>
+                            <label for="descriptionListCat"><fmt:message key="admin.h.description" /></label>
                             <textarea class="form-control" name="descriptionListCat" rows="3"
                                       placeholder="Description"></textarea>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group  col-md-6">
-                            <label for="photo">Add photo</label>
+                            <label for="photo"><fmt:message key="admin.h.photos" /></label>
                             <input type="file" class="form-control-file" name="photo">
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-primary">Add list category</button>
+                    <button type="submit" class="btn btn-primary"><fmt:message key="admin.h.add_list" /></button>
                 </form>
             </div>
         </div>
@@ -253,7 +246,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modifyListCatModalLabel">Edit List Category</h5>
+                <h5 class="modal-title" id="modifyListCatModalLabel"><fmt:message key="admin.h.edit_list" /></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -263,25 +256,25 @@
                       enctype='multipart/form-data'>
                     <div class="form-row">
                         <div class="form-group col-md-12">
-                            <label for="nameListCat">Name</label>
+                            <label for="nameListCat"><fmt:message key="admin.h.name" /></label>
                             <input type="text" class="form-control" id="nameListCat" placeholder="Name" name="nameListCat">
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-12">
-                            <label for="descriptionListCat">Description</label>
+                            <label for="descriptionListCat"><fmt:message key="admin.h.description" /></label>
                             <textarea class="form-control" id="descriptionListCat" name="descriptionListCat" rows="3"
                                       placeholder="Description"></textarea>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group  col-md-6">
-                            <label for="photo">Add photo</label>
+                            <label for="photo"><fmt:message key="admin.h.photo" /></label>
                             <input type="file" class="form-control-file" id="photo" name="photo">
                         </div>
                     </div>
                     <input type="hidden" name="listCatId" id="hiddenListCatId">
-                    <button type="submit" class="btn btn-primary">Edit list category</button>
+                    <button type="submit" class="btn btn-primary"><fmt:message key="admin.h.edit_list" /></button>
                 </form>
             </div>
         </div>
@@ -294,7 +287,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="deleteListCatModalLabel">Delete ListCategory</h5>
+                <h5 class="modal-title" id="deleteListCatModalLabel"><fmt:message key="admin.h.delete_list" /></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -302,11 +295,11 @@
             <div class="modal-body">
                 <form action="${pageContext.request.contextPath}/list/category/delete" method="POST">
                     <div class="form-row">
-                        <label>Are you sure you want to delete this category<br>You will delete all list using this category</label>
+                        <label><fmt:message key="admin.h.sure" /><br><fmt:message key="admin.h.sure2" /></label>
                     </div>
                     <input type="hidden" id="hiddenListCatDeleteId" name="listCatId">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Delete list category</button>
+                    <button type="submit" class="btn btn-primary"><fmt:message key="admin.h.delete_list" /></button>
                 </form>
             </div>
         </div>
