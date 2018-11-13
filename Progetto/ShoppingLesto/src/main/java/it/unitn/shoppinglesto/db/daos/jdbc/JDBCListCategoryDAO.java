@@ -191,4 +191,43 @@ public class JDBCListCategoryDAO extends JDBCDAO<Category, Integer> implements L
             throw new DAOException("Error retrieving path of photo");
         }
     }
+
+    /**
+     * Update the @{link Category category} passed as parameter and returns it.
+     *
+     * @param cat the @{link Category category} used to update the persistence system.
+     * @return the updated category.
+     * @throws DAOException if an error occurred during the action.
+     */
+    @Override
+    public Category update(Category cat) throws DAOException {
+        if(cat == null){
+            throw new DAOException("parameter not valid", new IllegalArgumentException("The category is null."));
+        }
+        try (PreparedStatement prepStm = CON.prepareStatement("UPDATE `ListCategory` SET name = ?, description = ? WHERE `category_id` = ?")) {
+            prepStm.setString(1, cat.getName());
+            prepStm.setString(2, cat.getDescription());
+            prepStm.setInt(3, cat.getId());
+            if(cat.getPhotos() != null && !cat.getPhotos().isEmpty()){
+                removeAllPhotos(cat);
+                setPhotos(cat);
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+            throw new DAOException("Impossible to insert list category.", ex);
+        }
+        return cat;
+    }
+
+    private void removeAllPhotos(Category category) throws DAOException{
+        if(category == null){
+            throw new DAOException("parameter not valid", new IllegalArgumentException("The category is null."));
+        }
+        try (PreparedStatement prepStm = CON.prepareStatement("DELETE FROM ListCategoryPhoto WHERE listCategoryId = ?")) {
+            prepStm.setInt(1, category.getId());
+            prepStm.executeUpdate();
+        } catch (SQLException e) {
+            throw new DAOException("Error deleting listcategoryphoto");
+        }
+    }
 }

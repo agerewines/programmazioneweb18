@@ -10,11 +10,11 @@
     </context-param>
     <context-param>
         <param-name>smtp-username</param-name>
-        <param-value>onlygere@gmail.com</param-value>
+        <param-value>shoppinglesto@gmail.com</param-value>
     </context-param>
     <context-param>
         <param-name>smtp-password</param-name>
-        <param-value>wxosbrxukguhigey</param-value>
+        <param-value>ujaxwswuxpcpxrds</param-value>
     </context-param>
     <context-param>
         <description>The folder where avatars are stored</description>
@@ -44,6 +44,7 @@
     <filter-mapping>
         <filter-name>AuthenticationFilter</filter-name>
         <url-pattern>/user/profile</url-pattern>
+        <url-pattern>/list/*</url-pattern>
     </filter-mapping>
     <servlet>
         <servlet-name>UsersListServlet</servlet-name>
@@ -207,7 +208,7 @@
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>EditCategoryServlet</servlet-name>
-        <url-pattern>/list/editCategory</url-pattern>
+        <url-pattern>/list/category/edit</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>NewListCategoryServlet</servlet-name>

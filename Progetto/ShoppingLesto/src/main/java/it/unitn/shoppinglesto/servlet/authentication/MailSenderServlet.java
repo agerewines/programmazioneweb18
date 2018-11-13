@@ -72,8 +72,8 @@ public class MailSenderServlet extends HttpServlet {
 
             String activationKey = userDAO.getActivationKey(user);
             String url;
-            RawDBDemoGeoIPLocationService rdb = new RawDBDemoGeoIPLocationService();
-            if (templateName == "geolocTemplate.vm") {
+            RawDBDemoGeoIPLocationService rdb = new RawDBDemoGeoIPLocationService(getServletContext());
+            if (templateName.equals("geolocTemplate.vm")) {
                 String ip = request.getRemoteAddr();
 
                 JsonNode myCity = rdb.getLocation(ip);

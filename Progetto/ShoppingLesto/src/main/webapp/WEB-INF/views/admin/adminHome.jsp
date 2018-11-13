@@ -67,7 +67,7 @@
                     <table class="table table-striped">
                         <thead>
                         <tr>
-                            <th scope="col">Image</th>
+                            <th scope="col">Photos</th>
                             <th scope="col">Name</th>
                             <th scope="col">Description</th>
                             <th scope="col">Edit</th>
@@ -89,7 +89,7 @@
                                 <td>
                                     <ul class="list-inline">
                                             <li class="list-inline-item">
-                                                <button type="button" class="btn btn-primary modifyList"
+                                                <button type="button" class="btn btn-primary modifyListCat"
                                                         style="padding: 0 .375rem 0 .375rem;"
                                                         data-toggle="modal" data-target="#modifyListCatModal"
                                                         data-id="${listCat.id}"
@@ -223,7 +223,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form action="${pageContext.request.contextPath}/list/editCategory" method="POST"
+                <form action="${pageContext.request.contextPath}/list/category/edit" method="POST"
                       enctype='multipart/form-data'>
                     <div class="form-row">
                         <div class="form-group col-md-12">
@@ -244,6 +244,7 @@
                             <input type="file" class="form-control-file" id="photo" name="photo">
                         </div>
                     </div>
+                    <input type="hidden" name="listCatId" id="hiddenListCatId">
                     <button type="submit" class="btn btn-primary">Edit list category</button>
                 </form>
             </div>
@@ -256,7 +257,7 @@
 <%@include file="../parts/_importsjs.jspf" %>
 <script type="text/javascript">
         // language=JQuery-CSS
-        $('.modifyList').click(function () {
+        $('.modifyListCat').click(function () {
             $('#hiddenListCatId').val($(this).data('id'));
             $('#descriptionListCat').html($(this).data('desc'));
             $('#nameListCat').val($(this).data('name'));

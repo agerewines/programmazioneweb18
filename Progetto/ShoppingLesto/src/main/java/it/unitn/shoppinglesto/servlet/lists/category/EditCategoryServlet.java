@@ -4,6 +4,7 @@ import it.unitn.shoppinglesto.db.daos.ListCategoryDAO;
 import it.unitn.shoppinglesto.db.daos.ShoppingListDAO;
 import it.unitn.shoppinglesto.db.daos.UserDAO;
 import it.unitn.shoppinglesto.db.entities.Category;
+import it.unitn.shoppinglesto.db.entities.Photo;
 import it.unitn.shoppinglesto.db.entities.User;
 import it.unitn.shoppinglesto.db.exceptions.DAOException;
 import it.unitn.shoppinglesto.db.exceptions.DAOFactoryException;
@@ -16,6 +17,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.Date;
 
 @WebServlet(name = "EditCategoryServlet")
 @MultipartConfig
@@ -65,33 +67,53 @@ public class EditCategoryServlet extends HttpServlet {
         }
 
         String rootPath = System.getProperty("catalina.home");
-        String nameList = request.getParameter("nameListCat");
-        String descriptionList = request.getParameter("descriptionListCat");
+        String nameListCat = request.getParameter("nameListCat");
+        String descriptionListCat = request.getParameter("descriptionListCat");
+        Integer listCatId = Integer.parseInt(request.getParameter("listCatId"));
 
         Category listCat = null;
-        if ( nameList == null || descriptionList == null || nameList.equals("") || descriptionList.equals("")) {
+        if ( nameListCat == null || descriptionListCat == null || nameListCat.equals("") || descriptionListCat.equals("") || listCatId.equals("")) {
             hasError = true;
             message = "All fields are mandatory and must be filled!";
         } else {
-            listCat = new Category();
-            listCat.setName(nameList);
-            listCat.setDescription(descriptionList);
-            // aggiungi  a ListCategory
-            // prendi l'id, salvalo in listCat
-            // aggiungi le foto se ci sono
+            try {
+                listCat = listCategoryDAO.getByPrimaryKey(listCatId);
+                // prendi la categoria dal db
+                listCat.setDescription(descriptionListCat);
+                listCat.setName(nameListCat);
+                // aggiungi la foto se presente
+
+                Part filePart = request.getPart("photo");
+                if ((filePart != null) && (filePart.getSize() > 0)) {
+                    Photo listPhoto = new Photo();
+                    listPhoto.setId(listCat.getId());
+                    listPhoto.setItemId(listCat.getId());
+                    String fileName = UtilityHelper.getFilename(filePart);
+                    fileName = UtilityHelper.renameImage(fileName, "ListCategory_" + listCat.getId() + "_" + (new Date().toString()).replace(":", "_").replace(" ", "_"));
+                    String listCategoryUploadDir = rootPath + File.separator + avatarsFolder + "ListCategory";
+                    try {
+                        listPhoto.setPath(UtilityHelper.uploadFileToDirectory(listCategoryUploadDir, fileName, filePart));
+                        listCat.addPhoto(listPhoto);
+                        listCategoryDAO.addPhoto(listPhoto);
+                    } catch (DAOException | IOException ex) {
+                        response.sendError(500, ex.getMessage());
+                    }
+                }
+                // aggiorna la categoria
+                listCategoryDAO.update(listCat);
+
+            } catch (DAOException e) {
+                response.sendError(500, e.getMessage());
+            }
         }
 
         if (hasError) {
-            request.setAttribute("errorMessage", "errors");
+            session.setAttribute("errorMessage", message);
             response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath() + "/home"));
         } else {
-            if (modified) {
-                //listCat = listCategoryDAO.update(listCat);
-                message = "List was successfully updated";
-                session.setAttribute("successMessage", message);
-            }
+            message = "List was successfully updated";
+            session.setAttribute("successMessage", message);
             response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath() + "/home"));
-
         }
     }
 

@@ -122,8 +122,8 @@ public class LoginServlet extends HttpServlet {
             request.setAttribute("template", "geolocTemplate.vm");
             request.setAttribute("linkName", "Point of Interest");
 
-           RequestDispatcher rd = getServletContext().getRequestDispatcher("/sendRegistrationEmail.handler");
-           rd.forward(request, response);
+            //RequestDispatcher rd = getServletContext().getRequestDispatcher("/sendRegistrationEmail.handler");
+            //rd.forward(request, response);
 
 
             response.sendRedirect(response.encodeRedirectURL(returnUrl));

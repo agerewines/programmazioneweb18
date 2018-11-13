@@ -21,4 +21,12 @@ public interface ListCategoryDAO extends DAO<Category, Integer> {
      * @throws DAOException
      */
     public String getPhotoPath(Integer photoId) throws DAOException;
+
+    /**
+     * Update the @{link Category category} passed as parameter and returns it.
+     * @param cat the @{link Category category} used to update the persistence system.
+     * @return the updated category.
+     * @throws DAOException if an error occurred during the action.
+     */
+    public Category update(Category cat) throws DAOException;
 }
