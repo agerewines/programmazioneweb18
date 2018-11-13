@@ -123,8 +123,32 @@
         <servlet-class>it.unitn.shoppinglesto.servlet.lists.DeleteSharedUserServlet</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>DeleteListCategoryPhotoServlet</servlet-name>
+        <servlet-class>it.unitn.shoppinglesto.servlet.lists.category.DeleteListCategoryPhotoServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DeleteListCategoryServlet</servlet-name>
+        <servlet-class>it.unitn.shoppinglesto.servlet.lists.category.DeleteListCategoryServlet</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>NewListCategoryServlet</servlet-name>
         <servlet-class>it.unitn.shoppinglesto.servlet.lists.category.NewListCategoryServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>EditProductCategoryServlet</servlet-name>
+        <servlet-class>it.unitn.shoppinglesto.servlet.product.category.EditProductCategoryServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>NewProductCategoryServlet</servlet-name>
+        <servlet-class>it.unitn.shoppinglesto.servlet.product.category.NewProductCategoryServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DeleteProductCategoryServlet</servlet-name>
+        <servlet-class>it.unitn.shoppinglesto.servlet.product.category.DeleteProductCategoryServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DeleteProductCategoryPhotoServlet</servlet-name>
+        <servlet-class>it.unitn.shoppinglesto.servlet.product.category.DeleteProductCategoryPhotoServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ImageServlet</servlet-name>
@@ -215,8 +239,32 @@
         <url-pattern>/list/category/new</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
+        <servlet-name>DeleteListCategoryServlet</servlet-name>
+        <url-pattern>/list/category/delete</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DeleteListCategoryPhotoServlet</servlet-name>
+        <url-pattern>/list/category/photo/delete</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
         <servlet-name>AddProductToListServlet</servlet-name>
         <url-pattern>/product/add</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EditProductCategoryServlet</servlet-name>
+        <url-pattern>/product/category/edit</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>NewProductCategoryServlet</servlet-name>
+        <url-pattern>/product/category/new</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DeleteProductCategoryServlet</servlet-name>
+        <url-pattern>/product/category/delete</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DeleteProductCategoryPhotoServlet</servlet-name>
+        <url-pattern>/product/category/photo/delete</url-pattern>
     </servlet-mapping>
   <welcome-file-list>
         <welcome-file>/WEB-INF/views/index.jsp</welcome-file>

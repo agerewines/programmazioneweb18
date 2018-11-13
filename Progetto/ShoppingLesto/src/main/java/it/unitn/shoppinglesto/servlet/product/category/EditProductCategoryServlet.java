@@ -1,8 +1,6 @@
-package it.unitn.shoppinglesto.servlet.lists.category;
+package it.unitn.shoppinglesto.servlet.product.category;
 
-import it.unitn.shoppinglesto.db.daos.ListCategoryDAO;
-import it.unitn.shoppinglesto.db.daos.ShoppingListDAO;
-import it.unitn.shoppinglesto.db.daos.UserDAO;
+import it.unitn.shoppinglesto.db.daos.ProdCategoryDAO;
 import it.unitn.shoppinglesto.db.entities.Category;
 import it.unitn.shoppinglesto.db.entities.Photo;
 import it.unitn.shoppinglesto.db.entities.User;
@@ -19,12 +17,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 
-@WebServlet(name = "EditCategoryServlet")
+@WebServlet(name = "EditProductCategoryServlet")
 @MultipartConfig
-public class EditCategoryServlet extends HttpServlet {
-    private UserDAO userDAO;
-    private ShoppingListDAO shoppingListDAO;
-    private ListCategoryDAO listCategoryDAO;
+public class EditProductCategoryServlet extends HttpServlet {
+    private ProdCategoryDAO prodCategoryDAO;
 
     @Override
     public void init() throws ServletException {
@@ -33,21 +29,10 @@ public class EditCategoryServlet extends HttpServlet {
             throw new ServletException("Impossible to get dao factory!");
         }
         try {
-            userDAO = daoFactory.getDAO(UserDAO.class);
-        } catch (DAOFactoryException ex) {
-            throw new ServletException("Impossible to get user dao from dao factory!", ex);
-        }
-        try {
-            listCategoryDAO = daoFactory.getDAO(ListCategoryDAO.class);
+            prodCategoryDAO = daoFactory.getDAO(ProdCategoryDAO.class);
         } catch (DAOFactoryException ex) {
             throw new ServletException("Impossible to get list category dao from dao factory!", ex);
         }
-        try {
-            shoppingListDAO = daoFactory.getDAO(ShoppingListDAO.class);
-        } catch (DAOFactoryException ex) {
-            throw new ServletException("Impossible to get shopping list dao from dao factory!", ex);
-        }
-
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -67,40 +52,40 @@ public class EditCategoryServlet extends HttpServlet {
         }
 
         String rootPath = System.getProperty("catalina.home");
-        String nameListCat = request.getParameter("nameListCat");
-        String descriptionListCat = request.getParameter("descriptionListCat");
-        Integer listCatId = Integer.parseInt(request.getParameter("listCatId"));
+        String nameProdCat = request.getParameter("nameProdCat");
+        String descriptionProdCat = request.getParameter("descriptionProdCat");
+        Integer prodCatId = Integer.parseInt(request.getParameter("prodCatId"));
 
-        Category listCat = null;
-        if ( nameListCat == null || descriptionListCat == null || nameListCat.equals("") || descriptionListCat.equals("") || listCatId.equals("")) {
+        Category prodCat = null;
+        if ( nameProdCat == null || descriptionProdCat == null || nameProdCat.equals("") || descriptionProdCat.equals("") || prodCatId.equals("")) {
             hasError = true;
             message = "All fields are mandatory and must be filled!";
         } else {
             try {
-                listCat = listCategoryDAO.getByPrimaryKey(listCatId);
+                prodCat = prodCategoryDAO.getByPrimaryKey(prodCatId);
                 // prendi la categoria dal db
-                listCat.setDescription(descriptionListCat);
-                listCat.setName(nameListCat);
+                prodCat.setDescription(descriptionProdCat);
+                prodCat.setName(nameProdCat);
                 // aggiungi la foto se presente
-                listCategoryDAO.simpleUpdate(listCat);
+                prodCategoryDAO.simpleUpdate(prodCat);
                 Part filePart = request.getPart("photo");
                 if ((filePart != null) && (filePart.getSize() > 0)) {
-                    Photo listPhoto = new Photo();
-                    listPhoto.setId(listCat.getId());
-                    listPhoto.setItemId(listCat.getId());
+                    Photo prodPhoto = new Photo();
+                    prodPhoto.setId(prodCat.getId());
+                    prodPhoto.setItemId(prodCat.getId());
                     String fileName = UtilityHelper.getFilename(filePart);
-                    fileName = UtilityHelper.renameImage(fileName, "ListCategory_" + listCat.getId() + "_" + (new Date().toString()).replace(":", "_").replace(" ", "_"));
-                    String listCategoryUploadDir = rootPath + File.separator + avatarsFolder + "ListCategory";
+                    fileName = UtilityHelper.renameImage(fileName, "ProdCategory_" + prodCat.getId() + "_" + (new Date().toString()).replace(":", "_").replace(" ", "_"));
+                    String listCategoryUploadDir = rootPath + File.separator + avatarsFolder + "ProdCategory";
                     try {
-                        listPhoto.setPath(UtilityHelper.uploadFileToDirectory(listCategoryUploadDir, fileName, filePart));
-                        listCat.addPhoto(listPhoto);
-                        listCategoryDAO.addPhoto(listPhoto);
+                        prodPhoto.setPath(UtilityHelper.uploadFileToDirectory(listCategoryUploadDir, fileName, filePart));
+                        prodCat.addPhoto(prodPhoto);
+                        prodCategoryDAO.addPhoto(prodPhoto);
                     } catch (DAOException | IOException ex) {
                         response.sendError(500, ex.getMessage());
                     }
                 }
                 // aggiorna la categoria
-                listCategoryDAO.update(listCat);
+                prodCategoryDAO.update(prodCat);
 
             } catch (DAOException e) {
                 response.sendError(500, e.getMessage());
@@ -111,7 +96,7 @@ public class EditCategoryServlet extends HttpServlet {
             session.setAttribute("errorMessage", message);
             response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath() + "/home"));
         } else {
-            message = "List was successfully updated";
+            message = "Product category was successfully updated";
             session.setAttribute("successMessage", message);
             response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath() + "/home"));
         }

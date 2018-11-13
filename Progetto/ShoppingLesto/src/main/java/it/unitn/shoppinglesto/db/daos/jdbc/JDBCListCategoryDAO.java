@@ -101,7 +101,19 @@ public class JDBCListCategoryDAO extends JDBCDAO<Category, Integer> implements L
 
     @Override
     public Integer delete(Integer primaryKey) throws DAOException {
-        return null;
+        if (primaryKey == null) {
+            throw new DAOException("primary key is null");
+        }
+        // delete all list with this category
+        // delete all photos
+        // delete category
+        try(PreparedStatement stm = CON.prepareStatement("DELETE FROM ListCategory WHERE category_id = ?")) {
+            stm.setInt(1, primaryKey);
+            stm.executeUpdate();
+        } catch (SQLException e) {
+            throw new DAOException("Error deleting list category");
+        }
+        return 1;
     }
 
     private List<Photo> getPhotos(Integer categoryId) throws DAOException {
@@ -208,15 +220,55 @@ public class JDBCListCategoryDAO extends JDBCDAO<Category, Integer> implements L
             prepStm.setString(1, cat.getName());
             prepStm.setString(2, cat.getDescription());
             prepStm.setInt(3, cat.getId());
+            prepStm.executeUpdate();
             if(cat.getPhotos() != null && !cat.getPhotos().isEmpty()){
                 removeAllPhotos(cat);
                 setPhotos(cat);
             }
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
-            throw new DAOException("Impossible to insert list category.", ex);
+            throw new DAOException("Impossible to update list category.", ex);
         }
         return cat;
+    }
+
+    /**
+     * Update the @{link Category category} passed as parameter and returns it.
+     *
+     * @param cat the @{link Category category} used to update the persistence system.
+     * @return the updated category.
+     * @throws DAOException if an error occurred during the action.
+     */
+    @Override
+    public Category simpleUpdate(Category cat) throws DAOException {
+        if(cat == null){
+            throw new DAOException("parameter not valid", new IllegalArgumentException("The category is null."));
+        }
+        try (PreparedStatement prepStm = CON.prepareStatement("UPDATE `ListCategory` SET name = ?, description = ? WHERE `category_id` = ?")) {
+            prepStm.setString(1, cat.getName());
+            prepStm.setString(2, cat.getDescription());
+            prepStm.setInt(3, cat.getId());
+            prepStm.executeUpdate();
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+            throw new DAOException("Impossible to simple update list category.", ex);
+        }
+        return cat;
+    }
+
+    @Override
+    public boolean deletePhoto(Integer photoId) throws DAOException {
+        if(photoId == null){
+            throw new DAOException("photoid is null");
+        }
+        try(PreparedStatement preparedStatement = CON.prepareStatement("DELETE FROM ListCategoryPhoto WHERE listCategoryPhotoId = ?")){
+            preparedStatement.setInt(1, photoId);
+            if(preparedStatement.executeUpdate() == 1)
+                return true;
+        }catch (SQLException e){
+            throw new DAOException("Impossible to delete photo", e);
+        }
+        return false;
     }
 
     private void removeAllPhotos(Category category) throws DAOException{

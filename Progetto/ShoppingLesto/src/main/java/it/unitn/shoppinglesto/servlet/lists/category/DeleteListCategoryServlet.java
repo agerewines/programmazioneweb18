@@ -1,9 +1,7 @@
-package it.unitn.shoppinglesto.servlet.lists;
+package it.unitn.shoppinglesto.servlet.lists.category;
 
 import it.unitn.shoppinglesto.db.daos.ListCategoryDAO;
-import it.unitn.shoppinglesto.db.daos.ShoppingListDAO;
 import it.unitn.shoppinglesto.db.daos.UserDAO;
-import it.unitn.shoppinglesto.db.entities.ShoppingList;
 import it.unitn.shoppinglesto.db.entities.User;
 import it.unitn.shoppinglesto.db.exceptions.DAOException;
 import it.unitn.shoppinglesto.db.exceptions.DAOFactoryException;
@@ -17,10 +15,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-@WebServlet(name = "DeleteListServlet")
-public class DeleteListServlet extends HttpServlet {
-    private final String TEMPLISTCOOKIENAME = "templist_shoppingLesto_token";
-    private ShoppingListDAO shoppingListDAO;
+@WebServlet(name = "DeleteListCategoryServlet")
+public class DeleteListCategoryServlet extends HttpServlet {
+    private ListCategoryDAO listCategoryDAO;
 
     @Override
     public void init() throws ServletException {
@@ -29,9 +26,9 @@ public class DeleteListServlet extends HttpServlet {
             throw new ServletException("Impossible to get dao factory!");
         }
         try {
-            shoppingListDAO = daoFactory.getDAO(ShoppingListDAO.class);
+            listCategoryDAO = daoFactory.getDAO(ListCategoryDAO.class);
         } catch (DAOFactoryException ex) {
-            throw new ServletException("Impossible to get shopping list dao from dao factory!", ex);
+            throw new ServletException("Impossible to get list category dao from dao factory!", ex);
         }
     }
 
@@ -46,14 +43,14 @@ public class DeleteListServlet extends HttpServlet {
         String message = null;
         boolean hasError = false;
 
-        Integer listId = null;
+        Integer listCatId = null;
         try {
-            listId = Integer.valueOf(request.getParameter("listId"));
+            listCatId = Integer.valueOf(request.getParameter("listCatId"));
         } catch (RuntimeException ex) {
-            response.sendError(500, "Error getting list id");
+            response.sendError(500, "Error getting list cat id");
         }
         try{
-            if(!shoppingListDAO.delete(listId).equals(1)){
+            if(!listCategoryDAO.delete(listCatId).equals(1)){
                 hasError = true;
             }
         }catch (DAOException e){
@@ -61,15 +58,14 @@ public class DeleteListServlet extends HttpServlet {
         }
 
         if (hasError) {
-            session.setAttribute("errorMessage", "Error deleting list " + listId);
-            session.setAttribute("action", "deleteList");
-            response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath() + "/list?id=" + listId));
+            session.setAttribute("errorMessage", "Error deleting list category " + listCatId);
+            session.setAttribute("action", "deleteListCat");
+            response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath() + "/home"));
         } else {
-            message = "List was successfully deleted";
+            message = "List Category was successfully deleted";
             session.setAttribute("successMessage", message);
             response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath() + "/home"));
         }
-
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

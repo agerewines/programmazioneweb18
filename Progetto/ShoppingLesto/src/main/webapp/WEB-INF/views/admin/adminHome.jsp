@@ -38,6 +38,7 @@
         <div class="col-lg-8 col-md-8 col-12">
             <%@include file="../parts/_successMessage.jspf" %>
             <h2>Admin Panel</h2>
+            <p><small>Click on the images in order to delete them.</small></p>
             <ul class="nav nav-pills nav-fill mb-3" id="pills-tab" role="tablist">
                 <li class="nav-item">
                     <a class="nav-link" id="pills-listCat-tab" data-toggle="pill" href="#pills-listCat" role="tab" aria-controls="pills-listCat" aria-selected="true">Category of lists</a>
@@ -64,7 +65,7 @@
                             </button>
                         </li>
                     </ul>
-                    <table class="table table-striped">
+                    <table class="table table-striped table-hover">
                         <thead>
                         <tr>
                             <th scope="col">Photos</th>
@@ -79,9 +80,11 @@
                             <tr>
                                 <td>
                                     <c:forEach items="${listCat.photos}" var="photo">
-                                        <img class="rounded shadow mb-3 bg-white rounded" height="65" width="65"
+                                        <img class="rounded shadow mb-3 bg-white rounded deletePhoto image" height="65" width="65"
                                              src="${pageContext.request.contextPath}/images?id=${photo.id}&resource=listCatPhoto"
-                                             onerror="this.onerror=null;this.src='${pageContext.request.contextPath}/images/avatars/Products/default.png';"/>
+                                             onerror="this.onerror=null;this.src='${pageContext.request.contextPath}/images/avatars/Products/default.png';"
+                                             onclick="deleteListCatPhoto(${photo.id}, this)"
+                                             onmouseover="mouseOverPhoto(this)" title="Click on the picture to delete it!"/>
                                     </c:forEach>
                                 </td>
                                 <td>${listCat.name}</td>
@@ -99,9 +102,9 @@
                                                 </button>
                                             </li>
                                         <li class="list-inline-item">
-                                            <button type="button" class="btn btn-primary"
+                                            <button type="button" class="btn btn-primary deleteListCat"
                                                     style="padding: 0 .375rem 0 .375rem;"
-                                                    data-toggle="modal" data-target="#deleteListCatModal" data-id-listCat="${listCat.id}">
+                                                    data-toggle="modal" data-target="#deleteListCatModal" data-id-list-cat="${listCat.id}">
                                                 <i class="fas fa-trash"></i>
                                             </button>
                                         </li>
@@ -136,11 +139,22 @@
                 </div>
                 <!-- Categoria di prodotti -->
                 <div class="tab-pane fade" id="pills-prodCat" role="tabpanel" aria-labelledby="pills-prodCat-tab">
-                    <h5>Manage the category of products</h5>
+                    <ul class="list-inline">
+                        <li class="list-inline-item">
+                            <h5>Manage the category of lists</h5>
+                        </li>
+                        <li class="list-inline-item">
+                            <button type="button" class="btn btn-primary addListCat"
+                                    style="padding: 0 .375rem 0 .375rem;"
+                                    data-toggle="modal" data-target="#addListCatModal">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </li>
+                    </ul>
                     <table class="table table-striped">
                         <thead>
                         <tr>
-                            <th scope="col">Images</th>
+                            <th scope="col">Photos</th>
                             <th scope="col">Name</th>
                             <th scope="col">Description</th>
                             <th scope="col">Edit</th>
@@ -152,13 +166,35 @@
                                 <td>
                                     <c:forEach items="${prodCat.photos}" var="photo">
                                     <img class="rounded shadow mb-3 bg-white rounded" height="65" width="65"
-                                         src="${pageContext.request.contextPath}/images?id=${photo.id}&resource=listCatPhoto"
-                                         onerror="this.onerror=null;this.src='${pageContext.request.contextPath}/images/avatars/Products/default.png';"/>
+                                         src="${pageContext.request.contextPath}/images?id=${photo.id}&resource=prodCatPhoto"
+                                         onerror="this.onerror=null;this.src='${pageContext.request.contextPath}/images/avatars/Products/default.png';"
+                                         onmouseover="mouseOverPhoto(this)"
+                                         onclick="deleteProdCatPhoto(${photo.id}, this)"  title="Click on the picture to delete it!"/>
                                     </c:forEach>
                                 </td>
                                 <td>${prodCat.name}</td>
                                 <td>${prodCat.description}</td>
-                                <td>@mdo</td>
+                                <td>
+                                    <ul class="list-inline">
+                                        <li class="list-inline-item">
+                                            <button type="button" class="btn btn-primary modifyProdCat"
+                                                    style="padding: 0 .375rem 0 .375rem;"
+                                                    data-toggle="modal" data-target="#modifyProdCatModal"
+                                                    data-id="${prodCat.id}"
+                                                    data-name="${prodCat.name}"
+                                                    data-desc="${prodCat.description}">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                        </li>
+                                        <li class="list-inline-item">
+                                            <button type="button" class="btn btn-primary"
+                                                    style="padding: 0 .375rem 0 .375rem;"
+                                                    data-toggle="modal" data-target="#deleteProdCatModal" data-id-prod-cat="${prodCat.id}">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </li>
+                                    </ul>
+                                </td>
                             </tr>
                         </c:forEach>
                         </tbody>
@@ -170,7 +206,7 @@
         </div>
     </div>
 </div>
-
+<!-- List Categoy -->
 <!-- Modal add list category button -->
 <div class="modal fade" id="addListCatModal" tabindex="-1" role="dialog" aria-labelledby="addListCatModalLabel"
      aria-hidden="true">
@@ -252,16 +288,188 @@
     </div>
 </div>
 
+<!-- Modal delete list category button -->
+<div class="modal fade" id="deleteListCatModal" tabindex="-1" role="dialog" aria-labelledby="deleteListCatModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteListCatModalLabel">Delete ListCategory</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="${pageContext.request.contextPath}/list/category/delete" method="POST">
+                    <div class="form-row">
+                        <label>Are you sure you want to delete this category<br>You will delete all list using this category</label>
+                    </div>
+                    <input type="hidden" id="hiddenListCatDeleteId" name="listCatId">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Delete list category</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Product Category -->
+<!-- Modal add list category button -->
+<div class="modal fade" id="addProdCatModal" tabindex="-1" role="dialog" aria-labelledby="addProdCatModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addProdCatModalLabel">Add List Category</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="${pageContext.request.contextPath}/product/category/new" method="POST"
+                      enctype='multipart/form-data'>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label for="nameProdCat">Name</label>
+                            <input type="text" class="form-control" placeholder="Name" name="nameProdCat">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label for="descriptionProdCat">Description</label>
+                            <textarea class="form-control" name="descriptionProdCat" rows="3"
+                                      placeholder="Description"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group  col-md-6">
+                            <label for="photo">Add photo</label>
+                            <input type="file" class="form-control-file" name="photo">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Add product category</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal edit list category button -->
+<div class="modal fade" id="modifyProdCatModal" tabindex="-1" role="dialog" aria-labelledby="modifyProdCatModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modifyProdCatModalLabel">Edit List Category</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="${pageContext.request.contextPath}/product/category/edit" method="POST"
+                      enctype='multipart/form-data'>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label for="nameProdCat">Name</label>
+                            <input type="text" class="form-control" id="nameProdCat" placeholder="Name" name="nameProdCat">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label for="descriptionProdCat">Description</label>
+                            <textarea class="form-control" id="descriptionProdCat" name="descriptionProdCat" rows="3"
+                                      placeholder="Description"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group  col-md-6">
+                            <label for="photo">Add photo</label>
+                            <input type="file" class="form-control-file" name="photo">
+                        </div>
+                    </div>
+                    <input type="hidden" name="prodCatId" id="hiddenProdCatId">
+                    <button type="submit" class="btn btn-primary">Edit product category</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal delete list category button -->
+<div class="modal fade" id="deleteProdCatModal" tabindex="-1" role="dialog" aria-labelledby="deleteProdCatModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteProdCatModalLabel">Delete Product Category</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="${pageContext.request.contextPath}/product/category/delete" method="POST">
+                    <div class="form-row">
+                        <label>Are you sure you want to delete this category<br>You will delete all product using this category</label>
+                    </div>
+                    <input type="hidden" id="hiddenProdCatDeleteId" name="prodCatId">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Delete product category</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <%@include file="../parts/_footer.jspf" %>
 <%@include file="../parts/_importsjs.jspf" %>
 <script type="text/javascript">
-        // language=JQuery-CSS
-        $('.modifyListCat').click(function () {
-            $('#hiddenListCatId').val($(this).data('id'));
-            $('#descriptionListCat').html($(this).data('desc'));
-            $('#nameListCat').val($(this).data('name'));
-        })
+    // language=JQuery-CSS
+    $('.modifyListCat').click(function () {
+        $('#hiddenListCatId').val($(this).data('id'));
+        $('#descriptionListCat').html($(this).data('desc'));
+        $('#nameListCat').val($(this).data('name'));
+    });
+
+    $('.deleteListCat').click(function () {
+        $('#hiddenListCatDeleteId').val($(this).data('id-list-cat'));
+    });
+
+    $('.deleteProdCat').click(function () {
+        $('#hiddenProdCatDeleteId').val($(this).data('id-prod-cat'));
+    });
+
+    $('.modifyProdCat').click(function () {
+        $('#hiddenProdCatId').val($(this).data('id'));
+        $('#descriptionProdCat').html($(this).data('desc'));
+        $('#nameProdCat').val($(this).data('name'));
+    });
+
+    function mouseOverPhoto(elem){
+        $(elem).css( 'cursor', 'pointer' );
+    }
+
+    function deleteListCatPhoto(id, elem) {        // When HTML DOM "click" event is invoked on element with ID "somebutton", execute the following function...
+        $.post("list/category/photo/delete",
+            {
+                listCategoryPhotoId : id
+            }).done(function(){});
+        $(elem).fadeOut(300, function() { $(this).remove(); });
+        $(elem).tooltip( "option", "disabled" );
+    }
+
+
+    function deleteProdCatPhoto(id, elem) {        // When HTML DOM "click" event is invoked on element with ID "somebutton", execute the following function...
+        $.post("product/category/photo/delete",
+            {
+                prodCategoryPhotoId : id
+            }).done(function(){});
+        $(elem).fadeOut(300, function() { $(this).remove(); });
+        $(elem).tooltip( "option", "disabled" );
+    }
+
+
 </script>
 </body>
 

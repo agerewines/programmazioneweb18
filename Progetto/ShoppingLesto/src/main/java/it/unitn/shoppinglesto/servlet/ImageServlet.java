@@ -1,9 +1,6 @@
 package it.unitn.shoppinglesto.servlet;
 
-import it.unitn.shoppinglesto.db.daos.ListCategoryDAO;
-import it.unitn.shoppinglesto.db.daos.ProductDAO;
-import it.unitn.shoppinglesto.db.daos.ShoppingListDAO;
-import it.unitn.shoppinglesto.db.daos.UserDAO;
+import it.unitn.shoppinglesto.db.daos.*;
 import it.unitn.shoppinglesto.db.entities.*;
 import it.unitn.shoppinglesto.db.exceptions.DAOException;
 import it.unitn.shoppinglesto.db.exceptions.DAOFactoryException;
@@ -26,7 +23,7 @@ public class ImageServlet extends HttpServlet {
     private UserDAO userDAO;
     private ShoppingListDAO shoppingListDAO;
     private ListCategoryDAO listCategoryDAO;
-    //private ProductCategoryDAO prodCategoryDAO;
+    private ProdCategoryDAO prodCategoryDAO;
     private ProductDAO productDAO;
 
     @Override
@@ -50,11 +47,11 @@ public class ImageServlet extends HttpServlet {
         } catch (DAOFactoryException ex) {
             throw new ServletException("Impossible to get list category dao from dao factory", ex);
         }
-        /*try{
-            prodCategoryDAO = daoFactory.getDAO(ProductCategoryDAO.class);
+        try{
+            prodCategoryDAO = daoFactory.getDAO(ProdCategoryDAO.class);
         } catch (DAOFactoryException ex) {
             throw new ServletException("Impossible to get product category dao from dao factory", ex);
-        }*/
+        }
         try{
             productDAO = daoFactory.getDAO(ProductDAO.class);
         } catch (DAOFactoryException ex) {
@@ -124,12 +121,9 @@ public class ImageServlet extends HttpServlet {
                         case "listCatPhoto":
                             path = listCategoryDAO.getPhotoPath(id);
                             break;
-                        /*case "productCategories":
-                            ProductCategory prodCategory = prodCategoryDAO.getByPrimaryKey(id);
-                            if(prodCategory != null){
-                                path = prodCategory.getLogoPath();
-                            }
-                            break;*/
+                        case "prodCatPhoto":
+                            path = prodCategoryDAO.getPhotoPath(id);
+                            break;
                         default:
                             validResource = false;
                             break;

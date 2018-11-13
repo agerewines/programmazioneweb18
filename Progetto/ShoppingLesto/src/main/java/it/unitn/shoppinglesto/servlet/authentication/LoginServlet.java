@@ -125,7 +125,6 @@ public class LoginServlet extends HttpServlet {
             //RequestDispatcher rd = getServletContext().getRequestDispatcher("/sendRegistrationEmail.handler");
             //rd.forward(request, response);
 
-
             response.sendRedirect(response.encodeRedirectURL(returnUrl));
 
         }
