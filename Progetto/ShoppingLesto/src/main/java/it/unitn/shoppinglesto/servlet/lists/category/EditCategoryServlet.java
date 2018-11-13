@@ -11,12 +11,14 @@ import it.unitn.shoppinglesto.db.factories.DAOFactory;
 import it.unitn.shoppinglesto.utils.UtilityHelper;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.File;
 import java.io.IOException;
 
 @WebServlet(name = "EditCategoryServlet")
+@MultipartConfig
 public class EditCategoryServlet extends HttpServlet {
     private UserDAO userDAO;
     private ShoppingListDAO shoppingListDAO;

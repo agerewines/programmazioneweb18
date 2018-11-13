@@ -26,9 +26,9 @@
 
 <div class="container-fluid">
     <div class="row justify-content-md-center">
-        <div class="col">
+        <div class="col-md-2">
         </div>
-        <div class="col-md-8">
+        <div class="col-lg-8 col-md-8 col-12">
             <%@include file="parts/_successMessage.jspf" %>
             <!-- Search form -->
             <form class="form-inline md-form form-sm mt-0">
@@ -76,7 +76,7 @@
                 </tbody>
             </table>
         </div>
-        <div class="col">
+        <div class="col-md-2">
         </div>
     </div>
 </div>

@@ -26,9 +26,9 @@
 
 <div class="container-fluid">
     <div class="row">
-        <div class="col">
+        <div class="col-md-2">
         </div>
-        <div class="col-6">
+        <div class="col-lg-8 col-md-8 col-12">
             <h2>Login</h2>
             <form  method="POST" action="${pageContext.request.contextPath}/login">
                 <div class="form-group">
@@ -52,7 +52,7 @@
             </div>
 
         </div>
-        <div class="col">
+        <div class="col-md-2">
         </div>
     </div>
 </div>

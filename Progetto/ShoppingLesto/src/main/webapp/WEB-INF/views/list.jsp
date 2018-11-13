@@ -27,9 +27,9 @@
 
 <div class="container-fluid">
     <div class="row justify-content-md-center">
-        <div class="col">
+        <div class="col-md-2">
         </div>
-        <div class="col-md-8">
+        <div class="col-lg-8 col-md-8 col-12">
             <%@include file="parts/_successMessage.jspf" %>
             <div class="d-flex flex-wrap">
                 <div class="p-2 align-self-center justify-content-center">
@@ -104,11 +104,11 @@
                 </div>
             </div>
         </div>
-        <div class="col">
+        <div class="col-md-2">
         </div>
     </div>
     <div class="row justify-content-center">
-        <div class="col">
+        <div class="col" media="(min-width: 465px)">
         </div>
         <div class="col-md-8">
             <table class="table">
@@ -136,7 +136,7 @@
             <a class="btn btn-primary"
                href="${pageContext.request.contextPath}/product/add?listId=${list.id}"><fmt:message key="list.a.add_product" /></a>
         </div>
-        <div class="col">
+        <div class="col" media="(min-width: 465px)">
         </div>
     </div>
 </div>

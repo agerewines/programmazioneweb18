@@ -25,9 +25,9 @@
 <%@include file="parts/_errors.jspf" %>
 <div class="container-fluid">
     <div class="row justify-content-md-center">
-        <div class="col">
+        <div class="col-md-2">
         </div>
-        <div class="col-md-8">
+        <div class="col-lg-8 col-md-8 col-12">
             <h2>Users</h2>
             <table class="table">
                 <thead>
@@ -48,7 +48,7 @@
                 </tbody>
             </table>
         </div>
-        <div class="col">
+        <div class="col-md-2">
         </div>
     </div>
 </div>

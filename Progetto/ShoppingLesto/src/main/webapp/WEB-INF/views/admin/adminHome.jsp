@@ -33,9 +33,9 @@
 
 <div class="container-fluid">
     <div class="row justify-content-md-center">
-        <div class="col">
+        <div class="col-md-2">
         </div>
-        <div class="col-md-8">
+        <div class="col-lg-8 col-md-8 col-12">
             <%@include file="../parts/_successMessage.jspf" %>
             <h2>Admin Panel</h2>
             <ul class="nav nav-pills nav-fill mb-3" id="pills-tab" role="tablist">
@@ -166,7 +166,7 @@
                 </div>
             </div>
         </div>
-        <div class="col">
+        <div class="col-md-2">
         </div>
     </div>
 </div>
