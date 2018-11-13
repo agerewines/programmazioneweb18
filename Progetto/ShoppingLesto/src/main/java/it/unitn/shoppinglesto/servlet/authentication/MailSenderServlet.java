@@ -1,10 +1,13 @@
 package it.unitn.shoppinglesto.servlet.authentication;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.maxmind.geoip2.exception.GeoIp2Exception;
 import it.unitn.shoppinglesto.db.daos.UserDAO;
 import it.unitn.shoppinglesto.db.entities.User;
 import it.unitn.shoppinglesto.db.exceptions.DAOException;
 import it.unitn.shoppinglesto.db.exceptions.DAOFactoryException;
 import it.unitn.shoppinglesto.db.factories.DAOFactory;
+import it.unitn.shoppinglesto.geolocation.RawDBDemoGeoIPLocationService;
 import it.unitn.shoppinglesto.utils.MailHelper;
 import it.unitn.shoppinglesto.utils.UtilityHelper;
 import it.unitn.shoppinglesto.utils.VelocityHelper;
@@ -68,7 +71,25 @@ public class MailSenderServlet extends HttpServlet {
             }
 
             String activationKey = userDAO.getActivationKey(user);
-            String url = UtilityHelper.getURLWithContextPath(request) + path + activationKey;
+            String url;
+            RawDBDemoGeoIPLocationService rdb = new RawDBDemoGeoIPLocationService();
+            if (templateName == "geolocTemplate.vm") {
+                String ip = request.getRemoteAddr();
+
+                JsonNode myCity = rdb.getLocation(ip);
+
+                JsonNode location = myCity.get("location");
+                Float latitude = Float.valueOf(location.get("latitude").toString());
+                Float longitude = Float.valueOf(location.get("longitude").toString());
+
+                Float latMax = latitude + 0.01f;
+                Float lonMax = longitude + 0.01f;
+                Float latMin = latitude - 0.01f;
+                Float lonMin = longitude - 0.01f;
+
+                url = "https://www.openstreetmap.org/export/embed.html?bbox=" + lonMin + "%2C" + latMin + "%2C" + lonMax + "%2C" + latMax + "&amp;layer=hot";
+            } else
+                url = UtilityHelper.getURLWithContextPath(request) + path + activationKey;
 
             final String host = getServletContext().getInitParameter("smtp-hostname");
             final String port = getServletContext().getInitParameter("smtp-port");
@@ -98,8 +119,10 @@ public class MailSenderServlet extends HttpServlet {
 
         } catch (DAOException ex) {
             response.sendError(500, ex.getMessage());
+        } catch (GeoIp2Exception e) {
+            e.printStackTrace();
         }
-            // Connect to google
+        // Connect to google
         // create email
         // send email
         // send message to user notifying to check email

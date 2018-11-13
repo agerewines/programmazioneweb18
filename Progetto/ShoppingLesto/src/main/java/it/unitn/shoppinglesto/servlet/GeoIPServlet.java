@@ -46,7 +46,7 @@ public class GeoIPServlet extends HttpServlet {
                 request.getSession().setAttribute("lonMin", lonMin);
                 */
 
-                String mapUrl = "https://www.openstreetmap.org/export/embed.html?bbox=" + lonMin + "%2C" + latMin + "%2C" + lonMax + "%2C" + latMax + "&amp;layer=mapnik";
+                String mapUrl = "https://www.openstreetmap.org/export/embed.html?bbox=" + lonMin + "%2C" + latMin + "%2C" + lonMax + "%2C" + latMax + "&amp;layer=hot";
 
                 request.getSession().setAttribute("map", mapUrl);
 
