@@ -115,6 +115,17 @@ public class LoginServlet extends HttpServlet {
                 user.setAdmin(true);
             session.setAttribute("user", user);
             session.setAttribute("successMessage", message);
+
+            request.setAttribute("user", user);
+            request.setAttribute("path", "/geoip");
+            request.setAttribute("subject", "I nostri suggerimenti");
+            request.setAttribute("template", "geolocTemplate.vm");
+            request.setAttribute("linkName", "Point of Interest");
+
+           RequestDispatcher rd = getServletContext().getRequestDispatcher("/sendRegistrationEmail.handler");
+           rd.forward(request, response);
+
+
             response.sendRedirect(response.encodeRedirectURL(returnUrl));
 
         }
