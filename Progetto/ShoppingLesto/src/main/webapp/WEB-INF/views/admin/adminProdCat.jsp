@@ -216,7 +216,7 @@
 <%@include file="../parts/_importsjs.jspf" %>
 
 <script type="text/javascript">
-    $('table').DataTable();
+
 
     $('.deleteProdCat').click(function () {
         $('#hiddenProdCatDeleteId').val($(this).data('id'));
@@ -257,6 +257,7 @@
         });
         e.preventDefault(); // avoid to execute the actual submit of the form.
     });
+    $('table').DataTable();
 </script>
 </body>
 </html>

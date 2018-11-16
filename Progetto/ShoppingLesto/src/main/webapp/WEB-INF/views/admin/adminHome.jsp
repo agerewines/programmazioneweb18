@@ -246,12 +246,9 @@
     </div>
 </div>
 
-
-
-
-
 <%@include file="../parts/_footer.jspf" %>
 <%@include file="../parts/_importsjs.jspf" %>
+
 <script type="text/javascript">
     $('.addProduct').click(function(){       // When HTML DOM "click" event is invoked on element with ID "somebutton", execute the following function...
         $.get("product/category/all")
@@ -263,6 +260,7 @@
                 $("#productCategory").append(opts);
             });
     });
+
     var lang = document.documentElement.lang;
     var langFile = "/resources/i18n/English.lang";
     $(document).ready( function(){
@@ -275,19 +273,16 @@
                break;
        }
     });
-    var deleteButton = function(){
-        $('#hiddenProdDeleteId').val($(this).data('id'));
-    };
 
-    var editButton = function(){       // When HTML DOM "click" event is invoked on element with ID "somebutton", execute the following function...
+    $('.modifyProd').click(function(){       // When HTML DOM "click" event is invoked on element with ID "somebutton", execute the following function...
         $('#nameProdEdit').val($(this).data('name'));
-        $('#priceEdit').val($(this).data('price'));
+        $('#priceProdEdit').val($(this).data('price'));
         $('#descriptionProdEdit').val($(this).data('desc'));
         $('#hiddenProductEditId').val($(this).data('id'));
         $('#productCategoryEdit').val($(this).data('cat'));
         var catId = $(this).data('cat');
         $.get("product/category/all")
-            .done(function(responseJson) {                 // Execute Ajax GET request on URL of "someservlet" and execute the following function with Ajax response JSON...
+            .done(function(responseJson) {
                 var opts = "";
                 $.each(responseJson, function(key, value) {
                     if(key != catId){
@@ -299,17 +294,11 @@
                 });
                 $("#productCategoryEdit").append(opts);
             });
-    };
-
-    $('#productTable').dataTable({
-        "language": {
-            "url": langFile
-        }
     });
-    $('#productTable').on('click', '.modifyProd', editButton());
-    $('#productTable').on('click', '.deleteProd', deleteButton());
 
-
+    $('.deleteProd').click(function(){
+        $('#hiddenProdDeleteId').val($(this).data('id'));
+    });
 
     function mouseOverPhoto(elem){
         $(elem).css( 'cursor', 'pointer' );
@@ -342,6 +331,7 @@
 
         e.preventDefault(); // avoid to execute the actual submit of the form.
     });
+    $('table').DataTable();
 </script>
 </body>
 

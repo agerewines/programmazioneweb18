@@ -215,7 +215,6 @@
 <%@include file="../parts/_footer.jspf" %>
 <%@include file="../parts/_importsjs.jspf" %>
 <script type="text/javascript">
-    $('table').DataTable();
 
     // language=JQuery-CSS
     $('.modifyListCat').click(function () {
@@ -258,6 +257,7 @@
         });
         e.preventDefault(); // avoid to execute the actual submit of the form.
     });
+    $('table').DataTable();
 </script>
 
 </body>

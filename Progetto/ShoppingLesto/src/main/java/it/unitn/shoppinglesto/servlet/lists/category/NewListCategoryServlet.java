@@ -107,7 +107,7 @@ public class NewListCategoryServlet extends HttpServlet {
         } else {
             message = "List was successfully updated";
             session.setAttribute("successMessage", message);
-            response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath() + "/home"));
+            response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath() + "/admin/listCat"));
         }
     }
 
