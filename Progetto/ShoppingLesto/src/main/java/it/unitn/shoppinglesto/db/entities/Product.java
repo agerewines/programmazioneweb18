@@ -18,6 +18,8 @@ public class Product {
     private int categoryId; // chiave esterna per la categoria
     private boolean custom;
     private List<Photo> photos;
+    private Category category;
+    private Double price;
 
     public Product(){
         this.custom = false;
@@ -86,5 +88,27 @@ public class Product {
 
     public void setPhotos(List<Photo> photos) {
         this.photos = photos;
+    }
+
+    public void addPhoto(Photo p) {
+        if(photos == null || photos.isEmpty())
+            photos = new ArrayList<>();
+        photos.add(p);
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 }

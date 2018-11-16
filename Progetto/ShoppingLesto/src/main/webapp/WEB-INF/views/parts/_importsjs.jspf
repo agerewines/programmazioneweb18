@@ -7,12 +7,12 @@
 <!-- Plugin JavaScript -->
 <script src="${pageContext.request.contextPath}/assets/vendor/jquery-easing/jquery.easing.min.js"></script>
 
+<!-- DataTables -->
+<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
 <!-- Contact form JavaScript -->
 <script src="${pageContext.request.contextPath}/assets/js/jqBootstrapValidation.js"></script>
 <script src="${pageContext.request.contextPath}/assets/js/contact_me.js"></script>
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.2/dist/jquery.fancybox.min.css" />
-<script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.2/dist/jquery.fancybox.min.js"></script>
 
 <!-- Custom scripts for this template -->
 <script src="${pageContext.request.contextPath}/assets/js/agency.min.js"></script>

@@ -1,4 +1,4 @@
-package it.unitn.shoppinglesto.servlet;
+package it.unitn.shoppinglesto.servlet.admin;
 
 import it.unitn.shoppinglesto.db.daos.*;
 import it.unitn.shoppinglesto.db.entities.Category;
@@ -18,16 +18,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
-@WebServlet(name = "HomeServlet")
-public class HomeServlet extends HttpServlet {
+@WebServlet(name = "ShowListCategoryServlet")
+public class ShowListCategoryServlet extends HttpServlet {
     private final String TEMPLISTCOOKIENAME = "templist_shoppingLesto_token";
-    private ShoppingListDAO shoppingListDAO;
-    private ProductDAO productDAO;
-
+    private ListCategoryDAO listCategoryDAO;
     @Override
     public void init() throws ServletException {
         DAOFactory daoFactory = (DAOFactory) super.getServletContext().getAttribute("daoFactory");
@@ -35,26 +31,12 @@ public class HomeServlet extends HttpServlet {
             throw new ServletException("Impossible to get dao factory!");
         }
         try {
-            shoppingListDAO = daoFactory.getDAO(ShoppingListDAO.class);
+            listCategoryDAO = daoFactory.getDAO(ListCategoryDAO.class);
         } catch (DAOFactoryException ex) {
-            throw new ServletException("Impossible to get shopping list dao from dao factory!", ex);
-        }
-        try {
-            productDAO = daoFactory.getDAO(ProductDAO.class);
-        } catch (DAOFactoryException ex) {
-            throw new ServletException("Impossible to get product dao from dao factory!", ex);
+            throw new ServletException("Impossible to get listCategory dao from dao factory!", ex);
         }
     }
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request  servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException      if an I/O error occurs
-     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession(false);
@@ -76,22 +58,16 @@ public class HomeServlet extends HttpServlet {
         } else {
             if (user.isAdmin()) {
                 try {
-                    List<Product> products = productDAO.getAll();
-                    session.setAttribute("products", products);
+                    List<Category> listCategory = listCategoryDAO.getAll();
+
+                    session.setAttribute("listCategory", listCategory);
 
                 } catch (DAOException ex) {
                     response.sendError(500, ex.getMessage());
                 }
 
-                dispatchPath = "/WEB-INF/views/admin/adminHome.jsp";
+                dispatchPath = "/WEB-INF/views/admin/adminListCat.jsp";
             } else {
-                try {
-                    List<ShoppingList> lists = shoppingListDAO.getUserLists(user);
-                    session.setAttribute("userLists", lists);
-                } catch (DAOException ex) {
-                    response.sendError(500, ex.getMessage());
-                }
-
                 dispatchPath = "/WEB-INF/views/home.jsp";
             }
 
@@ -141,5 +117,4 @@ public class HomeServlet extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
 }

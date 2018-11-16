@@ -20,7 +20,13 @@
                     <c:choose>
                         <c:when test="${user.admin}">
                             <li class="nav-item">
-                                <a class="nav-link js-scroll-trigger" href="${pageContext.request.contextPath}/home"><fmt:message key="navigation.a.admin" /></a>
+                                <a class="nav-link js-scroll-trigger" href="${pageContext.request.contextPath}/home">Products</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link js-scroll-trigger" href="${pageContext.request.contextPath}/admin/prodCat">Product category</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link js-scroll-trigger" href="${pageContext.request.contextPath}/admin/listCat">List category</a>
                             </li>
                         </c:when>
                         <c:otherwise>
@@ -42,7 +48,6 @@
                     <c:otherwise>
                     </c:otherwise>
                 </c:choose>
-
             </ul>
         </div>
     </div>

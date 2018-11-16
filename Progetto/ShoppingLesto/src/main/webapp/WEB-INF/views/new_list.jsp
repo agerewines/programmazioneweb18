@@ -53,7 +53,7 @@
                     </div>
                 </div>
                 <div class="form-row">
-                    <div class="form-group  col-md-12">
+                    <div class="form-group col-md-12">
                         <label for="avatar"><fmt:message key="list.label.add_avatar" /></label>
                         <input type="file" class="form-control-file" id="avatar" name="avatar">
                     </div>

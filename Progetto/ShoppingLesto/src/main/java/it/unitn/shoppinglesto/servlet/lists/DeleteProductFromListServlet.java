@@ -1,14 +1,11 @@
 package it.unitn.shoppinglesto.servlet.lists;
 
-import it.unitn.shoppinglesto.db.daos.*;
-import it.unitn.shoppinglesto.db.entities.Product;
-import it.unitn.shoppinglesto.db.entities.ShoppingList;
+import it.unitn.shoppinglesto.db.daos.ShoppingListDAO;
 import it.unitn.shoppinglesto.db.entities.User;
 import it.unitn.shoppinglesto.db.exceptions.DAOException;
 import it.unitn.shoppinglesto.db.exceptions.DAOFactoryException;
 import it.unitn.shoppinglesto.db.factories.DAOFactory;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -16,10 +13,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.List;
 
-@WebServlet(name = "AddProductToListServlet")
-public class AddProductToListServlet extends HttpServlet {
+@WebServlet(name = "DeleteProductFromListServlet")
+public class DeleteProductFromListServlet extends HttpServlet {
     private ShoppingListDAO shoppingListDAO;
 
     @Override
@@ -34,7 +30,6 @@ public class AddProductToListServlet extends HttpServlet {
             throw new ServletException("Impossible to get shopping list dao from dao factory!", ex);
         }
     }
-
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);
         User user = (User) session.getAttribute("user");
@@ -55,11 +50,11 @@ public class AddProductToListServlet extends HttpServlet {
         // lo aggiungo alla lista
         if(listId != null && prodId != null){
             try{
-                shoppingListDAO.addProductToList(listId, prodId);
+                shoppingListDAO.deleteProductFromList(listId, prodId);
             }catch (DAOException e){
                 response.sendError(500, e.getMessage());
             }
-            message = "Product successfully added into list";
+            message = "Product successfully deleted from this list";
             session.setAttribute("successMessage", message);
             response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath() + "/list?id=" + listId));
         }
@@ -68,13 +63,9 @@ public class AddProductToListServlet extends HttpServlet {
             session.setAttribute("errorMessage", message);
             response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath() + "/list?id=" + listId));
         }
-
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        HttpSession session = request.getSession(false);
-        User user = (User) session.getAttribute("user");
-        RequestDispatcher rd = getServletContext().getRequestDispatcher("/WEB-INF/views/addProduct.jsp");
-        rd.forward(request, response);
+
     }
 }

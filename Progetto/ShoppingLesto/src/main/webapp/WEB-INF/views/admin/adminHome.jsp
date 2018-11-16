@@ -33,205 +33,127 @@
 
 <div class="container-fluid">
     <div class="row justify-content-md-center">
-        <div class="col-md-2">
+        <div class="col-md-2 col-lg-2">
         </div>
         <div class="col-lg-8 col-md-8 col-12">
             <%@include file="../parts/_successMessage.jspf" %>
             <h2>Admin Panel</h2>
-            <p><small>Click on the images in order to delete them.</small></p>
-            <ul class="nav nav-pills nav-fill mb-3" id="pills-tab" role="tablist">
-                <li class="nav-item">
-                    <a class="nav-link" id="pills-listCat-tab" data-toggle="pill" href="#pills-listCat" role="tab" aria-controls="pills-listCat" aria-selected="true">Category of lists</a>
+            <!-- Prodotti -->
+            <ul class="list-inline">
+                <li class="list-inline-item">
+                    <h5>Manage the available products</h5>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="pills-prod-tab" data-toggle="pill" href="#pills-prod" role="tab" aria-controls="pills-prod" aria-selected="false">Products</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="pills-prodCat-tab" data-toggle="pill" href="#pills-prodCat" role="tab" aria-controls="pills-prodCat" aria-selected="false">Category of products</a>
+                <li class="list-inline-item">
+                    <button type="button" class="btn btn-primary addProduct"
+                            style="padding: 0 .375rem 0 .375rem;"
+                            data-toggle="modal" data-target="#addProductModal">
+                        <i class="fas fa-plus"></i>
+                    </button>
                 </li>
             </ul>
-            <!-- Categoria di liste -->
-            <div class="tab-content" id="pills-tabContent">
-                <div class="tab-pane fade" id="pills-listCat" role="tabpanel" aria-labelledby="pills-listCat-tab">
-                    <ul class="list-inline">
-                        <li class="list-inline-item">
-                            <h5>Manage the category of lists</h5>
-                        </li>
-                        <li class="list-inline-item">
-                            <button type="button" class="btn btn-primary addListCat"
+            <p><small>Click on the images in order to delete them.</small></p>
+            <table class="table table-striped" id="productTable">
+                <thead>
+                <tr>
+                    <th style="width: 10%" scope="col">Photos</th>
+                    <th style="width: 25%" scope="col">Name</th>
+                    <th style="width: 50%" scope="col">Description</th>
+                    <th style="width: 5%" scope="col">Price</th>
+                    <th style="width: 10%" scope="col">Edit</th>
+                </tr>
+                </thead>
+                <tbody>
+                <c:forEach items="${products}" var="prod">
+                    <tr id="prod${prod.id}">
+                        <td>
+                            <c:forEach items="${prod.photos}" var="photo">
+                                <img class="rounded shadow mb-3 bg-white rounded deletePhoto image" height="65" width="65"
+                                     src="${pageContext.request.contextPath}/images?id=${photo.id}&resource=products"
+                                     onerror="this.onerror=null;this.src='${pageContext.request.contextPath}/images/avatars/Products/default.png';"
+                                     onclick="deleteProductPhoto(${photo.id}, this)"
+                                     onmouseover="mouseOverPhoto(this)" title="Click on the picture to delete it!"/>
+                            </c:forEach>
+                        </td>
+                        <td>${prod.name}</td>
+                        <td>${prod.description}</td>
+                        <td>${prod.price} €</td>
+                        <td>
+                            <ul class="list-inline">
+                                <li class="list-inline-item">
+                                    <button type="button" class="btn btn-primary modifyProd"
+                                            style="padding: 0 .375rem 0 .375rem;"
+                                            data-toggle="modal" data-target="#modifyProdModal"
+                                            data-id="${prod.id}"
+                                            data-name="${prod.name}"
+                                            data-desc="${prod.description}"
+                                            data-cat="${prod.categoryId}"
+                                            data-price="${prod.price}">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                </li>
+                                <li class="list-inline-item">
+                                    <button type="button" class="btn btn-primary deleteProd"
+                                            style="padding: 0 .375rem 0 .375rem;"
+                                            data-toggle="modal" data-target="#deleteProdModal" data-id="${prod.id}">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+                </c:forEach>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-2 col-lg-2">
+        </div>
+
+<!-- Product -->
+<!-- Modal add product button -->
+<div class="modal fade" id="addProductModal" tabindex="-1" role="dialog" aria-labelledby="addProdModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addProdModalLabel">Add Product</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="${pageContext.request.contextPath}/product/new" method="POST"
+                      enctype='multipart/form-data'>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label for="nameProd">Name</label>
+                            <input type="text" class="form-control" id="nameProd" placeholder="Name" name="nameProd">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label for="descriptionProd">Description</label>
+                            <textarea class="form-control" id="descriptionProd" name="descriptionProd" rows="3"
+                                      placeholder="Description"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label for="priceProd">Price</label>
+                            <input type="number" class="form-control" id="priceProd" placeholder="Price" name="price">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <label for="productCategory">Choose category</label>
+                        <div class="form-group col-md-10 col-10">
+                            <select id="productCategory" name="category" class="form-control">
+                            </select>
+                        </div>
+                        <div class="form-group col-md-2 col-2">
+                            <button type="button" class="btn btn-primary addProdCat"
                                     style="padding: 0 .375rem 0 .375rem;"
-                                    data-toggle="modal" data-target="#addListCatModal">
+                                    data-toggle="modal" data-target="#addProdCatModal" data-dismiss="modal">
                                 <i class="fas fa-plus"></i>
                             </button>
-                        </li>
-                    </ul>
-                    <table class="table table-striped table-hover">
-                        <thead>
-                        <tr>
-                            <th scope="col">Photos</th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Description</th>
-                            <th scope="col">Edit</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <c:forEach items="${listCategory}" var="listCat">
-
-                            <tr>
-                                <td>
-                                    <c:forEach items="${listCat.photos}" var="photo">
-                                        <img class="rounded shadow mb-3 bg-white rounded deletePhoto image" height="65" width="65"
-                                             src="${pageContext.request.contextPath}/images?id=${photo.id}&resource=listCatPhoto"
-                                             onerror="this.onerror=null;this.src='${pageContext.request.contextPath}/images/avatars/Products/default.png';"
-                                             onclick="deleteListCatPhoto(${photo.id}, this)"
-                                             onmouseover="mouseOverPhoto(this)" title="Click on the picture to delete it!"/>
-                                    </c:forEach>
-                                </td>
-                                <td>${listCat.name}</td>
-                                <td>${listCat.description}</td>
-                                <td>
-                                    <ul class="list-inline">
-                                            <li class="list-inline-item">
-                                                <button type="button" class="btn btn-primary modifyListCat"
-                                                        style="padding: 0 .375rem 0 .375rem;"
-                                                        data-toggle="modal" data-target="#modifyListCatModal"
-                                                        data-id="${listCat.id}"
-                                                        data-name="${listCat.name}"
-                                                        data-desc="${listCat.description}">
-                                                    <i class="fas fa-edit"></i>
-                                                </button>
-                                            </li>
-                                        <li class="list-inline-item">
-                                            <button type="button" class="btn btn-primary deleteListCat"
-                                                    style="padding: 0 .375rem 0 .375rem;"
-                                                    data-toggle="modal" data-target="#deleteListCatModal" data-id-list-cat="${listCat.id}">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        </li>
-                                    </ul>
-                                </td>
-                            </tr>
-                        </c:forEach>
-                        </tbody>
-                    </table>
-                </div>
-                <!-- Prodotti -->
-                <div class="tab-pane fade" id="pills-prod" role="tabpanel" aria-labelledby="pills-prod-tab">
-                    <h5>Manage the available products</h5>
-                    <table class="table table-striped">
-                        <thead>
-                        <tr>
-                            <th scope="col">Name</th>
-                            <th scope="col">Description</th>
-                            <th scope="col">Edit</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <c:forEach items="${products}" var="prod">
-                            <tr>
-                                <td>${prod.name}</td>
-                                <td>${prod.description}</td>
-                                <td>@mdo</td>
-                            </tr>
-                        </c:forEach>
-                        </tbody>
-                    </table>
-                </div>
-                <!-- Categoria di prodotti -->
-                <div class="tab-pane fade" id="pills-prodCat" role="tabpanel" aria-labelledby="pills-prodCat-tab">
-                    <ul class="list-inline">
-                        <li class="list-inline-item">
-                            <h5>Manage the category of lists</h5>
-                        </li>
-                        <li class="list-inline-item">
-                            <button type="button" class="btn btn-primary addListCat"
-                                    style="padding: 0 .375rem 0 .375rem;"
-                                    data-toggle="modal" data-target="#addListCatModal">
-                                <i class="fas fa-plus"></i>
-                            </button>
-                        </li>
-                    </ul>
-                    <table class="table table-striped">
-                        <thead>
-                        <tr>
-                            <th scope="col">Photos</th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Description</th>
-                            <th scope="col">Edit</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <c:forEach items="${prodCategory}" var="prodCat">
-                            <tr>
-                                <td>
-                                    <c:forEach items="${prodCat.photos}" var="photo">
-                                    <img class="rounded shadow mb-3 bg-white rounded" height="65" width="65"
-                                         src="${pageContext.request.contextPath}/images?id=${photo.id}&resource=prodCatPhoto"
-                                         onerror="this.onerror=null;this.src='${pageContext.request.contextPath}/images/avatars/Products/default.png';"
-                                         onmouseover="mouseOverPhoto(this)"
-                                         onclick="deleteProdCatPhoto(${photo.id}, this)"  title="Click on the picture to delete it!"/>
-                                    </c:forEach>
-                                </td>
-                                <td>${prodCat.name}</td>
-                                <td>${prodCat.description}</td>
-                                <td>
-                                    <ul class="list-inline">
-                                        <li class="list-inline-item">
-                                            <button type="button" class="btn btn-primary modifyProdCat"
-                                                    style="padding: 0 .375rem 0 .375rem;"
-                                                    data-toggle="modal" data-target="#modifyProdCatModal"
-                                                    data-id="${prodCat.id}"
-                                                    data-name="${prodCat.name}"
-                                                    data-desc="${prodCat.description}">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
-                                        </li>
-                                        <li class="list-inline-item">
-                                            <button type="button" class="btn btn-primary"
-                                                    style="padding: 0 .375rem 0 .375rem;"
-                                                    data-toggle="modal" data-target="#deleteProdCatModal" data-id-prod-cat="${prodCat.id}">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        </li>
-                                    </ul>
-                                </td>
-                            </tr>
-                        </c:forEach>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-2">
-        </div>
-    </div>
-</div>
-<!-- List Categoy -->
-<!-- Modal add list category button -->
-<div class="modal fade" id="addListCatModal" tabindex="-1" role="dialog" aria-labelledby="addListCatModalLabel"
-     aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="addListCatModalLabel">Add List Category</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form action="${pageContext.request.contextPath}/list/category/new" method="POST"
-                      enctype='multipart/form-data'>
-                    <div class="form-row">
-                        <div class="form-group col-md-12">
-                            <label for="nameListCat">Name</label>
-                            <input type="text" class="form-control" placeholder="Name" name="nameListCat">
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group col-md-12">
-                            <label for="descriptionListCat">Description</label>
-                            <textarea class="form-control" name="descriptionListCat" rows="3"
-                                      placeholder="Description"></textarea>
                         </div>
                     </div>
                     <div class="form-row">
@@ -240,73 +162,84 @@
                             <input type="file" class="form-control-file" name="photo">
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-primary">Add list category</button>
+                    <button type="submit" class="btn btn-primary">Add product</button>
                 </form>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Modal edit list category button -->
-<div class="modal fade" id="modifyListCatModal" tabindex="-1" role="dialog" aria-labelledby="modifyListCatModalLabel"
+<!-- Modal edit product button -->
+<div class="modal fade" id="modifyProdModal" tabindex="-1" role="dialog" aria-labelledby="modifyProdModalLabel"
      aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modifyListCatModalLabel">Edit List Category</h5>
+                <h5 class="modal-title" id="modifyProdModalLabel">Edit Product</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <form action="${pageContext.request.contextPath}/list/category/edit" method="POST"
+                <form action="${pageContext.request.contextPath}/product/edit" method="POST"
                       enctype='multipart/form-data'>
                     <div class="form-row">
                         <div class="form-group col-md-12">
-                            <label for="nameListCat">Name</label>
-                            <input type="text" class="form-control" id="nameListCat" placeholder="Name" name="nameListCat">
+                            <label for="nameProdEdit">Name</label>
+                            <input type="text" class="form-control" id="nameProdEdit" placeholder="Name" name="nameProd">
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-12">
-                            <label for="descriptionListCat">Description</label>
-                            <textarea class="form-control" id="descriptionListCat" name="descriptionListCat" rows="3"
+                            <label for="descriptionProdEdit">Description</label>
+                            <textarea class="form-control" id="descriptionProdEdit" name="descriptionProd" rows="3"
                                       placeholder="Description"></textarea>
                         </div>
                     </div>
                     <div class="form-row">
-                        <div class="form-group  col-md-6">
-                            <label for="photo">Add photo</label>
-                            <input type="file" class="form-control-file" id="photo" name="photo">
+                        <div class="form-group col-md-12">
+                            <label for="priceProdEdit">Price</label>
+                            <input type="number" class="form-control" id="priceProdEdit" placeholder="Price" name="priceEdit">
                         </div>
                     </div>
-                    <input type="hidden" name="listCatId" id="hiddenListCatId">
-                    <button type="submit" class="btn btn-primary">Edit list category</button>
+                    <div class="form-row">
+                        <label for="productCategoryEdit">Choose category</label>
+                            <select id="productCategoryEdit" name="category" class="form-control">
+                            </select>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group  col-md-6">
+                            <label for="photo">Add photo</label>
+                            <input type="file" id="photo" class="form-control-file" name="photo">
+                        </div>
+                    </div>
+                    <input type="hidden" name="prodId" id="hiddenProductEditId">
+                    <button type="submit" class="btn btn-primary">Edit product</button>
                 </form>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Modal delete list category button -->
-<div class="modal fade" id="deleteListCatModal" tabindex="-1" role="dialog" aria-labelledby="deleteListCatModalLabel"
+<!-- Modal delete product button -->
+<div class="modal fade" id="deleteProdModal" tabindex="-1" role="dialog" aria-labelledby="deleteProdModalLabel"
      aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="deleteListCatModalLabel">Delete ListCategory</h5>
+                <h5 class="modal-title" id="deleteProdModalLabel">Delete Product</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <form action="${pageContext.request.contextPath}/list/category/delete" method="POST">
+                <form id="deleteProductForm" action="${pageContext.request.contextPath}/product/delete" method="POST">
                     <div class="form-row">
-                        <label>Are you sure you want to delete this category<br>You will delete all list using this category</label>
+                        <label>Are you sure you want to delete this product<br>You will delete this product from every list</label>
                     </div>
-                    <input type="hidden" id="hiddenListCatDeleteId" name="listCatId">
+                    <input type="hidden" id="hiddenProdDeleteId" name="prodId">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Delete list category</button>
+                    <button type="submit" id="deleteProductButton" class="btn btn-primary">Delete product</button>
                 </form>
             </div>
         </div>
@@ -314,162 +247,101 @@
 </div>
 
 
-<!-- Product Category -->
-<!-- Modal add list category button -->
-<div class="modal fade" id="addProdCatModal" tabindex="-1" role="dialog" aria-labelledby="addProdCatModalLabel"
-     aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="addProdCatModalLabel">Add List Category</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form action="${pageContext.request.contextPath}/product/category/new" method="POST"
-                      enctype='multipart/form-data'>
-                    <div class="form-row">
-                        <div class="form-group col-md-12">
-                            <label for="nameProdCat">Name</label>
-                            <input type="text" class="form-control" placeholder="Name" name="nameProdCat">
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group col-md-12">
-                            <label for="descriptionProdCat">Description</label>
-                            <textarea class="form-control" name="descriptionProdCat" rows="3"
-                                      placeholder="Description"></textarea>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group  col-md-6">
-                            <label for="photo">Add photo</label>
-                            <input type="file" class="form-control-file" name="photo">
-                        </div>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Add product category</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
 
-<!-- Modal edit list category button -->
-<div class="modal fade" id="modifyProdCatModal" tabindex="-1" role="dialog" aria-labelledby="modifyProdCatModalLabel"
-     aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modifyProdCatModalLabel">Edit List Category</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form action="${pageContext.request.contextPath}/product/category/edit" method="POST"
-                      enctype='multipart/form-data'>
-                    <div class="form-row">
-                        <div class="form-group col-md-12">
-                            <label for="nameProdCat">Name</label>
-                            <input type="text" class="form-control" id="nameProdCat" placeholder="Name" name="nameProdCat">
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group col-md-12">
-                            <label for="descriptionProdCat">Description</label>
-                            <textarea class="form-control" id="descriptionProdCat" name="descriptionProdCat" rows="3"
-                                      placeholder="Description"></textarea>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group  col-md-6">
-                            <label for="photo">Add photo</label>
-                            <input type="file" class="form-control-file" name="photo">
-                        </div>
-                    </div>
-                    <input type="hidden" name="prodCatId" id="hiddenProdCatId">
-                    <button type="submit" class="btn btn-primary">Edit product category</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Modal delete list category button -->
-<div class="modal fade" id="deleteProdCatModal" tabindex="-1" role="dialog" aria-labelledby="deleteProdCatModalLabel"
-     aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="deleteProdCatModalLabel">Delete Product Category</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form action="${pageContext.request.contextPath}/product/category/delete" method="POST">
-                    <div class="form-row">
-                        <label>Are you sure you want to delete this category<br>You will delete all product using this category</label>
-                    </div>
-                    <input type="hidden" id="hiddenProdCatDeleteId" name="prodCatId">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Delete product category</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
 
 
 <%@include file="../parts/_footer.jspf" %>
 <%@include file="../parts/_importsjs.jspf" %>
 <script type="text/javascript">
-    // language=JQuery-CSS
-    $('.modifyListCat').click(function () {
-        $('#hiddenListCatId').val($(this).data('id'));
-        $('#descriptionListCat').html($(this).data('desc'));
-        $('#nameListCat').val($(this).data('name'));
+    $('.addProduct').click(function(){       // When HTML DOM "click" event is invoked on element with ID "somebutton", execute the following function...
+        $.get("product/category/all")
+            .done(function(responseJson) {                 // Execute Ajax GET request on URL of "someservlet" and execute the following function with Ajax response JSON...
+                var opts = "";
+                $.each(responseJson, function(key, value) {               // Iterate over the JSON object.
+                    opts += "<option value='" + key + "'>" + value + "</option>";
+                });
+                $("#productCategory").append(opts);
+            });
     });
+    var lang = document.documentElement.lang;
+    var langFile = "/resources/i18n/English.lang";
+    $(document).ready( function(){
+       switch (lang){
+           case "it" : langFile = "/resources/i18n/Italian.lang";
+               break;
+           case "en" : langFile = "/resources/i18n/English.lang";
+               break;
+           default : langFile = "/resources/i18n/English.lang";
+               break;
+       }
+    });
+    var deleteButton = function(){
+        $('#hiddenProdDeleteId').val($(this).data('id'));
+    };
 
-    $('.deleteListCat').click(function () {
-        $('#hiddenListCatDeleteId').val($(this).data('id-list-cat'));
-    });
+    var editButton = function(){       // When HTML DOM "click" event is invoked on element with ID "somebutton", execute the following function...
+        $('#nameProdEdit').val($(this).data('name'));
+        $('#priceEdit').val($(this).data('price'));
+        $('#descriptionProdEdit').val($(this).data('desc'));
+        $('#hiddenProductEditId').val($(this).data('id'));
+        $('#productCategoryEdit').val($(this).data('cat'));
+        var catId = $(this).data('cat');
+        $.get("product/category/all")
+            .done(function(responseJson) {                 // Execute Ajax GET request on URL of "someservlet" and execute the following function with Ajax response JSON...
+                var opts = "";
+                $.each(responseJson, function(key, value) {
+                    if(key != catId){
+                        opts += "<option value='" + key + "'>" + value + "</option>";
+                    }
+                    else{
+                        opts += "<option value='" + key + "' selected>" + value + "</option>";
+                    }
+                });
+                $("#productCategoryEdit").append(opts);
+            });
+    };
 
-    $('.deleteProdCat').click(function () {
-        $('#hiddenProdCatDeleteId').val($(this).data('id-prod-cat'));
+    $('#productTable').dataTable({
+        "language": {
+            "url": langFile
+        }
     });
+    $('#productTable').on('click', '.modifyProd', editButton());
+    $('#productTable').on('click', '.deleteProd', deleteButton());
 
-    $('.modifyProdCat').click(function () {
-        $('#hiddenProdCatId').val($(this).data('id'));
-        $('#descriptionProdCat').html($(this).data('desc'));
-        $('#nameProdCat').val($(this).data('name'));
-    });
+
 
     function mouseOverPhoto(elem){
         $(elem).css( 'cursor', 'pointer' );
     }
 
-    function deleteListCatPhoto(id, elem) {        // When HTML DOM "click" event is invoked on element with ID "somebutton", execute the following function...
-        $.post("list/category/photo/delete",
+    function deleteProductPhoto(id, elem) {        // When HTML DOM "click" event is invoked on element with ID "somebutton", execute the following function...
+        $.post("product/photo/delete",
             {
-                listCategoryPhotoId : id
+                prodPhotoId : id
             }).done(function(){});
         $(elem).fadeOut(300, function() { $(this).remove(); });
         $(elem).tooltip( "option", "disabled" );
     }
 
 
-    function deleteProdCatPhoto(id, elem) {        // When HTML DOM "click" event is invoked on element with ID "somebutton", execute the following function...
-        $.post("product/category/photo/delete",
-            {
-                prodCategoryPhotoId : id
-            }).done(function(){});
-        $(elem).fadeOut(300, function() { $(this).remove(); });
-        $(elem).tooltip( "option", "disabled" );
-    }
+    $("#deleteProductForm").submit(function(e) {
+        var form = $(this);
+        var url = form.attr('action');
+        var myData = $("#hiddenProdDeleteId").val();
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: myData
+        }).done(function() {
+            var elem = document.getElementById("prod" + myData);
+            $(elem).fadeOut(300, function() { $(this).remove(); });
+        }).fail(function() {
+            alert("error deleting product");
+        });
 
-
+        e.preventDefault(); // avoid to execute the actual submit of the form.
+    });
 </script>
 </body>
 

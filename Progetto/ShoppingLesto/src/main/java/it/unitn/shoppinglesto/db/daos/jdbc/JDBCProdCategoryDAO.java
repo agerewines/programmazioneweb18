@@ -114,8 +114,7 @@ public class JDBCProdCategoryDAO extends JDBCDAO<Category, Integer> implements P
         if(cat == null){
             throw new DAOException("parameter not valid", new IllegalArgumentException("The product category is null."));
         }
-        String insert = "INSERT INTO `ProductCategory`(`name`, `description`)"
-                + "VALUES (?,?)";
+        String insert = "INSERT INTO `ProductCategory`(`name`, `description`) VALUES (?,?)";
         try(PreparedStatement preparedStatement  = CON.prepareStatement(insert, Statement.RETURN_GENERATED_KEYS)){
             preparedStatement.setString(1, cat.getName());
             preparedStatement.setString(2, cat.getDescription());
@@ -125,7 +124,8 @@ public class JDBCProdCategoryDAO extends JDBCDAO<Category, Integer> implements P
                     cat.setId(rs.getInt(1));
                 }
             }
-            setPhotos(cat);
+            if(cat.getPhotos() != null && !cat.getPhotos().isEmpty())
+                setPhotos(cat);
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
             throw new DAOException("Impossible to insert product category.", ex);

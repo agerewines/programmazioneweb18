@@ -108,15 +108,17 @@
         </div>
     </div>
     <div class="row justify-content-center">
-        <div class="col" media="(min-width: 465px)">
+        <div class="col-md-2">
         </div>
-        <div class="col-md-8">
-            <table class="table">
+        <div class="col-lg-8 col-md-8 col-12">
+            <table class="table" id="tableProductInList">
                 <thead class="thead-light">
                 <tr>
-                    <th scope="col" width="70px">#</th>
-                        <th scope="col"><fmt:message key="list.th.name" /></th>
+                    <th scope="col" width="70px">Images</th>
+                    <th scope="col"><fmt:message key="list.th.name" /></th>
                     <th scope="col"><fmt:message key="list.th.description" /></th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Delete</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -129,6 +131,14 @@
                         </td>
                         <td>${prod.name}</td>
                         <td>${prod.description}</td>
+                        <td>${prod.price} €</td>
+                        <td>
+                            <button type="button" class="btn btn-primary removeProd"
+                                    style="padding: 0 .375rem 0 .375rem;"
+                            data-toggle="modal" data-target="#deleteProductModal" data-id="${prod.id}">
+                            <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
                     </tr>
                 </c:forEach>
                 </tbody>
@@ -136,7 +146,7 @@
             <a class="btn btn-primary"
                href="${pageContext.request.contextPath}/product/add?listId=${list.id}"><fmt:message key="list.a.add_product" /></a>
         </div>
-        <div class="col" media="(min-width: 465px)">
+        <div class="col-md-2">
         </div>
     </div>
 </div>
@@ -253,7 +263,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form action="${pageContext.request.contextPath}/list/delete" method="POST">
+                <form action="${pageContext.request.contextPath}/list/delete" method="POST" id="deleteItemForm">
                     <label><fmt:message key="list.label.sure" /> ${list.name}?</label> <br/>
                     <c:if test="${not empty sharedWith}">
                         <label>
@@ -362,7 +372,7 @@
         </div>
     </div>
 </div>
-<!-- Modal edit share permit -->
+<!-- Modal edit shared user permit -->
 <div class="modal fade" id="deleteSharedUserModal" tabindex="-1" role="dialog" aria-labelledby="deleteSharedUserModalLabel"
      aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -380,6 +390,29 @@
                     <input type="hidden" id="userIdDeleteSharedUser" name="user">
                     <button type="submit" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                     <button type="submit" class="btn btn-primary">Delete shared user</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal delete product from list -->
+<div class="modal fade" id="deleteProductModal" tabindex="-1" role="dialog" aria-labelledby="deleteProductModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteProductModalLabel">Remove product</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="${pageContext.request.contextPath}/list/product/delete" method="POST">
+                    <label id="confirmLabelDeleteProduct">Are you sure you want to delete this product from this list?</label> <br/>
+                    <input type="hidden" id="listIdDeleteProduct" name="listId" value="${list.id}">
+                    <input type="hidden" id="prodIdDelete" name="prodId">
+                    <button type="submit" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Remove product</button>
                 </form>
             </div>
         </div>
@@ -417,6 +450,13 @@
         $('#confirmLabelDeleteSharedUser').html("Are you sure you want to unshare this list with " + $(this).data('shared-name') + "?");
         $('#userIdDeleteSharedUser').val($(this).data('id'));
     });
+
+    $(document).ready(function() {
+        $('#tableProductInList').DataTable();
+    } );
+    $('.removeProd').click(function(){
+        $('#prodIdDelete').val($(this).data('id'));
+    })
 </script>
 </body>
 
