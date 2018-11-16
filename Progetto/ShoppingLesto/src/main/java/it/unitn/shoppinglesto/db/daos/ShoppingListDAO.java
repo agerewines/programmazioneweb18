@@ -149,6 +149,14 @@ public interface ShoppingListDAO extends DAO<ShoppingList, Integer> {
     public void addProductToList(Integer listId, Integer productId) throws DAOException;
 
     /**
+     * Delete product to certain list
+     * @param listId shoppinglist thats gonna be modified
+     * @param productId product to delete
+     * @throws DAOException if an error occurs during the operation.
+     */
+    public void deleteProductFromList(Integer listId, Integer productId) throws DAOException;
+
+    /**
      * Remove user list link
      * @param listId shoppinglist thats gonna be unshared
      * @param userId user to delete

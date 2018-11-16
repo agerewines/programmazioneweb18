@@ -1,8 +1,9 @@
-package it.unitn.shoppinglesto.servlet.product.category;
+package it.unitn.shoppinglesto.servlet.product;
 
 import it.unitn.shoppinglesto.db.daos.ProdCategoryDAO;
-import it.unitn.shoppinglesto.db.entities.Category;
+import it.unitn.shoppinglesto.db.daos.ProductDAO;
 import it.unitn.shoppinglesto.db.entities.Photo;
+import it.unitn.shoppinglesto.db.entities.Product;
 import it.unitn.shoppinglesto.db.entities.User;
 import it.unitn.shoppinglesto.db.exceptions.DAOException;
 import it.unitn.shoppinglesto.db.exceptions.DAOFactoryException;
@@ -17,9 +18,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 
-@WebServlet(name = "EditProductCategoryServlet")
+@WebServlet(name = "EditProductServlet")
 @MultipartConfig
-public class EditProductCategoryServlet extends HttpServlet {
+public class EditProductServlet extends HttpServlet {
+    private ProductDAO productDAO;
     private ProdCategoryDAO prodCategoryDAO;
 
     @Override
@@ -29,12 +31,16 @@ public class EditProductCategoryServlet extends HttpServlet {
             throw new ServletException("Impossible to get dao factory!");
         }
         try {
+            productDAO = daoFactory.getDAO(ProductDAO.class);
+        } catch (DAOFactoryException ex) {
+            throw new ServletException("Impossible to get product dao from dao factory!", ex);
+        }
+        try {
             prodCategoryDAO = daoFactory.getDAO(ProdCategoryDAO.class);
         } catch (DAOFactoryException ex) {
-            throw new ServletException("Impossible to get list category dao from dao factory!", ex);
+            throw new ServletException("Impossible to get product dao from dao factory!", ex);
         }
     }
-
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);
         User user = (User) session.getAttribute("user");
@@ -42,6 +48,7 @@ public class EditProductCategoryServlet extends HttpServlet {
             response.sendError(500, "There was an error processing the request");
             return;
         }
+
         String message = null;
         boolean hasError = false;
         boolean modified = false;
@@ -52,43 +59,51 @@ public class EditProductCategoryServlet extends HttpServlet {
         }
 
         String rootPath = System.getProperty("catalina.home");
-        String nameProdCat = request.getParameter("nameProdCat");
-        String descriptionProdCat = request.getParameter("descriptionProdCat");
-        Integer prodCatId = Integer.parseInt(request.getParameter("prodCatId"));
-
-        Category prodCat = null;
-        if ( nameProdCat == null || descriptionProdCat == null || nameProdCat.equals("") || descriptionProdCat.equals("") || prodCatId.equals("")) {
+        String name = request.getParameter("nameProd");
+        String description = request.getParameter("descriptionProd");
+        int categoryId = Integer.parseInt(request.getParameter("category"));
+        Double price = Double.parseDouble(request.getParameter("priceEdit"));
+        int prodId = Integer.parseInt(request.getParameter("prodId"));
+        if (name == null || description == null || name.equals("") || description.equals("")) {
             hasError = true;
             message = "All fields are mandatory and must be filled!";
         } else {
-            try {
-                prodCat = prodCategoryDAO.getByPrimaryKey(prodCatId);
-                // prendi la categoria dal db
-                prodCat.setDescription(descriptionProdCat);
-                prodCat.setName(nameProdCat);
-                // aggiungi la foto se presente
-                prodCategoryDAO.simpleUpdate(prodCat);
+            if (description.length() > 255) {
+                hasError = true;
+                message = "Product description can contain a maximum of  255 characters.";
+            } else {
+                // int id, String name, String description, String image, int categoryId, int userId, User user
+
+                Product product = null;
+                try {
+                    product = productDAO.getByPrimaryKey(prodId);
+                    product.setCustom(false);
+                    product.setName(name);
+                    product.setDescription(description);
+                    product.setCategoryId(categoryId);
+                    product.setPrice(price);
+                    product.setCategory(productDAO.getCategory(categoryId));
+                    productDAO.update(product);
+                } catch (DAOException e) {
+                    response.sendError(500, e.getMessage());
+                }
                 Part filePart = request.getPart("photo");
                 if ((filePart != null) && (filePart.getSize() > 0)) {
                     Photo prodPhoto = new Photo();
-                    prodPhoto.setId(prodCat.getId());
-                    prodPhoto.setItemId(prodCat.getId());
+                    assert product != null;
+                    prodPhoto.setItemId(product.getId());
                     String fileName = UtilityHelper.getFilename(filePart);
-                    fileName = UtilityHelper.renameImage(fileName, "ProdCategory_" + prodCat.getId() + "_" + (new Date().toString()).replace(":", "_").replace(" ", "_"));
-                    String listCategoryUploadDir = rootPath + File.separator + avatarsFolder + "ProdCategory";
+                    assert fileName != null;
+                    fileName = UtilityHelper.renameImage(fileName, "Product_" + product.getId() + "_" + (new Date().toString()).replace(":", "_").replace(" ", "_"));
+                    String listCategoryUploadDir = rootPath + File.separator + avatarsFolder + "Product";
                     try {
                         prodPhoto.setPath(UtilityHelper.uploadFileToDirectory(listCategoryUploadDir, fileName, filePart));
-                        prodCat.addPhoto(prodPhoto);
-                        prodCategoryDAO.addPhoto(prodPhoto);
+                        product.addPhoto(prodPhoto);
+                        productDAO.addPhoto(prodPhoto);
                     } catch (DAOException | IOException ex) {
                         response.sendError(500, ex.getMessage());
                     }
                 }
-                // aggiorna la categoria
-                prodCategoryDAO.update(prodCat);
-
-            } catch (DAOException e) {
-                response.sendError(500, e.getMessage());
             }
         }
 
@@ -96,13 +111,13 @@ public class EditProductCategoryServlet extends HttpServlet {
             session.setAttribute("errorMessage", message);
             response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath() + "/home"));
         } else {
-            message = "Product category was successfully updated";
+            message = "Product was successfully updated";
             session.setAttribute("successMessage", message);
-            response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath() + "/admin/prodCat"));
+            response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath() + "/home"));
         }
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        throw new ServletException("You can't access this page via get");
+        throw new ServletException("Cannot enter this page");
     }
 }

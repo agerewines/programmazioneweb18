@@ -1,6 +1,7 @@
 package it.unitn.shoppinglesto.db.daos.jdbc;
 
 import it.unitn.shoppinglesto.db.daos.ProductDAO;
+import it.unitn.shoppinglesto.db.entities.Category;
 import it.unitn.shoppinglesto.db.entities.Photo;
 import it.unitn.shoppinglesto.db.entities.Product;
 import it.unitn.shoppinglesto.db.entities.ShoppingList;
@@ -46,6 +47,8 @@ public class JDBCProductDAO extends JDBCDAO<Product, Integer> implements Product
                 product.setDescription(rs.getString("description"));
                 product.setPhotos(getPhotos(product.getId()));
                 product.setCustom(rs.getBoolean("custom"));
+                product.setPrice(rs.getDouble("prezzo"));
+                product.setCategory(getCategory(product.getCategoryId()));
                 return product;
             }
         } catch (SQLException ex) {
@@ -67,7 +70,8 @@ public class JDBCProductDAO extends JDBCDAO<Product, Integer> implements Product
                     product.setPhotos(getPhotos(product.getId()));
                     product.setCustom(rs.getBoolean("custom"));
                     product.setCategoryId(rs.getInt("category_id"));
-
+                    product.setPrice(rs.getDouble("prezzo"));
+                    product.setCategory(getCategory(product.getCategoryId()));
                     products.add(product);
                 }
             }
@@ -83,19 +87,22 @@ public class JDBCProductDAO extends JDBCDAO<Product, Integer> implements Product
         if(prod == null){
             throw new DAOException("parameter not valid", new IllegalArgumentException("The shopping list is null."));
         }
-        String insert = "INSERT INTO `Product`(`name`, `description`, `category_id`, `custom`)"
-                + "VALUES (?,?,?,?)";
+        String insert = "INSERT INTO `Product`(`name`, `description`, `category_id`, `custom`, `prezzo`)"
+                + "VALUES (?,?,?,?,?)";
         try(PreparedStatement preparedStatement  = CON.prepareStatement(insert, Statement.RETURN_GENERATED_KEYS)){
             preparedStatement.setString(1, prod.getName());
             preparedStatement.setString(2, prod.getDescription());
             preparedStatement.setInt(3, prod.getCategoryId());
             preparedStatement.setBoolean(4, prod.isCustom());
+            preparedStatement.setDouble(4, prod.getPrice());
             preparedStatement.executeUpdate();
             try(ResultSet rs  = preparedStatement.getGeneratedKeys()){
                 if(rs.next()){
                     prod.setId(rs.getInt(1));
                 }
             }
+            if(prod.getPhotos() != null && !prod.getPhotos().isEmpty())
+                setPhotos(prod);
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
             throw new DAOException("Impossible to insert products.", ex);
@@ -105,7 +112,16 @@ public class JDBCProductDAO extends JDBCDAO<Product, Integer> implements Product
 
     @Override
     public Integer delete(Integer primaryKey) throws DAOException {
-        return null;
+        if (primaryKey == null) {
+            throw new DAOException("primary key is null");
+        }
+        try(PreparedStatement stm = CON.prepareStatement("DELETE FROM Product WHERE prod_id = ?")) {
+            stm.setInt(1, primaryKey);
+            stm.executeUpdate();
+        } catch (SQLException e) {
+            throw new DAOException("Error deleting product");
+        }
+        return 1;
     }
 
     @Override
@@ -122,6 +138,8 @@ public class JDBCProductDAO extends JDBCDAO<Product, Integer> implements Product
                     product.setDescription(rs.getString("description"));
                     product.setPhotos(getPhotos(product.getId()));
                     product.setCustom(rs.getBoolean("custom"));
+                    product.setPrice(rs.getDouble("prezzo"));
+                    product.setCategory(getCategory(product.getCategoryId()));
                     products.add(product);
                 }
             }
@@ -135,19 +153,22 @@ public class JDBCProductDAO extends JDBCDAO<Product, Integer> implements Product
     /**
      * Retrieve all products that can be added into the list
      *
-     * @param shoppingList list that i wanna view
-     * @return list of products insterted to this list
+     *
+     * @param listId @return list of products insterted to this list
+     * @param search
      * @throws DAOException if an error occurred during the operation.
      */
     @Override
-    public List<Product> getAvailableProduct(ShoppingList shoppingList) throws DAOException {
-        if(shoppingList == null){
+    public List<Product> getAvailableProduct(Integer listId, String search) throws DAOException {
+        if(listId == null){
             throw new DAOException("shoppingList is null");
         }
         List<Product> products = new ArrayList<>();
 
-        try (PreparedStatement stm = CON.prepareStatement("SELECT * FROM Product WHERE prod_id NOT IN (SELECT prodId FROM ListProduct WHERE listId = ?) AND custom = FALSE ORDER BY name")) {
-            stm.setInt(1, shoppingList.getId());
+        try (PreparedStatement stm = CON.prepareStatement("SELECT * FROM Product WHERE name LIKE ? AND prod_id NOT IN (SELECT prodId FROM ListProduct WHERE listId = ?) AND custom = FALSE ORDER BY name LIMIT 20")) {
+            stm.setString(1, "%" + search + "%");
+            stm.setInt(2, listId);
+
             try (ResultSet rs = stm.executeQuery()) {
                 while (rs.next()) {
                     Product product = new Product();
@@ -156,6 +177,9 @@ public class JDBCProductDAO extends JDBCDAO<Product, Integer> implements Product
                     product.setDescription(rs.getString("description"));
                     product.setPhotos(getPhotos(product.getId()));
                     product.setCustom(rs.getBoolean("custom"));
+                    product.setPrice(rs.getDouble("prezzo"));
+                    product.setCategoryId(rs.getInt("category_id"));
+                    product.setCategory(getCategory(product.getCategoryId()));
                     products.add(product);
                 }
             }
@@ -178,8 +202,7 @@ public class JDBCProductDAO extends JDBCDAO<Product, Integer> implements Product
         if(photoId == null){
             throw new DAOException("Photo id is null");
         }
-        String path = null;
-        try(PreparedStatement preparedStatement = CON.prepareStatement("SELECT path FROM PhotoProduct WHERE id = ?")){
+        try(PreparedStatement preparedStatement = CON.prepareStatement("SELECT path FROM ProductPhoto WHERE id = ?")){
             preparedStatement.setInt(1, photoId);
             try(ResultSet rs  = preparedStatement.executeQuery()){
                 if(rs.next()){
@@ -189,7 +212,100 @@ public class JDBCProductDAO extends JDBCDAO<Product, Integer> implements Product
         }catch (SQLException e){
             throw new DAOException("Impossible to get single photo of the product.", e);
         }
-        return path;
+        return null;
+    }
+
+    /**
+     * Update product from edit servlet
+     *
+     * @param product@return the updated product
+     * @throws DAOException
+     */
+    @Override
+    public Product update(Product product) throws DAOException {
+        if(product == null){
+            throw new DAOException("Product to update is null");
+        }
+        try (PreparedStatement preparedStatement = CON.prepareStatement("UPDATE `Product` SET name = ?, description = ?, category_id = ?, custom = ?, prezzo = ? WHERE prod_id = ?")){
+            preparedStatement.setString(1, product.getName());
+            preparedStatement.setString(2, product.getDescription());
+            preparedStatement.setInt(3,product.getCategoryId());
+            preparedStatement.setBoolean(4, product.isCustom());
+            preparedStatement.setDouble(5, product.getPrice());
+            preparedStatement.setInt(6, product.getId());
+            if (preparedStatement.executeUpdate() == 1) {
+                return product;
+            } else {
+                throw new DAOException("Error while saving the product");
+            }
+        } catch (SQLException e) {
+            throw new DAOException("Impossible to update product");
+        }
+    }
+
+    /**
+     * Get category of product
+     *
+     * @param categoryId category id of the product
+     * @return complete category
+     * @throws DAOException
+     */
+    @Override
+    public Category getCategory(Integer categoryId) throws DAOException {
+        if(categoryId == null)
+            throw new DAOException("categoryId is null");
+        Category category = null;
+        try(PreparedStatement preparedStatement = CON.prepareStatement("SELECT * FROM ProductCategory WHERE prodCategoryId = ?")){
+            preparedStatement.setInt(1, categoryId);
+            try(ResultSet rs = preparedStatement.executeQuery()){
+              if(rs.next()){
+                  category = new Category();
+                  category.setId(rs.getInt("prodCategoryId"));
+                  category.setName(rs.getString("name"));
+                  category.setDescription(rs.getString("description"));
+                  category.setPhoto(getCategoryPhotos(categoryId));
+              }
+            }
+            return category;
+        } catch (SQLException e) {
+            throw new DAOException("Error getting category of the product");
+        }
+    }
+
+    @Override
+    public boolean deletePhoto(Integer photoId) throws DAOException {
+        if(photoId == null){
+            throw new DAOException("photoid is null");
+        }
+        try(PreparedStatement preparedStatement = CON.prepareStatement("DELETE FROM ProductPhoto WHERE id = ?")){
+            preparedStatement.setInt(1, photoId);
+            if(preparedStatement.executeUpdate() == 1)
+                return true;
+        }catch (SQLException e){
+            throw new DAOException("Impossible to delete photo", e);
+        }
+        return false;
+    }
+
+    private List<Photo> getCategoryPhotos(Integer categoryId) throws DAOException {
+        if(categoryId == null)
+            throw new DAOException("categoryId is null");
+        List<Photo> photos = new ArrayList<>();
+        try(PreparedStatement preparedStatement = CON.prepareStatement("SELECT * FROM ProductCategoryPhoto WHERE prodCat = ?")){
+            preparedStatement.setInt(1, categoryId);
+            try(ResultSet rs = preparedStatement.executeQuery()){
+                while(rs.next()){
+                    Photo photo = new Photo();
+                    photo.setId(rs.getInt("prodCatPhotoId"));
+                    photo.setPath(rs.getString("path"));
+                    photo.setItemId(rs.getInt("prodCat"));
+                    photos.add(photo);
+                }
+            }
+            return photos;
+        } catch (SQLException e) {
+            throw new DAOException("Error getting photo of the product category");
+        }
     }
 
     private List<Photo> getPhotos(Integer prodId) throws DAOException {
@@ -197,7 +313,7 @@ public class JDBCProductDAO extends JDBCDAO<Product, Integer> implements Product
             throw new DAOException("Prod id is null");
         }
         List<Photo> photos = new ArrayList<>();
-        try (PreparedStatement preparedStatement  = CON.prepareStatement("SELECT * FROM PhotoProduct WHERE prod_id = ?")) {
+        try (PreparedStatement preparedStatement  = CON.prepareStatement("SELECT * FROM ProductPhoto WHERE prod_id = ?")) {
             preparedStatement.setInt(1, prodId);
             ResultSet rs = preparedStatement.executeQuery();
             while (rs.next()) {
@@ -218,7 +334,7 @@ public class JDBCProductDAO extends JDBCDAO<Product, Integer> implements Product
             throw new DAOException("photos empty is null");
         }
         List<Photo> photos = product.getPhotos();
-        String insert = "INSERT INTO `PhotoProduct`(`path`, `prod_id`) VALUES (?,?)";
+        String insert = "INSERT INTO ProductPhoto(`path`, `prod_id`) VALUES (?,?)";
         try(PreparedStatement preparedStatement  = CON.prepareStatement(insert, Statement.RETURN_GENERATED_KEYS)){
             for (Photo photo: photos) {
                 preparedStatement.setString(1, photo.getPath());
@@ -233,5 +349,26 @@ public class JDBCProductDAO extends JDBCDAO<Product, Integer> implements Product
         }catch (SQLException e){
             throw new DAOException("Impossible to set photos.", e);
         }
+    }
+
+    @Override
+    public void addPhoto(Photo photo) throws DAOException{
+        if(photo == null){
+            throw new DAOException("photo is null");
+        }
+        String insert = "INSERT INTO `ProductPhoto`(`path`, `prod_id`) VALUES (?,?)";
+        try(PreparedStatement preparedStatement  = CON.prepareStatement(insert, Statement.RETURN_GENERATED_KEYS)){
+            preparedStatement.setString(1, photo.getPath());
+            preparedStatement.setInt(2, photo.getItemId());
+            try(ResultSet rs  = preparedStatement.getGeneratedKeys()){
+                if(rs.next()){
+                    photo.setId(rs.getInt(1));
+                }
+            }
+            preparedStatement.executeUpdate();
+        }catch (SQLException e){
+            throw new DAOException("Impossible to add photo", e);
+        }
+
     }
 }

@@ -1,7 +1,7 @@
-package it.unitn.shoppinglesto.servlet.lists.category;
+package it.unitn.shoppinglesto.servlet.product;
 
-import it.unitn.shoppinglesto.db.daos.ListCategoryDAO;
-import it.unitn.shoppinglesto.db.daos.UserDAO;
+import it.unitn.shoppinglesto.db.daos.ProductDAO;
+import it.unitn.shoppinglesto.db.entities.Product;
 import it.unitn.shoppinglesto.db.entities.User;
 import it.unitn.shoppinglesto.db.exceptions.DAOException;
 import it.unitn.shoppinglesto.db.exceptions.DAOFactoryException;
@@ -15,9 +15,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-@WebServlet(name = "DeleteListCategoryServlet")
-public class DeleteListCategoryServlet extends HttpServlet {
-    private ListCategoryDAO listCategoryDAO;
+@WebServlet(name = "DeleteProductServlet")
+public class DeleteProductServlet extends HttpServlet {
+    private ProductDAO productDAO;
 
     @Override
     public void init() throws ServletException {
@@ -26,12 +26,11 @@ public class DeleteListCategoryServlet extends HttpServlet {
             throw new ServletException("Impossible to get dao factory!");
         }
         try {
-            listCategoryDAO = daoFactory.getDAO(ListCategoryDAO.class);
+            productDAO = daoFactory.getDAO(ProductDAO.class);
         } catch (DAOFactoryException ex) {
-            throw new ServletException("Impossible to get list category dao from dao factory!", ex);
+            throw new ServletException("Impossible to get product dao from dao factory!", ex);
         }
     }
-
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);
         User user = (User) session.getAttribute("user");
@@ -40,25 +39,20 @@ public class DeleteListCategoryServlet extends HttpServlet {
             return;
         }
 
-        String message = null;
-        boolean hasError = false;
-
-        Integer listCatId = null;
+        Integer prodId = null;
         try {
-            listCatId = Integer.valueOf(request.getParameter("listCatId"));
+            prodId = Integer.valueOf(request.getParameter("prodId"));
         } catch (RuntimeException ex) {
-            response.sendError(500, "Error getting list cat id");
+            response.sendError(500, "Error getting prod id");
         }
         try{
-            if(!listCategoryDAO.delete(listCatId).equals(1)){
-                hasError = true;
-            }
+            productDAO.delete(prodId);
         }catch (DAOException e){
             response.sendError(500, e.getMessage());
         }
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        throw new ServletException("Cannot enter this page");
     }
 }

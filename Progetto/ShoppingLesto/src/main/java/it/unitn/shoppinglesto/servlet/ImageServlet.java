@@ -98,14 +98,7 @@ public class ImageServlet extends HttpServlet {
                             path = user.getAvatar();
                             break;
                         case "products":
-                            Product product = productDAO.getByPrimaryKey(id);
-                            if (product != null) {
-                                if (product.getPhotos().size() > 1){
-
-                                }else{
-                                    path = product.getPhotos().get(0).getPath();
-                                }
-                            }
+                            path = productDAO.getSinglePhoto(id);
                             break;
                         /*case "customproducts":
                             product = productDAO.getCustomByPrimaryKey(id);
@@ -133,10 +126,11 @@ public class ImageServlet extends HttpServlet {
                     response.sendError(500, ex.getMessage());
                 }
             } else {
-                response.sendError(404);
+                if(!response.isCommitted())
+                    response.sendError(404);
             }
 
-            if (!validResource || path == null) {
+            if (!validResource || path == null && !response.isCommitted()) {
                 response.sendError(404);
             } else {
                 InputStream inputStream = new FileInputStream(path);

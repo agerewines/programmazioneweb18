@@ -111,7 +111,7 @@ public class JDBCShoppingListDAO extends JDBCDAO<ShoppingList, Integer> implemen
                     shoppingList.setName(rs.getString("name"));
                     shoppingList.setDescription(rs.getString("description"));
                     shoppingList.setCategoryId(rs.getInt("category_id"));
-                    shoppingList.setCategoryId(rs.getInt("user_id"));
+                    shoppingList.setUserId(rs.getInt("user_id"));
                     shoppingList.setImage(rs.getString("image"));
                     shoppingLists.add(shoppingList);
                 }
@@ -521,6 +521,29 @@ public class JDBCShoppingListDAO extends JDBCDAO<ShoppingList, Integer> implemen
         }catch (SQLException ex) {
             System.out.println(ex.getMessage());
             throw new DAOException("Impossible to insert product in the list.", ex);
+        }
+    }
+
+    /**
+     * Delete product to certain list
+     *
+     * @param listId    shoppinglist thats gonna be modified
+     * @param productId product to delete
+     * @throws DAOException if an error occurs during the operation.
+     */
+    @Override
+    public void deleteProductFromList(Integer listId, Integer productId) throws DAOException {
+        if(listId == null || productId == null){
+            throw new DAOException("Parameter not valid", new IllegalArgumentException("Shoppinglist or product are nulls"));
+        }
+        String delete = "DELETE FROM ListProduct WHERE prodId = ? AND listId = ?";
+        try (PreparedStatement preparedStatement = CON.prepareStatement(delete, Statement.RETURN_GENERATED_KEYS)){
+            preparedStatement.setInt(1, productId);
+            preparedStatement.setInt(2, listId);
+            preparedStatement.executeUpdate();
+        }catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+            throw new DAOException("Impossible to delete product from the list.", ex);
         }
     }
 

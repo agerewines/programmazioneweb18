@@ -34,7 +34,7 @@ public class NewProductCategoryServlet extends HttpServlet {
         try {
             prodCategoryDAO = daoFactory.getDAO(ProdCategoryDAO.class);
         } catch (DAOFactoryException ex) {
-            throw new ServletException("Impossible to get list category dao from dao factory!", ex);
+            throw new ServletException("Impossible to get product category dao from dao factory!", ex);
         }
     }
 
@@ -74,16 +74,15 @@ public class NewProductCategoryServlet extends HttpServlet {
             // aggiungi le foto se ci sono
             Part filePart = request.getPart("photo");
             if ((filePart != null) && (filePart.getSize() > 0)) {
-                Photo listPhoto = new Photo();
-                listPhoto.setId(prodCat.getId());
-                listPhoto.setItemId(prodCat.getId());
+                Photo prodCatPhoto = new Photo();
+                prodCatPhoto.setItemId(prodCat.getId());
                 String fileName = UtilityHelper.getFilename(filePart);
                 fileName = UtilityHelper.renameImage(fileName, "ProdCategory_" + prodCat.getId() + "_" + (new Date().toString()).replace(":", "_").replace(" ", "_"));
                 String listCategoryUploadDir = rootPath + File.separator + avatarsFolder + "ProdCategory";
                 try {
-                    listPhoto.setPath(UtilityHelper.uploadFileToDirectory(listCategoryUploadDir, fileName, filePart));
-                    prodCat.addPhoto(listPhoto);
-                    prodCategoryDAO.addPhoto(listPhoto);
+                    prodCatPhoto.setPath(UtilityHelper.uploadFileToDirectory(listCategoryUploadDir, fileName, filePart));
+                    prodCat.addPhoto(prodCatPhoto);
+                    prodCategoryDAO.addPhoto(prodCatPhoto);
                 } catch (DAOException | IOException ex) {
                     response.sendError(500, ex.getMessage());
                 }
@@ -92,11 +91,11 @@ public class NewProductCategoryServlet extends HttpServlet {
 
         if (hasError) {
             session.setAttribute("errorMessage", message);
-            response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath() + "/users"));
+            response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath() + "/home"));
         } else {
             message = "Product category was successfully added";
             session.setAttribute("successMessage", message);
-            response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath() + "/home"));
+            response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath() + "/admin/prodCat"));
         }
     }
 

@@ -79,8 +79,8 @@ public class JDBCListCategoryDAO extends JDBCDAO<Category, Integer> implements L
         if(cat == null){
             throw new DAOException("parameter not valid", new IllegalArgumentException("The is null."));
         }
-        String insert = "INSERT INTO `ListCategory`(`name`, `description`)"
-                + "VALUES (?,?)";
+        String insert = "INSERT INTO `ListCategory` (`name`, `description`)"
+                + " VALUES (?,?)";
         try(PreparedStatement preparedStatement  = CON.prepareStatement(insert, Statement.RETURN_GENERATED_KEYS)){
             preparedStatement.setString(1, cat.getName());
             preparedStatement.setString(2, cat.getDescription());

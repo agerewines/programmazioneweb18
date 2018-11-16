@@ -33,48 +33,23 @@
             <!-- Search form -->
             <form class="form-inline md-form form-sm mt-0">
                 <i class="fa fa-search" aria-hidden="true"></i>
-                <input class="form-control form-control-sm ml-3 w-75" type="text" placeholder="Search" aria-label="Search">
+                <input class="form-control form-control-sm ml-3 w-75 search-box" type="text" placeholder="Search" aria-label="Search">
             </form>
-            <table class="table table-hover table-striped">
+            <br/>
+            <table class="table table-hover table-striped" id="allProductTable">
                 <thead>
                 <tr>
-                    <th scope="col"><fmt:message key="product.th.photo" /></th>
-                    <th scope="col"><fmt:message key="product.th.name" /></th>
-                    <th scope="col"><fmt:message key="product.th.description" /></th>
-                    <th scope="col"><fmt:message key="product.th.add" /></th>
+                    <th style="width: 10%" scope="col">Photos</th>
+                    <th style="width: 25%" scope="col">Name</th>
+                    <th style="width: 55%" scope="col">Description</th>
+                    <th style="width: 5%" scope="col">Price</th>
+                    <th style="width: 5%" scope="col">Edit</th>
                 </tr>
                 </thead>
                 <tbody>
-                <c:forEach items="${products}" var="prod">
-                    <tr>
-                        <td>
-                            <c:choose>
-                                <c:when test="${ empty prod.photos}">
-                                    <img class="rounded shadow mb-3 bg-white rounded" height="65" width="65"
-                                         src="${pageContext.request.contextPath}/images/avatars/Products/default.png" alt="default product photo"/>
-                                </c:when>
-                                <c:otherwise>
-                                    <c:forEach items="${prod.photos}" var="photo">
-                                        <img class="rounded shadow mb-3 bg-white rounded" height="65" width="65"
-                                             src="${pageContext.request.contextPath}/images?id=${photo.id}&resource=listCatPhoto"
-                                             onerror="this.onerror=null;this.src='${pageContext.request.contextPath}/images/avatars/Products/default.png';"/>
-                                    </c:forEach>
-                                </c:otherwise>
-                            </c:choose>
-                        </td>
-                        <td>${prod.name}</td>
-                        <td>${prod.description}</td>
-                        <td>
-                            <button type="button" class="btn btn-primary addButton"
-                                    style="padding: 0 .375rem 0 .375rem;"
-                                    data-toggle="modal" data-target="#addProductModal" data-id="${prod.id}">
-                                <i class="fas fa-plus"></i>
-                            </button>
-                        </td>
-                    </tr>
-                </c:forEach>
                 </tbody>
             </table>
+            <br/>
         </div>
         <div class="col-md-2">
         </div>
@@ -97,6 +72,7 @@
                 <form action="${pageContext.request.contextPath}/product/add" method="POST">
                     <label><fmt:message key="product.h.sure" /></label> <br/>
                     <input id="hiddenProdId" type="hidden" name="prodId">
+                    <div id="prova"></div>
                     <input id="hiddenListId" type="hidden" name="listId" value="${param.listId}">
                     <button type="submit" class="btn btn-secondary" data-dismiss="modal"><fmt:message key="product.button.cancel" /></button>
                     <button type="submit" class="btn btn-primary"><fmt:message key="product.button.add" /></button>
@@ -110,11 +86,57 @@
 <%@include file="parts/_importsjs.jspf" %>
 
 <script type="text/javascript">
-    // language=JQuery-CSS
-    $('.addButton').click(function () {
+    $('#allProductTable').DataTable();
+    var timeout = null;
+    var addProd = function (e) {
+        console.log($(e.target).data('id'));
         $('#hiddenProdId').val($(this).data('id'));
-    })
+    };
+    $('.search-box').keyup(function(e) {
+        if (timeout !== null) {
+            clearTimeout(timeout);
+        }
+        timeout = setTimeout(function() {
+            $.ajax({
+                'url': "/ShoppingLesto/list/availableproduct?listId=" + new URLSearchParams(window.location.search).get('listId') + "&q=" + e.target.value,
+                'method': "GET",
+                'contentType': 'application/json'
+            }).done(function (responseJson) {
+                var rows = "";
+                $.each(responseJson, function(key, value) {
+                    console.log(value);
+                    rows += "<tr>\n" +
+                        "            <td>\n";
 
+                    if(value.photos == null){
+                        rows    += "<img class=\"rounded shadow mb-3 bg-white rounded\" height=\"65\" width=\"65\"\n" +
+                        "                             src=\"${pageContext.request.contextPath}/images/avatars/Products/default.png\" alt=\"default product photo\"/>"
+                    }else{
+                        $.each(value.photos, function(photoKey, photoValue) {
+                            rows += "                            <img class=\"rounded shadow mb-3 bg-white rounded\" height=\"65\" width=\"65\"\n" +
+                                "                                 src=\"${pageContext.request.contextPath}/images?id=\""+ photoValue.id +"\"&resource=products\"\n" +
+                                "                                 onerror=\"this.onerror=null;this.src='${pageContext.request.contextPath}/images/avatars/Products/default.png';\"/>\n";
+                        });
+
+                    }
+                    rows += "            </td>" +
+                        "            <td>"+ value.name +"</td>\n" +
+                        "            <td>"+ value.description +"</td>\n" +
+                        "            <td>"+ value.price +" €</td>\n" +
+                        "            <td>\n" +
+                        "                <button type=\"button\" class=\"btn btn-primary addButton\"\n" +
+                        "                        style=\"padding: 0 .375rem 0 .375rem;\"\n" +
+                        "                        data-toggle=\"modal\" data-target=\"#addProductModal\" data-id=\""+ value.id +"\">\n" +
+                        "                    <i class=\"fas fa-plus\"></i>\n" +
+                        "                </button>\n" +
+                        "            </td>\n" +
+                        "        </tr>\n";
+                });
+                $('table tbody').html(rows);
+                $('.addButton').click(addProd);
+            });
+        }, 300);
+    });
 </script>
 </body>
 
