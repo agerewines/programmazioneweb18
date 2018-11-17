@@ -34,6 +34,13 @@ public interface ProductDAO extends DAO<Product, Integer> {
      * @throws DAOException if an error occurred during the operation.
      */
     public List<Product> getAvailableProduct(Integer listId, String search) throws DAOException;
+    /**
+     * Retrieve all products that can be added into the list
+     *
+     * @param listId @return list of products able to be added to this list
+     * @throws DAOException if an error occurred during the operation.
+     */
+    public List<Product> getAvailableProduct(Integer listId) throws DAOException;
 
     /**
      * Retrieve photo path

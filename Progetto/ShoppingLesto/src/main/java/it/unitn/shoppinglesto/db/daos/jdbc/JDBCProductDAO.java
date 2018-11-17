@@ -186,7 +186,42 @@ public class JDBCProductDAO extends JDBCDAO<Product, Integer> implements Product
         } catch (SQLException ex) {
             throw new DAOException("Error getting products associated to the list", ex);
         }
+        return products;
+    }
 
+    /**
+     * Retrieve all products that can be added into the list
+     *
+     * @param listId @return list of products able to be added to this list
+     * @throws DAOException if an error occurred during the operation.
+     */
+    @Override
+    public List<Product> getAvailableProduct(Integer listId) throws DAOException {
+        if(listId == null){
+            throw new DAOException("shoppingList is null");
+        }
+        List<Product> products = new ArrayList<>();
+
+        try (PreparedStatement stm = CON.prepareStatement("SELECT * FROM Product WHERE prod_id NOT IN (SELECT prodId FROM ListProduct WHERE listId = ?) AND custom = FALSE ORDER BY name")) {
+            stm.setInt(1, listId);
+
+            try (ResultSet rs = stm.executeQuery()) {
+                while (rs.next()) {
+                    Product product = new Product();
+                    product.setId(rs.getInt("prod_id"));
+                    product.setName(rs.getString("name"));
+                    product.setDescription(rs.getString("description"));
+                    product.setPhotos(getPhotos(product.getId()));
+                    product.setCustom(rs.getBoolean("custom"));
+                    product.setPrice(rs.getDouble("prezzo"));
+                    product.setCategoryId(rs.getInt("category_id"));
+                    product.setCategory(getCategory(product.getCategoryId()));
+                    products.add(product);
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DAOException("Error getting products associated to the list", ex);
+        }
         return products;
     }
 

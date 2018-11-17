@@ -22,9 +22,9 @@
 <body id="page-top">
 <div class="container-fluid">
     <div class="row">
-        <div class="col-md-2">
+        <div class="col-md-1">
         </div>
-        <div class="col-lg-8 col-md-8 col-12">
+        <div class="col-lg-10 col-md-10 col-12">
             <h2>Register</h2>
             <%@include file="parts/_navigation.jspf" %>
             <c:if test="${not empty errorMessage}">
@@ -74,7 +74,7 @@
             </div>
         </div>
 
-        <div class="col-md-2">
+        <div class="col-md-1">
         </div>
     </div>
 </div>

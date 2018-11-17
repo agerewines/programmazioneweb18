@@ -171,6 +171,10 @@
         <servlet-class>it.unitn.shoppinglesto.servlet.product.NewProductServlet</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>NewCustomProductServlet</servlet-name>
+        <servlet-class>it.unitn.shoppinglesto.servlet.product.NewCustomProductServlet</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>DeleteSinglePhotoProductServlet</servlet-name>
         <servlet-class>it.unitn.shoppinglesto.servlet.product.DeleteSinglePhotoProductServlet</servlet-class>
     </servlet>
@@ -325,6 +329,10 @@
     <servlet-mapping>
         <servlet-name>NewProductServlet</servlet-name>
         <url-pattern>/product/new</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>NewCustomProductServlet</servlet-name>
+        <url-pattern>/product/custom/new</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>EditProductServlet</servlet-name>

@@ -26,9 +26,9 @@
 
 <div class="container-fluid">
     <div class="row justify-content-md-center">
-        <div class="col-md-2">
+        <div class="col-md-1">
         </div>
-        <div class="col-lg-8 col-md-8 col-12">
+        <div class="col-lg-10 col-md-10 col-12">
             <%@include file="parts/_successMessage.jspf" %>
             <h2>
                 ${user.fullName}
@@ -66,7 +66,7 @@
                 <button type="submit" class="btn btn-primary">Modify</button>
             </form>
         </div>
-        <div class="col-md-2">
+        <div class="col-md-1">
         </div>
     </div>
 </div>

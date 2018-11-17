@@ -33,9 +33,9 @@
 
 <div class="container-fluid">
     <div class="row justify-content-md-center">
-        <div class="col-md-2 col-lg-2">
+        <div class="col-md-1 col-lg-2">
         </div>
-        <div class="col-lg-8 col-md-8 col-12">
+        <div class="col-lg-10 col-md-10 col-12">
             <%@include file="../parts/_successMessage.jspf" %>
             <h2>Admin Panel</h2>
             <ul class="list-inline">
@@ -100,7 +100,7 @@
                 </tbody>
             </table>
         </div>
-        <div class="col-md-2 col-lg-2">
+        <div class="col-md-1 col-lg-2">
         </div>
     </div>
 </div>

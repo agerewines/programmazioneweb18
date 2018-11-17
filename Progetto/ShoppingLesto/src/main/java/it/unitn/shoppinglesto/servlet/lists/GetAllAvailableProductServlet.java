@@ -45,12 +45,17 @@ public class GetAllAvailableProductServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Integer listId = Integer.parseInt(request.getParameter("listId"));
-        String search = request.getParameter("q");
+        String search = null;
+        if (request.getParameterMap().containsKey("q")) {
+            search = request.getParameter("q");
+        }
         if (listId != 0) {
-            ShoppingList list = null;
             List<Product> availableProducts = null;
             try {
-                availableProducts = productDAO.getAvailableProduct(listId, search);
+                if(search != null)
+                    availableProducts = productDAO.getAvailableProduct(listId, search);
+                else
+                    availableProducts = productDAO.getAvailableProduct(listId);
             } catch (DAOException e) {
                 e.printStackTrace();
             }

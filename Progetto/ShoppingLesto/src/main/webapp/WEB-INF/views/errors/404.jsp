@@ -23,28 +23,35 @@
     <meta name="author" content="">
 
     <title>ShoppingLesto | Error 404 - Webprogramming18</title>
-
+    <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/notfound.css" />
     <%@include file="../parts/_imports.jspf" %>
 
 </head>
 <body id="page-top">
 
-<%@include file="../parts/_navigation.jspf" %>
 <%@include file="../parts/_errors.jspf" %>
 
 <div class="container-fluid">
     <div class="row">
-        <div class="col-md-2">
+        <div class="col-md-1">
         </div>
-        <div class="col-lg-8 col-md-8 col-12">
-            <h2>Error 404</h2>
-            <h5>Exception is: <%= exception %></h5>
+        <div class="col-lg-10 col-md-10 col-12">
+            <div id="notfound">
+                <div class="notfound">
+                    <div class="notfound-404">
+                        <h3>Oops! Page not found</h3>
+                        <h1><span>4</span><span>0</span><span>4</span></h1>
+                    </div>
+                    <h2>Your ship got lost in time and space</h2>
+                    <small>we are sorry, but the page you requested was not found</small>
+                </div>
+            </div>
+
         </div>
-        <div class="col-md-2">
+        <div class="col-md-1">
         </div>
     </div>
 </div>
-<%@include file="../parts/_footer.jspf" %>
 <%@include file="../parts/_importsjs.jspf" %>
 </body>
 

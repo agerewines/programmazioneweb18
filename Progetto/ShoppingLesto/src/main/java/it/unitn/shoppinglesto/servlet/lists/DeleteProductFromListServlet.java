@@ -1,6 +1,8 @@
 package it.unitn.shoppinglesto.servlet.lists;
 
+import it.unitn.shoppinglesto.db.daos.ProductDAO;
 import it.unitn.shoppinglesto.db.daos.ShoppingListDAO;
+import it.unitn.shoppinglesto.db.entities.Product;
 import it.unitn.shoppinglesto.db.entities.User;
 import it.unitn.shoppinglesto.db.exceptions.DAOException;
 import it.unitn.shoppinglesto.db.exceptions.DAOFactoryException;
@@ -17,12 +19,18 @@ import java.io.IOException;
 @WebServlet(name = "DeleteProductFromListServlet")
 public class DeleteProductFromListServlet extends HttpServlet {
     private ShoppingListDAO shoppingListDAO;
+    private ProductDAO productDAO;
 
     @Override
     public void init() throws ServletException {
         DAOFactory daoFactory = (DAOFactory) super.getServletContext().getAttribute("daoFactory");
         if (daoFactory == null) {
             throw new ServletException("Impossible to get dao factory!");
+        }
+        try {
+            productDAO = daoFactory.getDAO(ProductDAO.class);
+        } catch (DAOFactoryException ex) {
+            throw new ServletException("Impossible to get product dao from dao factory!", ex);
         }
         try {
             shoppingListDAO = daoFactory.getDAO(ShoppingListDAO.class);
@@ -50,7 +58,10 @@ public class DeleteProductFromListServlet extends HttpServlet {
         // lo aggiungo alla lista
         if(listId != null && prodId != null){
             try{
+                Product prod = productDAO.getByPrimaryKey(prodId);
                 shoppingListDAO.deleteProductFromList(listId, prodId);
+                if(prod.isCustom())
+                    productDAO.delete(prodId);
             }catch (DAOException e){
                 response.sendError(500, e.getMessage());
             }

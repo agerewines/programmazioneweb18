@@ -33,9 +33,9 @@
 
 <div class="container-fluid">
     <div class="row justify-content-md-center">
-        <div class="col-md-2 col-lg-2">
+        <div class="col-md-1 col-lg-1 hidden-sm-down">
         </div>
-        <div class="col-lg-8 col-md-8 col-12">
+        <div class="col-lg-10 col-md-10 col-12">
             <%@include file="../parts/_successMessage.jspf" %>
             <h2>Admin Panel</h2>
             <!-- Prodotti -->
@@ -105,7 +105,7 @@
                 </tbody>
             </table>
         </div>
-        <div class="col-md-2 col-lg-2">
+        <div class="col-md-1 col-lg-1 hidden-sm-down">
         </div>
 
 <!-- Product -->
@@ -139,7 +139,7 @@
                     <div class="form-row">
                         <div class="form-group col-md-12">
                             <label for="priceProd">Price</label>
-                            <input type="number" class="form-control" id="priceProd" placeholder="Price" name="price">
+                            <input type="number" class="form-control" id="priceProd" placeholder="Price" name="price" step="0.01">
                         </div>
                     </div>
                     <div class="form-row">
@@ -148,7 +148,7 @@
                             <select id="productCategory" name="category" class="form-control">
                             </select>
                         </div>
-                        <div class="form-group col-md-2 col-2">
+                        <div class="form-group col-md-1 col-2">
                             <button type="button" class="btn btn-primary addProdCat"
                                     style="padding: 0 .375rem 0 .375rem;"
                                     data-toggle="modal" data-target="#addProdCatModal" data-dismiss="modal">
