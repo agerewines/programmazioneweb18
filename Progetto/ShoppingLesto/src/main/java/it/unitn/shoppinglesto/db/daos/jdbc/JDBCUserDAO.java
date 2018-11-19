@@ -499,7 +499,16 @@ public class JDBCUserDAO extends JDBCDAO<User, Integer> implements UserDAO {
     }
 
     @Override
-    public Integer delete(Integer primaryKey) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Integer delete(Integer primaryKey) throws DAOException {
+        if(primaryKey == null){
+            throw new DAOException("primary key is null");
+        }
+        try(PreparedStatement preparedStatement = CON.prepareStatement("DELETE FROM User WHERE id = ?")){
+            preparedStatement.setInt(1, primaryKey);
+            return preparedStatement.executeUpdate() == 1 ? 1 : 0;
+
+        } catch (SQLException e) {
+            throw new DAOException("Cannot delete user");
+        }
     }
 }

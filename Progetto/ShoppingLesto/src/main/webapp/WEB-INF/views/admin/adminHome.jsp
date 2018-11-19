@@ -199,7 +199,7 @@
                     <div class="form-row">
                         <div class="form-group col-md-12">
                             <label for="priceProdEdit">Price</label>
-                            <input type="number" class="form-control" id="priceProdEdit" placeholder="Price" name="priceEdit">
+                            <input type="number" class="form-control" id="priceProdEdit" placeholder="Price" name="priceEdit" step="0.01">
                         </div>
                     </div>
                     <div class="form-row">
@@ -331,7 +331,9 @@
 
         e.preventDefault(); // avoid to execute the actual submit of the form.
     });
-    $('table').DataTable();
+    $('table').DataTable({
+        "order" : [[1, "asc"]]
+    });
 </script>
 </body>
 

@@ -87,12 +87,9 @@ public class ShowListServlet extends HttpServlet {
                     response.sendError(500, "There is no list selected!");
                     return;
                 } else {
-                    if (!shoppingListDAO.isUserInList(user, list)) {
+                    if (!shoppingListDAO.isUserInList(user, list))
                         response.sendError(500, "You're not in this list!");
-                    } else {
-                        productList = productDAO.getProductsByList(list);
-                        //customproductList = productDAO.getCustomActiveByList(list);
-                    }
+                    else productList = productDAO.getProductsByList(list);
                 }
             } catch (DAOException e) {
                 response.sendError(500, e.getMessage());

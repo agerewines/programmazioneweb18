@@ -59,20 +59,14 @@ public class HomeServlet extends HttpServlet {
             throws ServletException, IOException {
         HttpSession session = request.getSession(false);
         User user = (User) session.getAttribute("user");
+        boolean anon = false;
+        if (request.getParameterMap().containsKey("anonymous")) {
+            anon = true;
+        }
         String dispatchPath = null;
-        if (user == null) {
+        if (user == null || anon) {
             String uuidStr = UtilityHelper.getCookieValue(request, TEMPLISTCOOKIENAME);
-
-            /*if (uuidStr != null) {
-                try {
-                    ShoppingList list = shoppingListDAO.getTemporaryList(uuidStr);
-                    request.setAttribute("shoppingList", list); //maybe should change it to session.
-
-                } catch (DAOException ex) {
-                    response.sendError(500, ex.getMessage()); //gives error if cookie present but db record is cancelled.
-                }
-            }*/
-            dispatchPath = "/WEB-INF/views/index.jsp";
+            dispatchPath = "/WEB-INF/views/home.jsp";
         } else {
             if (user.isAdmin()) {
                 try {

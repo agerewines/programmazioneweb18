@@ -30,7 +30,7 @@
             <c:if test="${not empty errorMessage}">
                 <c:out value="${errorMessage}"/>
             </c:if>
-            <form action="${pageContext.request.contextPath}/register" method="POST">
+            <form action="${pageContext.request.contextPath}/register" method="POST" id="register">
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <label for="firstName"><fmt:message key="register.label.first_name" /></label>
@@ -80,6 +80,7 @@
 </div>
 <%@include file="parts/_footer.jspf" %>
 <%@include file="parts/_importsjs.jspf" %>
+
 </body>
 
 </html>

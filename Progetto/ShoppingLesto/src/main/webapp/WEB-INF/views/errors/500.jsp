@@ -35,7 +35,9 @@
         <h1>500</h1>
         <h2>error</h2>
         <p>Ruh-roh, something just isn't right... Time to paw through your logs and get down and dirty in your
-            stack-trace;)</p>
+            stack-trace ;)
+            <%= request.getAttribute("javax.servlet.error.message") %>
+        </p>
     </div>
     <div class="stack-container">
         <div class="card-container">

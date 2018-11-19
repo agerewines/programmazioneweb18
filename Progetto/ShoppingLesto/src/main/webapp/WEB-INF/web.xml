@@ -43,12 +43,24 @@
     </filter-mapping>
     <filter-mapping>
         <filter-name>AuthenticationFilter</filter-name>
-        <url-pattern>/user/profile</url-pattern>
+        <url-pattern>/user/*</url-pattern>
         <url-pattern>/list/*</url-pattern>
     </filter-mapping>
     <servlet>
         <servlet-name>UsersListServlet</servlet-name>
         <servlet-class>it.unitn.shoppinglesto.servlet.UsersListServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DeleteUserServlet</servlet-name>
+        <servlet-class>it.unitn.shoppinglesto.servlet.DeleteUserServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ChangeUserPasswordServlet</servlet-name>
+        <servlet-class>it.unitn.shoppinglesto.servlet.ChangeUserPasswordServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>PrivacyPolicyServlet</servlet-name>
+        <servlet-class>it.unitn.shoppinglesto.servlet.PrivacyPolicyServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>RegistrationServlet</servlet-name>
@@ -243,6 +255,14 @@
         <url-pattern>/user/profile</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
+        <servlet-name>DeleteUserServlet</servlet-name>
+        <url-pattern>/user/delete</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ChangeUserPasswordServlet</servlet-name>
+        <url-pattern>/user/changepw</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
         <servlet-name>ImageServlet</servlet-name>
         <url-pattern>/images</url-pattern>
     </servlet-mapping>
@@ -345,6 +365,10 @@
     <servlet-mapping>
         <servlet-name>ShowListCategoryServlet</servlet-name>
         <url-pattern>/admin/listCat</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>PrivacyPolicyServlet</servlet-name>
+        <url-pattern>/PrivacyPolicy</url-pattern>
     </servlet-mapping>
   <welcome-file-list>
         <welcome-file>/WEB-INF/views/index.jsp</welcome-file>

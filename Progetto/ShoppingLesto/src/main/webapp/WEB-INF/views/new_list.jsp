@@ -49,13 +49,13 @@
                 <div class="form-row">
                     <div class="form-group col-md-12">
                         <label for="description"><fmt:message key="list.li.description" /></label>
-                        <textarea class="form-control" id="description" name="description " rows="3" placeholder="Description">${list.description}</textarea>
+                        <textarea class="form-control" id="description" name="description " rows="3" placeholder="Description"></textarea>
                     </div>
                 </div>
-                <div class="form-row">
-                    <div class="form-group col-md-12">
-                        <label for="avatar"><fmt:message key="list.label.add_avatar" /></label>
-                        <input type="file" class="form-control-file" id="avatar" name="avatar">
+                <div class="form-row mb-4">
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="avatar" name="avatar">
+                        <label class="custom-file-label" for="avatar">Add list avatar</label>
                     </div>
                 </div>
                 <button type="submit" class="btn btn-primary"><fmt:message key="new_list.h.new_list" /></button>

@@ -48,7 +48,8 @@
                 <tr>
                     <th style="width: 10%" scope="col">Photos</th>
                     <th style="width: 25%" scope="col">Name</th>
-                    <th style="width: 55%" scope="col">Description</th>
+                    <th style="width: 45%" scope="col">Description</th>
+                    <th style="width: 10%" scope="col">Category</th>
                     <th style="width: 5%" scope="col">Price</th>
                     <th style="width: 5%" scope="col">Add</th>
                 </tr>
@@ -153,7 +154,9 @@
 <%@include file="parts/_importsjs.jspf" %>
 
 <script type="text/javascript">
-    var datatable = $('#allProductTable').DataTable();
+    var datatable = $('#allProductTable').DataTable({
+        "order" : [[1, "asc"]]
+    });
     var timeout = null;
     var addProd = function (e) {
         console.log($(e.target).data('id'));
@@ -189,6 +192,7 @@
                     row += "            </td>" +
                         "            <td>"+ value.name +"</td>\n" +
                         "            <td>"+ value.description +"</td>\n" +
+                        "            <td>"+ value.category.name +"</td>\n" +
                         "            <td>"+ value.price +" €</td>\n" +
                         "            <td>\n" +
                         "                <button type=\"button\" class=\"btn btn-primary addButton\"\n" +
@@ -241,6 +245,7 @@
                     row += "            </td>" +
                         "            <td>"+ value.name +"</td>\n" +
                         "            <td>"+ value.description +"</td>\n" +
+                        "            <td>"+ value.category.name +"</td>\n" +
                         "            <td>"+ value.price +" €</td>\n" +
                         "            <td>\n" +
                         "                <button type=\"button\" class=\"btn btn-primary addButton\"\n" +

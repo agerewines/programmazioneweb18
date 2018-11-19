@@ -143,7 +143,7 @@
                 </c:forEach>
                 </tbody>
             </table>
-            <a class="btn btn-primary"
+            <a class="btn btn-primary mb-4"
                href="${pageContext.request.contextPath}/product/add?listId=${list.id}"><fmt:message key="list.a.add_product" /></a>
         </div>
         <div class="col-md-1">
@@ -187,11 +187,11 @@
                             </c:forEach>
                         </select>
                     </div>
-                    <div class="form-row">
-                        <div class="form-group  col-md-6">
-                            <label for="avatar"><fmt:message key="list.label.add_avatar" /></label>
-                            <input type="file" class="form-control-file" id="avatar" name="avatar"
-                                   value="${list.image}">
+                    <hr/>
+                    <div class="form-row mb-4">
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="avatar" name="avatar" value="${list.image}">
+                            <label class="custom-file-label" for="avatar">Add your avatar</label>
                         </div>
                     </div>
                     <input type="hidden" id="listId" name="listId" value="${list.id}">
@@ -452,7 +452,9 @@
     });
 
     $(document).ready(function() {
-        $('#tableProductInList').DataTable();
+        $('#tableProductInList').DataTable({
+            "order" : [[1, "asc"]]
+        });
     } );
     $('.removeProd').click(function(){
         $('#prodIdDelete').val($(this).data('id'));

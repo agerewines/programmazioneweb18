@@ -3,45 +3,63 @@
     <div class="container">
         <c:choose>
             <c:when test="${not empty user}">
-                <a class="navbar-brand js-scroll-trigger" href="${pageContext.request.contextPath}/home">ShoppingLesto</a>
+                <a class="navbar-brand js-scroll-trigger"
+                   href="${pageContext.request.contextPath}/home">ShoppingLesto</a>
             </c:when>
             <c:otherwise>
                 <a class="navbar-brand js-scroll-trigger" href="${pageContext.request.contextPath}/">ShoppingLesto</a>
             </c:otherwise>
         </c:choose>
-        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-            Menu
-            <i class="fas fa-bars"></i>
-        </button>
+        <c:choose>
+            <c:when test="${not empty user}">
+                <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+                        data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false"
+                        aria-label="Toggle navigation">
+                    Menu
+                    <i class="fas fa-bars"></i>
+                </button>
+            </c:when>
+            <c:otherwise>
+            </c:otherwise>
+        </c:choose>
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav text-uppercase ml-auto">
                 <c:choose>
                     <c:when test="${not empty user}">
-                    <c:choose>
-                        <c:when test="${user.admin}">
-                            <li class="nav-item">
-                                <a class="nav-link js-scroll-trigger" href="${pageContext.request.contextPath}/home">Products</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link js-scroll-trigger" href="${pageContext.request.contextPath}/admin/prodCat">Product category</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link js-scroll-trigger" href="${pageContext.request.contextPath}/admin/listCat">List category</a>
-                            </li>
-                        </c:when>
-                        <c:otherwise>
-                            <li class="nav-item">
-                                <a class="nav-link js-scroll-trigger" href="${pageContext.request.contextPath}/home"><fmt:message key="navigation.a.lists" /></a>
-                            </li>
-                        </c:otherwise>
-                    </c:choose>
+                        <c:choose>
+                            <c:when test="${user.admin}">
+                                <li class="nav-item">
+                                    <a class="nav-link js-scroll-trigger"
+                                       href="${pageContext.request.contextPath}/home">Products</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link js-scroll-trigger"
+                                       href="${pageContext.request.contextPath}/admin/prodCat">Product category</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link js-scroll-trigger"
+                                       href="${pageContext.request.contextPath}/admin/listCat">List category</a>
+                                </li>
+                            </c:when>
+                            <c:otherwise>
+                                <li class="nav-item">
+                                    <a class="nav-link js-scroll-trigger"
+                                       href="${pageContext.request.contextPath}/home"><fmt:message
+                                            key="navigation.a.lists"/></a>
+                                </li>
+                            </c:otherwise>
+                        </c:choose>
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                ${user.firstName} ${user.lastName}
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    ${user.firstName} ${user.lastName}
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                <a class="dropdown-item" href="${pageContext.request.contextPath}/user/profile"><fmt:message key="navigation.a.account" /></a>
-                                <a class="dropdown-item" href="${pageContext.request.contextPath}/logout"><fmt:message key="navigation.a.logout" /></a>
+                                <a class="dropdown-item"
+                                   href="${pageContext.request.contextPath}/user/profile"><fmt:message
+                                        key="navigation.a.account"/></a>
+                                <a class="dropdown-item" href="${pageContext.request.contextPath}/logout"><fmt:message
+                                        key="navigation.a.logout"/></a>
                             </div>
                         </li>
                     </c:when>

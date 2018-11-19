@@ -257,7 +257,9 @@
         });
         e.preventDefault(); // avoid to execute the actual submit of the form.
     });
-    $('table').DataTable();
+    $('table').DataTable({
+        "order" : [[1, "asc"]]
+    });
 </script>
 
 </body>
