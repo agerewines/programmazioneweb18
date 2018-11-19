@@ -136,8 +136,10 @@
                     </div>
                     <div class="form-row">
                         <div class="form-group  col-md-12">
-                            <label for="photo">Add photo</label>
-                            <input type="file" id="photo" class="form-control-file" name="photo">
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" id="photo" name="photo">
+                                <label class="custom-file-label" for="photo">Add photo</label>
+                            </div>
                         </div>
                     </div>
                     <input type="hidden" name="custom" value="1">

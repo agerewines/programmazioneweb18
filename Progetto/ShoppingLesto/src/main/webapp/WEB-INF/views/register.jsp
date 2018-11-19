@@ -20,16 +20,16 @@
 
 </head>
 <body id="page-top">
+
+<%@include file="parts/_navigation.jspf" %>
+<%@include file="parts/_errors.jspf" %>
+
 <div class="container-fluid">
     <div class="row">
-        <div class="col-md-1">
+        <div class="col-md-1 col-lg-2">
         </div>
-        <div class="col-lg-10 col-md-10 col-12">
+        <div class="col-lg-8 col-md-10 col-12">
             <h2>Register</h2>
-            <%@include file="parts/_navigation.jspf" %>
-            <c:if test="${not empty errorMessage}">
-                <c:out value="${errorMessage}"/>
-            </c:if>
             <form action="${pageContext.request.contextPath}/register" method="POST" id="register">
                 <div class="form-row">
                     <div class="form-group col-md-6">
@@ -74,7 +74,7 @@
             </div>
         </div>
 
-        <div class="col-md-1">
+        <div class="col-md-1 col-lg-2">
         </div>
     </div>
 </div>

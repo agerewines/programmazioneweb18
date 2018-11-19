@@ -126,7 +126,7 @@
                     <div class="form-row">
                         <div class="form-group col-md-12">
                             <label for="nameProd">Name</label>
-                            <input type="text" class="form-control" id="nameProd" placeholder="Name" name="nameProd">
+                            <input type="text" class="form-control" id="nameProd" placeholder="Name" name="nameProd" required>
                         </div>
                     </div>
                     <div class="form-row">
@@ -139,13 +139,13 @@
                     <div class="form-row">
                         <div class="form-group col-md-12">
                             <label for="priceProd">Price</label>
-                            <input type="number" class="form-control" id="priceProd" placeholder="Price" name="price" step="0.01">
+                            <input type="number" class="form-control" id="priceProd" placeholder="Price" name="price" step="0.01" required>
                         </div>
                     </div>
                     <div class="form-row">
                         <label for="productCategory">Choose category</label>
                         <div class="form-group col-md-10 col-10">
-                            <select id="productCategory" name="category" class="form-control">
+                            <select id="productCategory" name="category" class="form-control" required>
                             </select>
                         </div>
                         <div class="form-group col-md-1 col-2">
@@ -157,11 +157,12 @@
                         </div>
                     </div>
                     <div class="form-row">
-                        <div class="form-group  col-md-6">
-                            <label for="photo">Add photo</label>
-                            <input type="file" class="form-control-file" name="photo">
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="photo2" name="photo">
+                            <label class="custom-file-label" for="photo2">Add photo</label>
                         </div>
                     </div>
+                    <hr/>
                     <button type="submit" class="btn btn-primary">Add product</button>
                 </form>
             </div>
@@ -186,7 +187,7 @@
                     <div class="form-row">
                         <div class="form-group col-md-12">
                             <label for="nameProdEdit">Name</label>
-                            <input type="text" class="form-control" id="nameProdEdit" placeholder="Name" name="nameProd">
+                            <input type="text" class="form-control" id="nameProdEdit" placeholder="Name" name="nameProd" required>
                         </div>
                     </div>
                     <div class="form-row">
@@ -199,7 +200,7 @@
                     <div class="form-row">
                         <div class="form-group col-md-12">
                             <label for="priceProdEdit">Price</label>
-                            <input type="number" class="form-control" id="priceProdEdit" placeholder="Price" name="priceEdit" step="0.01">
+                            <input type="number" class="form-control" id="priceProdEdit" placeholder="Price" name="priceEdit" step="0.01" required>
                         </div>
                     </div>
                     <div class="form-row">
@@ -207,12 +208,13 @@
                             <select id="productCategoryEdit" name="category" class="form-control">
                             </select>
                     </div>
-                    <div class="form-row">
-                        <div class="form-group  col-md-6">
-                            <label for="photo">Add photo</label>
-                            <input type="file" id="photo" class="form-control-file" name="photo">
+                    <div class="form-row mt-4">
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="photo" name="photo">
+                            <label class="custom-file-label" for="photo">Add photo</label>
                         </div>
                     </div>
+                    <hr/>
                     <input type="hidden" name="prodId" id="hiddenProductEditId">
                     <button type="submit" class="btn btn-primary">Edit product</button>
                 </form>

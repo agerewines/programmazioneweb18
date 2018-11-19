@@ -33,7 +33,7 @@
 
 <div class="container-fluid">
     <div class="row justify-content-md-center">
-        <div class="col-md-1 col-lg-2">
+        <div class="col-md-1 col-lg-1">
         </div>
         <div class="col-lg-10 col-md-10 col-12">
             <%@include file="../parts/_successMessage.jspf" %>
@@ -100,7 +100,7 @@
                 </tbody>
             </table>
         </div>
-        <div class="col-md-1 col-lg-2">
+        <div class="col-md-1 col-lg-1">
         </div>
     </div>
 </div>
@@ -134,11 +134,12 @@
                         </div>
                     </div>
                     <div class="form-row">
-                        <div class="form-group  col-md-6">
-                            <label for="photo">Add photo</label>
-                            <input type="file" class="form-control-file" name="photo">
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="photo" name="photo">
+                            <label class="custom-file-label" for="photo">Add photo</label>
                         </div>
                     </div>
+                    <hr/>
                     <button type="submit" class="btn btn-primary">Add list category</button>
                 </form>
             </div>
@@ -174,11 +175,12 @@
                         </div>
                     </div>
                     <div class="form-row">
-                        <div class="form-group  col-md-6">
-                            <label for="photo">Add photo</label>
-                            <input type="file" class="form-control-file" id="photo" name="photo">
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="photo2" name="photo">
+                            <label class="custom-file-label" for="photo2">Add photo</label>
                         </div>
                     </div>
+                    <hr/>
                     <input type="hidden" name="listCatId" id="hiddenListCatId">
                     <button type="submit" class="btn btn-primary">Edit list category</button>
                 </form>

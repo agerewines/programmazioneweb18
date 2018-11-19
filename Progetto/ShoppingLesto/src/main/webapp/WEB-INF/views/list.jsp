@@ -191,7 +191,7 @@
                     <div class="form-row mb-4">
                         <div class="custom-file">
                             <input type="file" class="custom-file-input" id="avatar" name="avatar" value="${list.image}">
-                            <label class="custom-file-label" for="avatar">Add your avatar</label>
+                            <label class="custom-file-label" for="avatar">Add photo</label>
                         </div>
                     </div>
                     <input type="hidden" id="listId" name="listId" value="${list.id}">
