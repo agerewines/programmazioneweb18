@@ -334,6 +334,27 @@ public class JDBCShoppingListDAO extends JDBCDAO<ShoppingList, Integer> implemen
         }
     }
 
+    @Override
+    public ShoppingList updateAnon(ShoppingList list) throws DAOException {
+        if (list == null) {
+            throw new DAOException("list is null, not valid", new IllegalArgumentException("User null."));
+        }
+        try (PreparedStatement prepStm = CON.prepareStatement("UPDATE `List` SET `name` = ?, `description` = ?, `image` = ?, `category_id` = ?  WHERE `list_id` = ?")) {
+            prepStm.setString(1, list.getName());
+            prepStm.setString(2, list.getDescription());
+            prepStm.setString(3, list.getImage());
+            prepStm.setInt(4, list.getCategoryId());
+            prepStm.setInt(5, list.getId());
+            if (prepStm.executeUpdate() == 1) {
+                return list;
+            } else {
+                throw new DAOException("Error while saving the list");
+            }
+        } catch (SQLException ex) {
+            throw new DAOException("Error while updating the shopping list!", ex);
+        }
+    }
+
     /**
      * Checks the {@link User user} permissions of the {@link ShoppingList list}
      *
@@ -583,6 +604,31 @@ public class JDBCShoppingListDAO extends JDBCDAO<ShoppingList, Integer> implemen
             preparedStatement.setString(3, entity.getImage());
             preparedStatement.setInt(4, entity.getCategoryId());
             preparedStatement.setInt(5, entity.getUserId());
+            preparedStatement.executeUpdate();
+            try (ResultSet rs = preparedStatement.getGeneratedKeys()) {
+                if (rs.next()) {
+                    entity.setId(rs.getInt(1));
+                }
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+            throw new DAOException("Impossible to insert shopping list.", ex);
+        }
+        return entity.getId();
+    }
+
+    @Override
+    public Integer saveAnon(ShoppingList entity) throws DAOException {
+        if (entity == null) {
+            throw new DAOException("parameter not valid", new IllegalArgumentException("The shopping list is null."));
+        }
+        String insert = "INSERT INTO `List`(`name`, `description`, `image`, `category_id`)"
+                + "VALUES (?,?,?,?)";
+        try (PreparedStatement preparedStatement = CON.prepareStatement(insert, Statement.RETURN_GENERATED_KEYS)) {
+            preparedStatement.setString(1, entity.getName());
+            preparedStatement.setString(2, entity.getDescription());
+            preparedStatement.setString(3, entity.getImage());
+            preparedStatement.setInt(4, entity.getCategoryId());
             preparedStatement.executeUpdate();
             try (ResultSet rs = preparedStatement.getGeneratedKeys()) {
                 if (rs.next()) {

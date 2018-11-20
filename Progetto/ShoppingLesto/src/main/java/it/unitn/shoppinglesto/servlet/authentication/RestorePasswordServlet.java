@@ -1,4 +1,4 @@
-package it.unitn.shoppinglesto.servlet;
+package it.unitn.shoppinglesto.servlet.authentication;
 
 import it.unitn.shoppinglesto.db.daos.UserDAO;
 import it.unitn.shoppinglesto.db.entities.User;
@@ -7,6 +7,8 @@ import it.unitn.shoppinglesto.db.exceptions.DAOFactoryException;
 import it.unitn.shoppinglesto.db.factories.DAOFactory;
 import it.unitn.shoppinglesto.utils.MailHelper;
 import it.unitn.shoppinglesto.utils.VelocityHelper;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang.RandomStringUtils;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.InternetAddress;
@@ -22,8 +24,8 @@ import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
-@WebServlet(name = "DeleteUserServlet")
-public class DeleteUserServlet extends HttpServlet {
+@WebServlet(name = "RestorePasswordServlet")
+public class RestorePasswordServlet extends HttpServlet {
     private UserDAO userDAO;
 
     @Override
@@ -38,34 +40,37 @@ public class DeleteUserServlet extends HttpServlet {
             throw new ServletException("Impossible to get user dao from dao factory!", ex);
         }
     }
-
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);
-        User user = (User) session.getAttribute("user");
-        session.removeAttribute("user");
-        if (user == null) {
+        String userMail = request.getParameter("userMail");
+        if (userMail == null) {
             response.sendError(500, "There was an error processing the request");
             return;
         }
-        // delete user
+        // crea stringa nuova password
+        // converti in MD5
+        // cambia la pw nel db
+        // manda la mail all'utente
+
         try{
-            String email = user.getMail();
-            String fullName = user.getFullName();
-            userDAO.delete(user.getId());
+            User user = userDAO.getByMail(userMail);
             final String host = getServletContext().getInitParameter("smtp-hostname");
             final String port = getServletContext().getInitParameter("smtp-port");
             final String mail = getServletContext().getInitParameter("smtp-username");
             final String password = getServletContext().getInitParameter("smtp-password");
 
             try{
-                MailHelper mailer = new MailHelper(host, port, mail, password, new InternetAddress(mail, "ShoppingLesto"), new InternetAddress[]{new InternetAddress(email, fullName)}, "Deleted account on ShoppingLesto");
+                MailHelper mailer = new MailHelper(host, port, mail, password, new InternetAddress(mail, "ShoppingLesto"), new InternetAddress[]{new InternetAddress(user.getMail(), user.getFullName())}, "Restore password ShoppingLesto");
                 Map<String, String> model = new HashMap<>();
-
+                model.put("mail", user.getMail());
+                String newPw = RandomStringUtils.random(8, true, true);
+                model.put("pw", newPw);
                 MimeBodyPart bodyPart = new MimeBodyPart();
-                bodyPart.setContent(VelocityHelper.createVelocityContent("deleteuser.vm", model),"text/html; charset=utf-8");
+                bodyPart.setContent(VelocityHelper.createVelocityContent("restorepassword.vm", model),"text/html; charset=utf-8");
                 mailer.addSinglePartToMultipart(bodyPart);
                 mailer.sendMessage();
-
+                user.setPassword(DigestUtils.md5Hex(newPw));
+                user = userDAO.update(user);
                 String infoMessage = "We have sent an email to the address you gave us.";
                 request.getSession().setAttribute("infoMessage", infoMessage);
                 response.sendRedirect(getServletContext().getContextPath() + "/");
@@ -74,11 +79,9 @@ public class DeleteUserServlet extends HttpServlet {
                 response.sendError(500, me.getMessage());
             }
         } catch (DAOException e) {
-            response.sendError(500, "Cannot delete user");
+            response.sendError(500, "Cannot restore password");
         }
     }
-
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
 
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -91,30 +94,6 @@ public class DeleteUserServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request  servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException      if an I/O error occurs
-     */
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
-    }
-
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
 }

@@ -38,8 +38,12 @@ public class AddProductToListServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);
         User user = (User) session.getAttribute("user");
-        if (user == null) {
-            response.sendError(500, "There was an error processing the request");
+        boolean anon = false;
+        if (request.getParameterMap().containsKey("anonymous")) {
+            anon = true;
+        }
+        if (user == null && !anon) {
+            response.sendError(500, "There was an error processing the request, user is null");
             return;
         }
 
@@ -61,13 +65,15 @@ public class AddProductToListServlet extends HttpServlet {
             }
             message = "Product successfully added into list";
             session.setAttribute("successMessage", message);
-            response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath() + "/list?id=" + listId));
         }
         else{
             message = "Error getting product and list id";
             session.setAttribute("errorMessage", message);
-            response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath() + "/list?id=" + listId));
         }
+        if(anon)
+            response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath() + "/list?anonymous=true&id=" + listId));
+        else
+            response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath() + "/list?id=" + listId));
 
     }
 

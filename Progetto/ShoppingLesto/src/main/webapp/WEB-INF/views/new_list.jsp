@@ -1,9 +1,11 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<c:set var="language" value="${not empty param.language ? param.language : not empty language ? language : pageContext.request.locale}" scope="session" />
-<fmt:setLocale value="${language}" />
-<fmt:setBundle basename="i18n.text" />
+<c:set var="language"
+       value="${not empty param.language ? param.language : not empty language ? language : pageContext.request.locale}"
+       scope="session"/>
+<fmt:setLocale value="${language}"/>
+<fmt:setBundle basename="i18n.text"/>
 <!DOCTYPE html>
 <html lang="${language}">
 
@@ -28,38 +30,49 @@
         <div class="col-md-1">
         </div>
         <div class="col-lg-10 col-md-10 col-12">
-            <h2><fmt:message key="new_list.h.new_list" /></h2>
+            <h2><fmt:message key="new_list.h.new_list"/></h2>
             <%@include file="parts/_successMessage.jspf" %>
-            <form action="${pageContext.request.contextPath}/list/new" method="POST" enctype="multipart/form-data">
-                <div class="form-row">
-                    <div class="form-group col-md-6">
-                        <label for="name"><fmt:message key="list.label.name" /></label>
-                        <input type="text" class="form-control" id="name" placeholder="Name" name="name">
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label for="category"><fmt:message key="new_list.label.category" /></label>
-                        <select id="category" name="category" class="form-control">
-                            <option selected><fmt:message key="list.option.choose" /></option>
-                            <c:forEach items="${listCategories}" var="category">
-                                <option value="${category.id}">${category.name}</option>
-                            </c:forEach>
-                        </select>
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group col-md-12">
-                        <label for="description"><fmt:message key="list.li.description" /></label>
-                        <textarea class="form-control" id="description" name="description " rows="3" placeholder="Description"></textarea>
-                    </div>
-                </div>
-                <div class="form-row mb-4">
-                    <div class="custom-file">
-                        <input type="file" class="custom-file-input" id="avatar" name="avatar">
-                        <label class="custom-file-label" for="avatar">Add list avatar</label>
-                    </div>
-                </div>
-                <button type="submit" class="btn btn-primary"><fmt:message key="new_list.h.new_list" /></button>
-            </form>
+            <c:choose>
+            <c:when test="${anon}">
+            <form action="${pageContext.request.contextPath}/list/new?anonymous=true" method="POST"
+                  enctype="multipart/form-data">
+                </c:when>
+                <c:otherwise>
+                <form action="${pageContext.request.contextPath}/list/new" method="POST" enctype="multipart/form-data">
+                    </c:otherwise>
+                    </c:choose>
+                    <form action="${pageContext.request.contextPath}/list/new" method="POST"
+                          enctype="multipart/form-data">
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="name"><fmt:message key="list.label.name"/></label>
+                                <input type="text" class="form-control" id="name" placeholder="Name" name="name">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="category"><fmt:message key="new_list.label.category"/></label>
+                                <select id="category" name="category" class="form-control">
+                                    <option selected><fmt:message key="list.option.choose"/></option>
+                                    <c:forEach items="${listCategories}" var="category">
+                                        <option value="${category.id}">${category.name}</option>
+                                    </c:forEach>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <label for="description"><fmt:message key="list.li.description"/></label>
+                                <textarea class="form-control" id="description" name="description " rows="3"
+                                          placeholder="Description"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-row mb-4">
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" id="avatar" name="avatar">
+                                <label class="custom-file-label" for="avatar">Add list avatar</label>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary"><fmt:message key="new_list.h.new_list"/></button>
+                    </form>
         </div>
         <div class="col-md-1">
         </div>

@@ -21,8 +21,20 @@ public class CookieHelper {
         cookieId.setHttpOnly(true);
         response.addCookie(cookieId);
     }
+    public static void storeGenericCookie(HttpServletResponse response,String id, String cookieValue){
+        Cookie cookieId = new Cookie(id, cookieValue);
+        cookieId.setMaxAge(24*60*60);
+        cookieId.setPath("/");
+        cookieId.setHttpOnly(true);
+        response.addCookie(cookieId);
+    }
 
-
+    public static void removeGenericCookie(HttpServletResponse response,String id){
+        Cookie cookieId = new Cookie(id, null);
+        cookieId.setMaxAge(0);
+        cookieId.setPath("/");
+        response.addCookie(cookieId);
+    }
 
     /**
      * Checks for the cookie containing the user's unique salt

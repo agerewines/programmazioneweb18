@@ -1,5 +1,7 @@
 package it.unitn.shoppinglesto.servlet.lists;
 
+import io.javalin.Javalin;
+import io.javalin.websocket.WsSession;
 import it.unitn.shoppinglesto.db.daos.ListCategoryDAO;
 import it.unitn.shoppinglesto.db.daos.ProductDAO;
 import it.unitn.shoppinglesto.db.daos.ShoppingListDAO;
@@ -12,8 +14,22 @@ import it.unitn.shoppinglesto.db.exceptions.DAOException;
 import it.unitn.shoppinglesto.db.exceptions.DAOFactoryException;
 import it.unitn.shoppinglesto.db.factories.DAOFactory;
 import it.unitn.shoppinglesto.utils.CookieHelper;
-
+import io.javalin.Javalin;
+import io.javalin.websocket.WsSession;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import org.eclipse.jetty.websocket.api.Session;
+import org.json.JSONObject;
+import static j2html.TagCreator.article;
+import static j2html.TagCreator.attrs;
+import static j2html.TagCreator.b;
+import static j2html.TagCreator.p;
+import static j2html.TagCreator.span;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
@@ -32,6 +48,10 @@ public class ShowListServlet extends HttpServlet {
     private ShoppingListDAO shoppingListDAO;
     private ProductDAO productDAO;
     private ListCategoryDAO listCategoryDAO;
+
+    private static Map<WsSession, String> userUsernameMap = new ConcurrentHashMap<>();
+    private static int nextUserNumber = 1; // Assign to username for next connecting user
+
 
     @Override
     public void init() throws ServletException {
@@ -68,7 +88,11 @@ public class ShowListServlet extends HttpServlet {
         ShoppingList list = null;
         List<Product> productList = null;
         //List<Product> customproductList = null;
-
+        boolean anon = false;
+        if (request.getParameterMap().containsKey("anonymous")) {
+            anon = true;
+        }
+        request.setAttribute("anon", anon);
         Integer listId = null;
         try {
             listId = Integer.valueOf(request.getParameter("id"));
@@ -76,7 +100,7 @@ public class ShowListServlet extends HttpServlet {
             response.sendError(500, ex.getMessage());
         }
 
-        if (user != null) {
+        if (user != null && !anon) {
             try {
                 list = shoppingListDAO.getByPrimaryKey(listId);
                 shoppingListDAO.getPermissions(user, list);
@@ -96,12 +120,9 @@ public class ShowListServlet extends HttpServlet {
             }
         } else {
             try {
-                String uuid = CookieHelper.getCookieValue(request, "shoppingLesto_authentication");
-                if (uuid != null && uuid != "") {
-                    list = shoppingListDAO.getTemporaryList(uuid);
-                    productList = productDAO.getProductsByList(list);
-                    //customproductList = productDAO.getCustomActiveByList(list);
-                }
+                list = shoppingListDAO.getByPrimaryKey(listId);
+                list.setCategory(listCategoryDAO.getByPrimaryKey(list.getCategoryId()));
+                productList = productDAO.getProductsByList(list);
             } catch (DAOException ex) {
                 Logger.getLogger(ShowListServlet.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -114,16 +135,16 @@ public class ShowListServlet extends HttpServlet {
         List<User> sharedWith = new ArrayList<>();
         try {
             categories = listCategoryDAO.getAll();
-            listUsers = shoppingListDAO.getSharableUsers(list);
-            sharedWith = shoppingListDAO.getSharedUser(list);
+            if(!anon){
+                listUsers = shoppingListDAO.getSharableUsers(list);
+                sharedWith = shoppingListDAO.getSharedUser(list);
+                request.setAttribute("listUsers", listUsers);
+                request.setAttribute("sharedWith", sharedWith);
+            }
         } catch (DAOException e) {
             e.printStackTrace();
         }
         request.setAttribute("listCategories", categories);
-        request.setAttribute("listUsers", listUsers);
-        request.setAttribute("sharedWith", sharedWith);
-        //request.getSession().setAttribute("customProductsOfList", customproductList);
-
         request.getRequestDispatcher("/WEB-INF/views/list.jsp").forward(request, response);
     }
 

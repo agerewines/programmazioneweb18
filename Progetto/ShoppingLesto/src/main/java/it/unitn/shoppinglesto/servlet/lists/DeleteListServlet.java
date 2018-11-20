@@ -8,13 +8,11 @@ import it.unitn.shoppinglesto.db.entities.User;
 import it.unitn.shoppinglesto.db.exceptions.DAOException;
 import it.unitn.shoppinglesto.db.exceptions.DAOFactoryException;
 import it.unitn.shoppinglesto.db.factories.DAOFactory;
+import it.unitn.shoppinglesto.utils.CookieHelper;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.*;
 import java.io.IOException;
 
 @WebServlet(name = "DeleteListServlet")
@@ -37,9 +35,13 @@ public class DeleteListServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);
+        boolean anon = false;
+        if (request.getParameterMap().containsKey("anonymous")) {
+            anon = true;
+        }
         User user = (User) session.getAttribute("user");
-        if (user == null) {
-            response.sendError(500, "There was an error processing the request");
+        if (user == null && !anon) {
+            response.sendError(500, "There was an error processing the request, user is null");
             return;
         }
 
@@ -59,11 +61,19 @@ public class DeleteListServlet extends HttpServlet {
         }catch (DAOException e){
             response.sendError(500, e.getMessage());
         }
+        if(anon){
+            CookieHelper.removeGenericCookie(response, TEMPLISTCOOKIENAME);
+        }
 
         if (hasError) {
             session.setAttribute("errorMessage", "Error deleting list " + listId);
             session.setAttribute("action", "deleteList");
-            response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath() + "/list?id=" + listId));
+            if(anon)
+                response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath() + "/list?anonymous=true&?id=" + listId));
+
+            else
+                response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath() + "/list?id=" + listId));
+
         } else {
             message = "List was successfully deleted";
             session.setAttribute("successMessage", message);

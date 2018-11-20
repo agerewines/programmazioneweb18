@@ -84,6 +84,9 @@
                     <label><fmt:message key="product.h.sure" /></label> <br/>
                     <input id="hiddenProdId" type="hidden" name="prodId">
                     <div id="prova"></div>
+                    <c:if test="${!anon}">
+                        <input id="hiddenAnon" type="hidden" name="anonymous" value="true">
+                    </c:if>
                     <input id="hiddenListId" type="hidden" name="listId" value="${param.listId}">
                     <button type="submit" class="btn btn-secondary" data-dismiss="modal"><fmt:message key="product.button.cancel" /></button>
                     <button type="submit" class="btn btn-primary"><fmt:message key="product.button.add" /></button>

@@ -65,8 +65,20 @@ public class HomeServlet extends HttpServlet {
         }
         String dispatchPath = null;
         if (user == null || anon) {
-            String uuidStr = UtilityHelper.getCookieValue(request, TEMPLISTCOOKIENAME);
-            dispatchPath = "/WEB-INF/views/home.jsp";
+            try {
+                String listId = UtilityHelper.getCookieValue(request, TEMPLISTCOOKIENAME);
+                // se listId é giá presente allora togli il pulsante addlist
+                if (listId != null) {
+                    request.setAttribute("listId", listId);
+                    List<ShoppingList> userLists = new ArrayList<>();
+                    userLists.add(shoppingListDAO.getByPrimaryKey(Integer.parseInt(listId)));
+                    request.setAttribute("userLists", userLists);
+                }
+                request.setAttribute("anon", true);
+                dispatchPath = "/WEB-INF/views/home.jsp";
+            } catch (DAOException e) {
+                e.printStackTrace();
+            }
         } else {
             if (user.isAdmin()) {
                 try {
@@ -90,7 +102,7 @@ public class HomeServlet extends HttpServlet {
             }
 
         }
-        if(!response.isCommitted()) {
+        if (!response.isCommitted()) {
             RequestDispatcher rd = request.getRequestDispatcher(dispatchPath);
             rd.forward(request, response);
         }

@@ -44,7 +44,7 @@
     <filter-mapping>
         <filter-name>AuthenticationFilter</filter-name>
         <url-pattern>/user/*</url-pattern>
-        <url-pattern>/list/*</url-pattern>
+        <url-pattern>/list/share/*</url-pattern>
     </filter-mapping>
     <servlet>
         <servlet-name>UsersListServlet</servlet-name>
@@ -205,6 +205,10 @@
     <servlet>
         <servlet-name>ShowProductCategoryServlet</servlet-name>
         <servlet-class>it.unitn.shoppinglesto.servlet.admin.ShowProductCategoryServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>RestorePasswordServlet</servlet-name>
+        <servlet-class>it.unitn.shoppinglesto.servlet.authentication.RestorePasswordServlet</servlet-class>
     </servlet>
     <listener>
         <description>ServletContextListener</description>
@@ -369,6 +373,10 @@
     <servlet-mapping>
         <servlet-name>PrivacyPolicyServlet</servlet-name>
         <url-pattern>/PrivacyPolicy</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>RestorePasswordServlet</servlet-name>
+        <url-pattern>/restorepw</url-pattern>
     </servlet-mapping>
   <welcome-file-list>
         <welcome-file>/WEB-INF/views/index.jsp</welcome-file>

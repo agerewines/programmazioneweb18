@@ -165,4 +165,15 @@ public interface ShoppingListDAO extends DAO<ShoppingList, Integer> {
      */
     public Integer removePermit(Integer listId, Integer userId) throws DAOException;
 
+    /**
+     * Saves the entity instance passed as parameter to the storage system
+     *
+     * @param list the instance of type @{link ShoppingList}
+     * @return the id of the entity stored in the database
+     * @throws DAOException if an error occurred during the action
+     */
+    public Integer saveAnon(ShoppingList list) throws DAOException;
+
+    public ShoppingList updateAnon(ShoppingList list) throws DAOException;
+
 }

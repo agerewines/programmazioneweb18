@@ -32,16 +32,37 @@
             <h2>
                 <ul class="list-inline">
                     <li class="list-inline-item"><fmt:message key="home.li.lists" /></li>
-                    <li class="list-inline-item"><a class="btn btn-primary"
-                                                    href="${pageContext.request.contextPath}/list/new"><fmt:message key="home.li.new_list" /></a>
+                    <li class="list-inline-item">
+                        <c:if test="${empty listId}">
+                            <c:choose>
+                                <c:when test="${anon}">
+                                    <a class="btn btn-primary"
+                                       href="${pageContext.request.contextPath}/list/new?anonymous=true"><fmt:message key="home.li.new_list" />
+                                    </a>
+                                </c:when>
+                                <c:otherwise>
+                                    <a class="btn btn-primary"
+                                       href="${pageContext.request.contextPath}/list/new"><fmt:message key="home.li.new_list" />
+                                    </a>
+                                </c:otherwise>
+                            </c:choose>
+                        </c:if>
                     </li>
                 </ul>
             </h2>
 
             <div class="list-group">
                 <c:forEach items="${userLists}" var="list">
-                    <a href="${pageContext.request.contextPath}/list?id=${list.id}"
+                    <c:choose>
+                        <c:when test="${anon}">
+                    <a href="${pageContext.request.contextPath}/list?id=${list.id}&anonymous=true"
                        class="list-group-item list-group-item-action flex-column align-items-start">
+                        </c:when>
+                        <c:otherwise>
+                            <a href="${pageContext.request.contextPath}/list?id=${list.id}"
+                            class="list-group-item list-group-item-action flex-column align-items-start">
+                        </c:otherwise>
+                    </c:choose>
                         <div class="d-flex w-100 justify-content-between">
                             <div class="media">
                                 <img id="listPic" class="align-self-center mr-3 rounded" height="64" width="64" src="${pageContext.request.contextPath}/images?id=${list.id}&resource=shoppingLists" onerror="this.onerror=null;this.src='${pageContext.request.contextPath}/images/avatars/Lists/default.png';"/>

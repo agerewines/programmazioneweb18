@@ -48,7 +48,10 @@
             </form>
             <div class="mt-4">
                 <hr/>
-                <fmt:message key="login.h.if" /> <a class="badge-pill btn-primary" href="${pageContext.request.contextPath}/register"><fmt:message key="register.h.here" /></a>!
+                <fmt:message key="login.h.if" /> <a class="btn btn-primary" href="${pageContext.request.contextPath}/register"><fmt:message key="register.h.here" /></a>!
+                <button type="button" class="btn btn-primary float-right" data-toggle="modal" data-target="#restorePasswordModal">
+                    Restore Password
+                </button>
             </div>
 
         </div>
@@ -56,6 +59,34 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="restorePasswordModal" tabindex="-1" role="dialog" aria-labelledby="restorePasswordModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="restorePasswordModalLabel">Restore password</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="${pageContext.request.contextPath}/restorepw" method="POST">
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label for="userMail">Insert your email</label>
+                            <input type="text" class="form-control" id="userMail" placeholder="E-Mail" name="userMail">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Restore pw</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
 <%@include file="parts/_footer.jspf" %>
 <%@include file="parts/_importsjs.jspf" %>
 </body>

@@ -56,11 +56,16 @@ public class NewListServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);
+        boolean anon = false;
+        if (request.getParameterMap().containsKey("anonymous")) {
+            anon = true;
+        }
         User user = (User) session.getAttribute("user");
-        if (user == null) {
-            response.sendError(500, "There was an error processing the request");
+        if (user == null && !anon) {
+            response.sendError(500, "There was an error processing the request, user is null");
             return;
         }
+
 
         String message = null;
         boolean hasError = false;
@@ -83,10 +88,14 @@ public class NewListServlet extends HttpServlet {
                 hasError = true;
                 message = "List description can contain a maximum of  255 characters.";
             } else {
+                ShoppingList list;
                 // int id, String name, String description, String image, int categoryId, int userId, User user
-                ShoppingList list = new ShoppingList(null, name, description, null, categoryId, user.getId(), user);
+                list = anon ? new ShoppingList(null, name, description, null, categoryId, null, user) : new ShoppingList(null, name, description, null, categoryId, user.getId(), user);
                 try {
-                    list.setId(shoppingListDAO.save(list));
+                    if(list.getUserId() != null)
+                        list.setId(shoppingListDAO.save(list));
+                    else
+                        list.setId(shoppingListDAO.saveAnon(list));
                 } catch (DAOException e) {
                     e.printStackTrace();
                 }
@@ -103,15 +112,15 @@ public class NewListServlet extends HttpServlet {
                     modified = true;
                 }
                 try {
-                    list = shoppingListDAO.update(list);
-                    list.setUser(userDAO.getById(list.getUserId()));
-                    list.setCategory(listCategoryDAO.getByPrimaryKey(list.getCategoryId()));
-                    if (user == null) {
-                        String uuid = UUID.randomUUID().toString();
-                        //shoppingListDAO.insertTempList(list, uuid);
-                        //CookieHelper.storeGenericCookie(response, TEMPLISTCOOKIENAME, uuid);
+                    if (anon) {
+                        list = shoppingListDAO.updateAnon(list);
+                        list.setUser(new User(null, null, "Anonymous", "User", null));
+                        list.setCategory(listCategoryDAO.getByPrimaryKey(list.getCategoryId()));
+                        CookieHelper.storeGenericCookie(response, TEMPLISTCOOKIENAME, list.getId().toString());
                     } else {
-                        //shoppingListDAO.linkShoppingListToUser(list, user);
+                        list = shoppingListDAO.update(list);
+                        list.setUser(userDAO.getById(list.getUserId()));
+                        list.setCategory(listCategoryDAO.getByPrimaryKey(list.getCategoryId()));
                         list.setUserId(user.getId());
                     }
 
@@ -125,12 +134,14 @@ public class NewListServlet extends HttpServlet {
         if (hasError) {
             session.setAttribute("errorMessage", message);
             session.setAttribute("action", "newList");
-            response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath() + "/home"));
         } else {
             message = "List was successfully created";
             session.setAttribute("successMessage", message);
-            response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath() + "/home"));
         }
+        if(anon)
+            response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath() + "/home"));
+        else
+            response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath() + "/home"));
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -141,6 +152,11 @@ public class NewListServlet extends HttpServlet {
             } catch (DAOException e) {
                 e.printStackTrace();
             }
+            boolean anon = false;
+            if (request.getParameterMap().containsKey("anonymous")) {
+                anon = true;
+            }
+            request.setAttribute("anon", anon);
             request.setAttribute("listCategories", categories);
             request.getRequestDispatcher("/WEB-INF/views/new_list.jsp").forward(request, response);
         }
