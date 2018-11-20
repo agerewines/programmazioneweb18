@@ -263,18 +263,6 @@
             });
     });
 
-    var lang = document.documentElement.lang;
-    var langFile = "/resources/i18n/English.lang";
-    $(document).ready( function(){
-       switch (lang){
-           case "it" : langFile = "/resources/i18n/Italian.lang";
-               break;
-           case "en" : langFile = "/resources/i18n/English.lang";
-               break;
-           default : langFile = "/resources/i18n/English.lang";
-               break;
-       }
-    });
 
     $('.modifyProd').click(function(){       // When HTML DOM "click" event is invoked on element with ID "somebutton", execute the following function...
         $('#nameProdEdit').val($(this).data('name'));
@@ -333,9 +321,27 @@
 
         e.preventDefault(); // avoid to execute the actual submit of the form.
     });
+
     $('table').DataTable({
-        "order" : [[1, "asc"]]
+        "order" : [[1, "asc"]],
+        "language" : {
+            "url" : getLang()
+        }
     });
+
+    var lang = document.documentElement.lang;
+    function getLang(){
+        switch (lang){
+            case "it_IT" : return "https://cdn.datatables.net/plug-ins/1.10.19/i18n/Italian.json";
+                break;
+            case "en_US" : return "https://cdn.datatables.net/plug-ins/1.10.19/i18n/English.json";
+                break;
+            default :  return "https://cdn.datatables.net/plug-ins/1.10.19/i18n/English.json";
+                break;
+        }
+    };
+
+
 </script>
 </body>
 

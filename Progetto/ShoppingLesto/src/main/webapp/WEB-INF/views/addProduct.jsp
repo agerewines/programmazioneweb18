@@ -159,9 +159,24 @@
 <%@include file="parts/_importsjs.jspf" %>
 
 <script type="text/javascript">
-    var datatable = $('#allProductTable').DataTable({
-        "order" : [[1, "asc"]]
+    var datatable =  $('#allProductTable').DataTable({
+        "order" : [[1, "asc"]],
+        "language" : {
+            "url" : getLang()
+        }
     });
+
+    var lang = document.documentElement.lang;
+    function getLang(){
+        switch (lang){
+            case "it_IT" : return "https://cdn.datatables.net/plug-ins/1.10.19/i18n/Italian.json";
+                break;
+            case "en_US" : return "https://cdn.datatables.net/plug-ins/1.10.19/i18n/English.json";
+                break;
+            default :  return "https://cdn.datatables.net/plug-ins/1.10.19/i18n/English.json";
+                break;
+        }
+    };
     var timeout = null;
     var addProd = function (e) {
         console.log($(e.target).data('id'));
