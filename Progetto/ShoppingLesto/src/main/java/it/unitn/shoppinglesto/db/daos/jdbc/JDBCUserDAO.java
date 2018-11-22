@@ -145,7 +145,6 @@ public class JDBCUserDAO extends JDBCDAO<User, Integer> implements UserDAO {
 
         try (Statement stm = CON.createStatement()) {
             try (ResultSet rs = stm.executeQuery("SELECT * FROM User WHERE anonymous = FALSE ORDER BY lastName")) {
-
                 while (rs.next()) {
                     User user = new User();
                     user.setId(rs.getInt("id"));

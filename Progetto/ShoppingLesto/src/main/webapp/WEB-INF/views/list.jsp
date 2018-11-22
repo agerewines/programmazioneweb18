@@ -167,15 +167,19 @@
         <div class="col-md-1">
         </div>
         <div class="col-lg-10 col-md-10 col-12">
-            <hr/>
-            <h3>Chat</h3>
-            <div id="chatControls">
-                <input id="message" placeholder="Type your message">
-                <button id="send">Send</button>
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Chat</h5>
+                    </div>
+                    <div class="modal-body">
+                        ...
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary">Submit</button>
+                    </div>
+                </div>
             </div>
-            <ul id="userlist"> <!-- Built by JS --> </ul>
-            <div id="chat">    <!-- Built by JS --> </div>
-            <script src="websocketDemo.js"></script>
         </div>
         <div class="col-md-1">
         </div>

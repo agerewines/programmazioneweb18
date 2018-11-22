@@ -52,20 +52,13 @@ public class IndexServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession(false);
-        User user = (User) session.getAttribute("user");
         boolean anon = false;
         if (request.getParameterMap().containsKey("anonymous")) {
             anon = true;
         }
-        if(!anon && user == null){
-            if(!response.isCommitted()) {
-                RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/index.jsp");
-                rd.forward(request, response);
-            }
-        }else if(!anon){
-            response.sendRedirect(getServletContext().getContextPath() + "/home");
-        }else{
-            response.sendRedirect(getServletContext().getContextPath() + "/home?anonymous=true");
+        if(!response.isCommitted()) {
+            RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/index.jsp");
+            rd.forward(request, response);
         }
     }
 

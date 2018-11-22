@@ -123,7 +123,15 @@
                     <div class="form-row">
                         <div class="form-group col-md-12">
                             <label for="nameListCat">Name</label>
-                            <input type="text" class="form-control" placeholder="Name" name="nameListCat">
+                            <select id="nameListCatAdd" name="nameListCat" class="form-control">
+                                <option value="Tempo Libero">Tempo libero</option>
+                                <option value="Alimentari">Alimentari</option>
+                                <option value="Videogiochi">Videogiochi</option>
+                                <option value="Tecnologia">Tecnologia</option>
+                                <option value="Accessori per la casa">Accessori per la casa</option>
+                                <option value="Elettrodomestici">Elettrodomestici</option>
+                                <option value="Fai da te">Fai da te</option>
+                            </select>
                         </div>
                     </div>
                     <div class="form-row">
