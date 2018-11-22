@@ -62,7 +62,7 @@
                                placeholder="<fmt:message key="register.label.confirm" />">
                     </div>
                     <div class="form-group col-md-2">
-                        <label for="checkTerms"><fmt:message key="register.label.check" /></label>
+                        <label for="checkTerms"><a href="PrivacyPolicy"><fmt:message key="register.label.check" /></a></label>
                         <input class="form-control" type="checkbox" id="checkTerms" name="checkTerms" value="A"/>
                     </div>
                 </div>
