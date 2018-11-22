@@ -1,6 +1,7 @@
 package it.unitn.shoppinglesto.filters;
 
 import it.unitn.shoppinglesto.db.entities.User;
+import org.apache.commons.codec.digest.DigestUtils;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
@@ -11,14 +12,11 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- * Making sure that the user is logged in
- * @author alessandrogerevini
- */
-@WebFilter(filterName = "AuthenticationFilter")
-public class AuthenticationFilter implements Filter {
+@WebFilter(filterName = "AnonymousFilter")
+public class AnonymousFilter implements Filter {
 
     private static final boolean debug = true;
 
@@ -27,31 +25,37 @@ public class AuthenticationFilter implements Filter {
     // configured.
     private FilterConfig filterConfig = null;
 
-    public AuthenticationFilter() {
+    public AnonymousFilter() {
     }
 
     private void doBeforeProcessing(ServletRequest request, ServletResponse response)
             throws IOException, ServletException {
         if (debug) {
-            log("AuthenticationFilter:DoBeforeProcessing");
+            log("AnonymousFilter:DoBeforeProcessing");
         }
 
         if(request instanceof HttpServletRequest && response instanceof HttpServletResponse){
             HttpServletRequest req = (HttpServletRequest) request;
-            HttpServletResponse resp = (HttpServletResponse) response;
-            HttpSession session = req.getSession(false);
-            User user = (User) session.getAttribute("user");
-            if(user == null){
-                if(!resp.isCommitted()){
-                    String message = "You must be logged in to view this section";
-                    session = req.getSession();
-                    session.setAttribute("errorMessage", message);
-                    session.setAttribute("action", "login");
-                    session.setAttribute("returnUrl", req.getRequestURL());
-                    resp.sendRedirect(resp.encodeRedirectURL(req.getContextPath() + "/login"));
-                    return;
-                }
+            HttpServletResponse res = (HttpServletResponse) response;
+            // regex
+            String url = req.getRequestURI();
+            log(url);
 
+            String regex = "(/ShoppingLesto/\\S+)";
+            boolean matches = Pattern.matches(regex, url);
+            log(matches + "");
+            if(matches){
+                HttpSession session = req.getSession(false);
+                User user = (User) session.getAttribute("user");
+                boolean anon = false;
+                if (request.getParameterMap().containsKey("anonymous")) {
+                    anon = true;
+                }
+                if(user == null && !anon){
+                    if (!res.isCommitted()) {
+                        res.sendRedirect(req.getServletContext().getContextPath() + "/");
+                    }
+                }
             }
         }
     }
@@ -59,7 +63,57 @@ public class AuthenticationFilter implements Filter {
     private void doAfterProcessing(ServletRequest request, ServletResponse response)
             throws IOException, ServletException {
         if (debug) {
-            log("AuthenticationFilter:DoAfterProcessing");
+            log("AnonymousFilter:DoAfterProcessing");
+        }
+
+        // Write code here to process the request and/or response after
+        // the rest of the filter chain is invoked.
+        // For example, a logging filter might log the attributes on the
+        // request object after the request has been processed.
+    }
+
+    /**
+     *
+     * @param request The servlet request we are processing
+     * @param response The servlet response we are creating
+     * @param chain The filter chain we are processing
+     *
+     * @exception IOException if an input/output error occurs
+     * @exception ServletException if a servlet error occurs
+     */
+    public void doFilter(ServletRequest request, ServletResponse response,
+                         FilterChain chain)
+            throws IOException, ServletException {
+
+        if (debug) {
+            log("AnonymousFilter:doFilter()");
+        }
+
+        doBeforeProcessing(request, response);
+
+        Throwable problem = null;
+        try {
+            chain.doFilter(request, response);
+        } catch (Throwable t) {
+            // If an exception is thrown somewhere down the filter chain,
+            // we still want to execute our after processing, and then
+            // rethrow the problem after that.
+            problem = t;
+            t.printStackTrace();
+        }
+
+        doAfterProcessing(request, response);
+
+        // If there was a problem, we want to rethrow it if it is
+        // a known type, otherwise log it.
+        if (problem != null) {
+            if (problem instanceof ServletException) {
+                throw (ServletException) problem;
+            }
+            if (problem instanceof IOException) {
+                throw (IOException) problem;
+            }
+            sendProcessingError(problem, response);
         }
     }
 
@@ -92,46 +146,23 @@ public class AuthenticationFilter implements Filter {
         this.filterConfig = filterConfig;
         if (filterConfig != null) {
             if (debug) {
-                log("AuthenticationFilter:Initializing filter");
+                log("AnonymousFilter:Initializing filter");
             }
         }
     }
 
+    /**
+     * Return a String representation of this object.
+     */
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response,
-                         FilterChain chain)
-            throws IOException, ServletException {
-
-        if (debug) {
-            log("AuthenticationFilter:doFilter()");
+    public String toString() {
+        if (filterConfig == null) {
+            return ("AnonymousFilter()");
         }
-
-        doBeforeProcessing(request, response);
-
-        Throwable problem = null;
-        try {
-            chain.doFilter(request, response);
-        } catch (Throwable t) {
-            // If an exception is thrown somewhere down the filter chain,
-            // we still want to execute our after processing, and then
-            // rethrow the problem after that.
-            problem = t;
-            t.printStackTrace();
-        }
-
-        doAfterProcessing(request, response);
-
-        // If there was a problem, we want to rethrow it if it is
-        // a known type, otherwise log it.
-        if (problem != null) {
-            if (problem instanceof ServletException) {
-                throw (ServletException) problem;
-            }
-            if (problem instanceof IOException) {
-                throw (IOException) problem;
-            }
-            sendProcessingError(problem, response);
-        }
+        StringBuffer sb = new StringBuffer("AnonymousFilter(");
+        sb.append(filterConfig);
+        sb.append(")");
+        return (sb.toString());
     }
 
     private void sendProcessingError(Throwable t, ServletResponse response) {
@@ -164,7 +195,6 @@ public class AuthenticationFilter implements Filter {
         }
     }
 
-
     public static String getStackTrace(Throwable t) {
         String stackTrace = null;
         try {
@@ -179,22 +209,9 @@ public class AuthenticationFilter implements Filter {
         return stackTrace;
     }
 
-    /**
-     * Return a String representation of this object.
-     */
-    @Override
-    public String toString() {
-        if (filterConfig == null) {
-            return ("AuthenticationFilter()");
-        }
-        StringBuffer sb = new StringBuffer("AuthenticationFilter(");
-        sb.append(filterConfig);
-        sb.append(")");
-        return (sb.toString());
-    }
-
-
     public void log(String msg) {
         filterConfig.getServletContext().log(msg);
     }
+
+
 }

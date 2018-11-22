@@ -2,6 +2,7 @@ package it.unitn.shoppinglesto.servlet;
 
 import it.unitn.shoppinglesto.db.daos.ShoppingListDAO;
 import it.unitn.shoppinglesto.db.daos.UserDAO;
+import it.unitn.shoppinglesto.db.entities.User;
 import it.unitn.shoppinglesto.db.exceptions.DAOFactoryException;
 import it.unitn.shoppinglesto.db.factories.DAOFactory;
 
@@ -50,9 +51,21 @@ public class IndexServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        if(!response.isCommitted()) {
-            RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/index.jsp");
-            rd.forward(request, response);
+        HttpSession session = request.getSession(false);
+        User user = (User) session.getAttribute("user");
+        boolean anon = false;
+        if (request.getParameterMap().containsKey("anonymous")) {
+            anon = true;
+        }
+        if(!anon && user == null){
+            if(!response.isCommitted()) {
+                RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/index.jsp");
+                rd.forward(request, response);
+            }
+        }else if(!anon){
+            response.sendRedirect(getServletContext().getContextPath() + "/home");
+        }else{
+            response.sendRedirect(getServletContext().getContextPath() + "/home?anonymous=true");
         }
     }
 

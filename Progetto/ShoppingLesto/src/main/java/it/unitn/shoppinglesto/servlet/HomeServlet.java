@@ -64,7 +64,7 @@ public class HomeServlet extends HttpServlet {
             anon = true;
         }
         String dispatchPath = null;
-        if (user == null || anon) {
+        if (user == null && anon) {
             try {
                 String listId = UtilityHelper.getCookieValue(request, TEMPLISTCOOKIENAME);
                 // se listId é giá presente allora togli il pulsante addlist
@@ -79,7 +79,7 @@ public class HomeServlet extends HttpServlet {
             } catch (DAOException e) {
                 e.printStackTrace();
             }
-        } else {
+        } else if(user != null){
             if (user.isAdmin()) {
                 try {
                     List<Product> products = productDAO.getAll();
@@ -101,6 +101,8 @@ public class HomeServlet extends HttpServlet {
                 dispatchPath = "/WEB-INF/views/home.jsp";
             }
 
+        }else{
+            dispatchPath = "/WEB-INF/views/index.jsp";
         }
         if (!response.isCommitted()) {
             RequestDispatcher rd = request.getRequestDispatcher(dispatchPath);
