@@ -87,7 +87,6 @@ public class ShowListServlet extends HttpServlet {
         User user = (User) session.getAttribute("user");
         ShoppingList list = null;
         List<Product> productList = null;
-        //List<Product> customproductList = null;
         boolean anon = false;
         if (request.getParameterMap().containsKey("anonymous")) {
             anon = true;

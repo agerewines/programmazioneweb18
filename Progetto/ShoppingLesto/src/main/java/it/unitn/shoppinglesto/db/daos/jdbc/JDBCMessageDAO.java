@@ -7,6 +7,7 @@ import it.unitn.shoppinglesto.db.entities.User;
 import it.unitn.shoppinglesto.db.exceptions.DAOException;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class JDBCMessageDAO extends JDBCDAO<Message, Integer> implements MessageDAO {
@@ -32,7 +33,7 @@ public class JDBCMessageDAO extends JDBCDAO<Message, Integer> implements Message
             }
 
         } catch (SQLException ex) {
-            throw new DAOException("Impossible to count users", ex);
+            throw new DAOException("Impossible to count messages", ex);
         }
 
         return 0L;
@@ -86,7 +87,26 @@ public class JDBCMessageDAO extends JDBCDAO<Message, Integer> implements Message
      */
     @Override
     public List<Message> getAll() throws DAOException {
-        return null;
+        List<Message> messages = new ArrayList<>();
+        try (Statement stm = CON.createStatement()) {
+            try (ResultSet resultSet = stm.executeQuery("SELECT * FROM Message ORDER BY createdAT")) {
+                while (resultSet.next()) {
+                    Message message = new Message();
+                    message.setId(resultSet.getInt("id"));
+                    message.setListId(resultSet.getInt("listId"));
+                    message.setUserId(resultSet.getInt("userId"));
+                    message.setCreatedAt(resultSet.getTimestamp("createdAt").toString());
+                    message.setText(resultSet.getString("text"));
+                    message.setUser(getUser(message.getUserId()));
+                    message.setList(getList(message.getListId()));
+                    messages.add(message);
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DAOException("Impossible to get the list of messages", ex);
+        }
+
+        return messages;
     }
 
     /**
@@ -98,7 +118,26 @@ public class JDBCMessageDAO extends JDBCDAO<Message, Integer> implements Message
      */
     @Override
     public Integer save(Message entity) throws DAOException {
-        return null;
+        if (entity == null) {
+            throw new DAOException("parameter not valid", new IllegalArgumentException("The message is null."));
+        }
+        String insert = "INSERT INTO `Message`(`userId`, `listId`, `text`)"
+                + "VALUES (?,?,?)";
+        try (PreparedStatement preparedStatement = CON.prepareStatement(insert, Statement.RETURN_GENERATED_KEYS)) {
+            preparedStatement.setInt(1, entity.getUserId());
+            preparedStatement.setInt(2, entity.getListId());
+            preparedStatement.setString(3, entity.getText());
+            preparedStatement.executeUpdate();
+            try (ResultSet rs = preparedStatement.getGeneratedKeys()) {
+                if (rs.next()) {
+                    entity.setId(rs.getInt(1));
+                }
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+            throw new DAOException("Impossible to insert message.", ex);
+        }
+        return entity.getId();
     }
 
     /**
@@ -118,7 +157,7 @@ public class JDBCMessageDAO extends JDBCDAO<Message, Integer> implements Message
             return preparedStatement.executeUpdate() == 1 ? 1 : 0;
 
         } catch (SQLException e) {
-            throw new DAOException("Cannot delete user");
+            throw new DAOException("Cannot delete message");
         }
     }
 
@@ -151,7 +190,7 @@ public class JDBCMessageDAO extends JDBCDAO<Message, Integer> implements Message
                 return null;
             }
         } catch (SQLException ex) {
-            throw new DAOException("Impossible to get the list of users by id", ex);
+            throw new DAOException("Impossible to get the users by id", ex);
         }
     }
 
