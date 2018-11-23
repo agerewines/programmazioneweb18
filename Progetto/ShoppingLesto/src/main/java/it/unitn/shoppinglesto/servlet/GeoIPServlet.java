@@ -3,21 +3,12 @@ package it.unitn.shoppinglesto.servlet;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.maxmind.geoip2.exception.GeoIp2Exception;
 import it.unitn.shoppinglesto.db.daos.ListCategoryDAO;
-import it.unitn.shoppinglesto.db.daos.ProductDAO;
-import it.unitn.shoppinglesto.db.daos.ShoppingListDAO;
-import it.unitn.shoppinglesto.db.daos.UserDAO;
-import it.unitn.shoppinglesto.db.daos.jdbc.JDBCListCategoryDAO;
-import it.unitn.shoppinglesto.db.entities.Product;
-import it.unitn.shoppinglesto.db.entities.ShoppingList;
 import it.unitn.shoppinglesto.db.entities.User;
 import it.unitn.shoppinglesto.db.exceptions.DAOException;
 import it.unitn.shoppinglesto.db.exceptions.DAOFactoryException;
 import it.unitn.shoppinglesto.db.factories.DAOFactory;
-import it.unitn.shoppinglesto.geolocation.GeoIP;
 import it.unitn.shoppinglesto.geolocation.RawDBDemoGeoIPLocationService;
-import it.unitn.shoppinglesto.servlet.lists.ShowListServlet;
 
-import javax.print.DocFlavor;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -27,12 +18,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.net.InetAddress;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -80,7 +65,7 @@ public class GeoIPServlet extends HttpServlet {
 
                 // estrapolare nome categoria
 
-                String categoryName = null;
+                String categoryName;
 
                 HttpSession session = request.getSession();
                 User user = (User) session.getAttribute("user");
@@ -93,7 +78,7 @@ public class GeoIPServlet extends HttpServlet {
                 }
 
                 if (categoryName == null)
-                    categoryName = "general";
+                    categoryName = "alimentari";
 
                 String mapUrl = "https://www.google.com/maps/embed?pb=!1m16!1m12!1m3!1d22154.981200143142!2d" + longitude + "!3d" + latitude + "!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!2m1!1s" + categoryName + "!5e0!3m2!1sit!2sit!4v1542911270560";
 
