@@ -3,11 +3,18 @@ package it.unitn.shoppinglesto.servlet;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.maxmind.geoip2.exception.GeoIp2Exception;
 import it.unitn.shoppinglesto.db.daos.ListCategoryDAO;
+import it.unitn.shoppinglesto.db.daos.ProductDAO;
+import it.unitn.shoppinglesto.db.daos.ShoppingListDAO;
+import it.unitn.shoppinglesto.db.daos.jdbc.JDBCListCategoryDAO;
+import it.unitn.shoppinglesto.db.entities.Category;
+import it.unitn.shoppinglesto.db.entities.Product;
+import it.unitn.shoppinglesto.db.entities.ShoppingList;
 import it.unitn.shoppinglesto.db.entities.User;
 import it.unitn.shoppinglesto.db.exceptions.DAOException;
 import it.unitn.shoppinglesto.db.exceptions.DAOFactoryException;
 import it.unitn.shoppinglesto.db.factories.DAOFactory;
 import it.unitn.shoppinglesto.geolocation.RawDBDemoGeoIPLocationService;
+import it.unitn.shoppinglesto.utils.UtilityHelper;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -18,6 +25,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -30,6 +39,10 @@ public class GeoIPServlet extends HttpServlet {
 
     private ListCategoryDAO listCategoryDAO;
 
+    private final String TEMPLISTCOOKIENAME = "templist_shoppingLesto_token";
+    private ShoppingListDAO shoppingListDAO;
+    private ProductDAO productDAO;
+
     @Override
     public void init() throws ServletException {
         DAOFactory daoFactory = (DAOFactory) super.getServletContext().getAttribute("daoFactory");
@@ -41,17 +54,24 @@ public class GeoIPServlet extends HttpServlet {
         } catch (DAOFactoryException ex) {
             throw new ServletException("Impossible to get list category dao from dao factory!", ex);
         }
+        try {
+            shoppingListDAO = daoFactory.getDAO(ShoppingListDAO.class);
+        } catch (DAOFactoryException ex) {
+            throw new ServletException("Impossible to get shopping list dao from dao factory!", ex);
+        }
+        try {
+            productDAO = daoFactory.getDAO(ProductDAO.class);
+        } catch (DAOFactoryException ex) {
+            throw new ServletException("Impossible to get product dao from dao factory!", ex);
+        }
     }
 
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        //String ip = request.getParameter("ipAddress"); //da form nella pagina /geoip
-
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int listId = -23;
         String ip = request.getRemoteAddr();
 
-        //ip = "193.205.210.82";
-
-        System.out.println(ip);
+        ip = "193.205.210.82";
 
         if (ip != null) {
             ServletContext context = this.getServletContext();
@@ -65,16 +85,24 @@ public class GeoIPServlet extends HttpServlet {
 
                 // estrapolare nome categoria
 
-                String categoryName;
+                String categoryName = null;
 
                 HttpSession session = request.getSession();
                 User user = (User) session.getAttribute("user");
 
-                // JDBC get list category
                 try {
-                    categoryName = listCategoryDAO.getCategoryNameByUser(user);
-                } catch (DAOException e) {
-                    throw new DAOException("User is null");
+                    listId = Integer.valueOf(request.getParameter("id"));
+                } catch (Exception e) {}
+
+                if (listId != -23) {
+                    Category category = listCategoryDAO.getByPrimaryKey(listId);
+                    categoryName = category.getName();
+                } else {
+                    try {
+                        categoryName = listCategoryDAO.getCategoryNameByUser(user);
+                    } catch (DAOException e) {
+                        throw new DAOException("User is null");
+                    }
                 }
 
                 if (categoryName == null)
@@ -84,6 +112,21 @@ public class GeoIPServlet extends HttpServlet {
 
                 request.getSession().setAttribute("map", mapUrl);
 
+                boolean anon = false;
+                if (request.getParameterMap().containsKey("anonymous")) {
+                    anon = true;
+                }
+                String dispatchPath = null;
+                if (user == null && anon) {
+                    response.sendError(500, "Anonimous user can't access this page");
+                } else if(user != null){
+                    try {
+                        List<ShoppingList> lists = shoppingListDAO.getUserLists(user);
+                        session.setAttribute("userLists", lists);
+                    } catch (DAOException ex) {
+                        response.sendError(500, ex.getMessage());
+                    }
+                }
 
             } catch (GeoIp2Exception | DAOException e) {
                 request.setAttribute("error", "Your IP isn't in our database");
@@ -96,5 +139,10 @@ public class GeoIPServlet extends HttpServlet {
         }
         RequestDispatcher rd = getServletContext().getRequestDispatcher("/WEB-INF/views/geoIP.jsp");
         rd.forward(request, response);
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        doPost(request, response);
     }
 }
