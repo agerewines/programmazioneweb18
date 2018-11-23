@@ -72,6 +72,7 @@ public class MailSenderServlet extends HttpServlet {
 
             String activationKey = userDAO.getActivationKey(user);
             String url;
+            /*
             RawDBDemoGeoIPLocationService rdb = new RawDBDemoGeoIPLocationService(getServletContext());
             if (templateName.equals("geolocTemplate.vm")) {
                 String ip = request.getRemoteAddr();
@@ -82,13 +83,17 @@ public class MailSenderServlet extends HttpServlet {
                 Float latitude = Float.valueOf(location.get("latitude").toString());
                 Float longitude = Float.valueOf(location.get("longitude").toString());
 
+                /*
                 Float latMax = latitude + 0.01f;
                 Float lonMax = longitude + 0.01f;
                 Float latMin = latitude - 0.01f;
                 Float lonMin = longitude - 0.01f;
 
-                url = "https://www.openstreetmap.org/export/embed.html?bbox=" + lonMin + "%2C" + latMin + "%2C" + lonMax + "%2C" + latMax + "&amp;layer=hot";
-            } else
+
+                String nome = "";   // nome categoria
+
+                url = "https://www.google.it/maps/search/" + nome + "/@" + latitude + "," + longitude + ",15z";//46.0850283,11.1173131,15z
+            } else */
                 url = UtilityHelper.getURLWithContextPath(request) + path + activationKey;
 
             final String host = getServletContext().getInitParameter("smtp-hostname");
@@ -119,9 +124,11 @@ public class MailSenderServlet extends HttpServlet {
 
         } catch (DAOException ex) {
             response.sendError(500, ex.getMessage());
-        } catch (GeoIp2Exception e) {
-            e.printStackTrace();
-        }
+        } //catch (GeoIp2Exception e) {
+            //e.printStackTrace();
+        //}
+
+
         // Connect to google
         // create email
         // send email

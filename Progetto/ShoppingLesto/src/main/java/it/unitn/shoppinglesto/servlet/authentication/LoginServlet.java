@@ -118,7 +118,7 @@ public class LoginServlet extends HttpServlet {
 
             request.setAttribute("user", user);
             request.setAttribute("path", "/geoip");
-            request.setAttribute("subject", "I nostri suggerimenti");
+            request.setAttribute("subject", "Our suggestions");
             request.setAttribute("template", "geolocTemplate.vm");
             request.setAttribute("linkName", "Point of Interest");
 

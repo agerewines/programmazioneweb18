@@ -17,17 +17,6 @@
         <input type="submit" name="submit" value="submit" />
     </form>
 
-    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js">
-    </script>
-
-    <script type="text/javascript">
-        $(document).ready (function () {
-            $.get( "https://api.ipify.org?format=json",
-                function( data ) {
-                    $("#ip").val(data.ip) ;
-                });
-    </script>-->
-
     <iframe width="425" height="350" src="${map}"></iframe>
 
 </body>

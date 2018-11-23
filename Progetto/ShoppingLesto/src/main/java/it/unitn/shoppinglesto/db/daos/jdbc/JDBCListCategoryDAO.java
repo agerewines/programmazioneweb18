@@ -4,6 +4,7 @@ import it.unitn.shoppinglesto.db.daos.DAO;
 import it.unitn.shoppinglesto.db.entities.Category;
 import it.unitn.shoppinglesto.db.daos.ListCategoryDAO;
 import it.unitn.shoppinglesto.db.entities.Photo;
+import it.unitn.shoppinglesto.db.entities.User;
 import it.unitn.shoppinglesto.db.exceptions.DAOException;
 
 import java.sql.*;
@@ -280,6 +281,23 @@ public class JDBCListCategoryDAO extends JDBCDAO<Category, Integer> implements L
             prepStm.executeUpdate();
         } catch (SQLException e) {
             throw new DAOException("Error deleting listcategoryphoto");
+        }
+    }
+
+    @Override
+    public String getCategoryNameByUser(User user) throws DAOException {
+        if(user == null){
+            throw new DAOException("user is null");
+        }
+        try(PreparedStatement preparedStatement = CON.prepareStatement("select ListCategory.name from ListCategory JOIN List ON List.category_id = ListCategory.category_id where user_id = ?;")){
+            preparedStatement.setInt(1, user.getId());
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if(resultSet.next()){
+                return resultSet.getString("name");
+            }else
+                return null;
+        }catch (SQLException e){
+            throw new DAOException("Error retrieving category name by user");
         }
     }
 }

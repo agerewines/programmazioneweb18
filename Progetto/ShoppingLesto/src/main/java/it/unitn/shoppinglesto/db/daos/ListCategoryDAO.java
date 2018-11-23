@@ -2,6 +2,7 @@ package it.unitn.shoppinglesto.db.daos;
 
 import it.unitn.shoppinglesto.db.entities.Category;
 import it.unitn.shoppinglesto.db.entities.Photo;
+import it.unitn.shoppinglesto.db.entities.User;
 import it.unitn.shoppinglesto.db.exceptions.DAOException;
 
 /**
@@ -39,4 +40,6 @@ public interface ListCategoryDAO extends DAO<Category, Integer> {
     public Category simpleUpdate(Category cat) throws DAOException;
 
     public boolean deletePhoto(Integer photoId) throws DAOException;
+
+    public String getCategoryNameByUser(User user) throws DAOException;
 }
