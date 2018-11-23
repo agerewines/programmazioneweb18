@@ -64,7 +64,7 @@ public class GeoIPServlet extends HttpServlet {
 
         String ip = request.getRemoteAddr();
 
-        ip = "193.205.210.82";
+        //ip = "193.205.210.82";
 
         System.out.println(ip);
 
