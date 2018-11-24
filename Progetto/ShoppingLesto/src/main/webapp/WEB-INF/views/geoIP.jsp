@@ -37,10 +37,10 @@
         </div>
         <div class="col-lg-10 col-md-10 col-12">
             <h2><fmt:message key="home.li.lists"/></h2>
-            <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+            <ul class="nav nav-pills mb-3 nav-fill" id="pills-tab" role="tablist">
                 <c:forEach items="${userLists}" var="list">
                     <li class="nav-item">
-                        <a class="btn btn-outline-warning mr-2 showMapButton" target="map" data-toggle="pill" href="" data-id-category="${list.categoryId}" role="tab">${list.name}</a>
+                        <a class="btn btn-outline-warning m-2 showMapButton" target="map" data-toggle="pill" href="" data-id-category="${list.categoryId}" role="tab">${list.name}</a>
                     </li>
                 </c:forEach>
             </ul>

@@ -75,8 +75,10 @@ public class DeleteListServlet extends HttpServlet {
                 response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath() + "/list?id=" + listId));
 
         } else {
-            message = "List was successfully deleted";
-            session.setAttribute("successMessage", message);
+            if(!anon){
+                message = "List was successfully deleted";
+                session.setAttribute("successMessage", message);
+            }
             response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath() + "/home"));
         }
 

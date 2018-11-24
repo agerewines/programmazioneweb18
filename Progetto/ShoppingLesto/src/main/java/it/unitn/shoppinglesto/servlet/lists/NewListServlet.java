@@ -139,7 +139,7 @@ public class NewListServlet extends HttpServlet {
             session.setAttribute("successMessage", message);
         }
         if(anon)
-            response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath() + "/home"));
+            response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath() + "/home?anonymous=true"));
         else
             response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath() + "/home"));
     }
