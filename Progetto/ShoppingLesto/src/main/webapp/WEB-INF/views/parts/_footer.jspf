@@ -8,15 +8,15 @@
                     <div class="d-none d-lg-block">Privacy Policy</div>
                 </a>
             </div>
-            <div class="col-8">
+            <div class="col-7">
                 <span class="copyright text-center">
                     <div class="d-lg-none"><i class="far fa-copyright"></i> ShoppingLesto</div>
                     <div class="d-none d-lg-block"><i class="far fa-copyright"></i> ShoppingLesto 2018</div>
                 </span>
             </div>
-            <div class="col-2">
+            <div class="col-3">
                 <!-- Default dropup button -->
-                <div class="btn-group dropup m-2">
+                <div class="btn-group dropup mt-1">
                     <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                          <i class="fas fa-globe"></i>
                          <p id="langDropdown">

@@ -59,7 +59,7 @@
                 </ul>
             </h2>
 
-            <div class="list-group">
+            <div class="list-group mb-4">
                 <c:forEach items="${userLists}" var="list">
                     <c:choose>
                         <c:when test="${anon}">

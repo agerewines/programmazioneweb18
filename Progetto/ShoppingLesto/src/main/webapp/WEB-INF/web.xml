@@ -95,8 +95,8 @@
         <servlet-class>it.unitn.shoppinglesto.servlet.authentication.LogoutServlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>GeoIPServlet</servlet-name>
-        <servlet-class>it.unitn.shoppinglesto.servlet.GeoIPServlet</servlet-class>
+        <servlet-name>GeolocationServlet</servlet-name>
+        <servlet-class>it.unitn.shoppinglesto.servlet.geoloc.GeolocationServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ShowListServlet</servlet-name>
@@ -259,7 +259,7 @@
         <url-pattern>/logout</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>GeoIPServlet</servlet-name>
+        <servlet-name>GeolocationServlet</servlet-name>
         <url-pattern>/geoip</url-pattern>
     </servlet-mapping>
    <servlet-mapping>

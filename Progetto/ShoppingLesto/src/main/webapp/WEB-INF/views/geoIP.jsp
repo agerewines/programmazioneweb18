@@ -33,60 +33,46 @@
 <%@include file="parts/_errors.jspf" %>
 <div class="container-fluid">
     <div class="row justify-content-md-center">
-        <div class="col-md-1">
+        <div class="col-md-1 col-lg-1">
         </div>
         <div class="col-lg-10 col-md-10 col-12">
-            <table style="width: 100%;">
-                <td style="width: 33%">
-                    <h2>
-                        <ul class="list-inline">
-                            <li class="list-inline-item"><fmt:message key="home.li.lists"/></li>
-                        </ul>
-                    </h2>
-
-                    <div class="list-group">
-                        <c:forEach items="${userLists}" var="list">
-                        <c:choose>
-                        <c:when test="${anon}">
-                        <a href="${pageContext.request.contextPath}/list?id=${list.id}&anonymous=true"
-                           class="list-group-item list-group-item-action flex-column align-items-start">
-                            </c:when>
-                            <c:otherwise>
-                            <a href="${pageContext.request.contextPath}/geoip?id=${list.id}"
-                               class="list-group-item list-group-item-action flex-column align-items-start">
-                                </c:otherwise>
-                                </c:choose>
-                                <div class="d-flex w-100 justify-content-between">
-                                    <div class="media">
-                                        <img id="listPic" class="align-self-center mr-3 rounded" height="64" width="64"
-                                             src="${pageContext.request.contextPath}/images?id=${list.id}&resource=shoppingLists"
-                                             onerror="this.onerror=null;this.src='${pageContext.request.contextPath}/images/avatars/Lists/default.png';"/>
-                                        <div class="media-body">
-                                            <h5 class="mb-1">${list.name}</h5>
-                                            <p class="mb-1">${list.description}</p>
-                                        </div>
-                                    </div>
-                                    <small>${list.user.fullName}</small>
-                                </div>
-                                <small></small>
-                            </a>
-                            </c:forEach>
-                    </div>
-                </td>
-                <td style="width: 66%">
-                    <div style="width: 100%">
-                        <iframe src="${map}" width="100%" height="700px" frameborder="0" style="border:0"
-                                allowfullscreen></iframe>
-                    </div>
-                </td>
-            </table>
+            <h2><fmt:message key="home.li.lists"/></h2>
+            <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                <c:forEach items="${userLists}" var="list">
+                    <li class="nav-item">
+                        <a class="btn btn-outline-warning mr-2 showMapButton" target="map" data-toggle="pill" href="" data-id-category="${list.categoryId}" role="tab">${list.name}</a>
+                    </li>
+                </c:forEach>
+            </ul>
+            <div class="tab-content">
+                    <iframe src="" width="100%" height="700px" frameborder="0" style="border:0" allowfullscreen id="map"></iframe>
+            </div>
+        </div>
+        <div class="col-md-1">
         </div>
     </div>
 </div>
 
-
 <%@include file="parts/_footer.jspf" %>
 <%@include file="parts/_importsjs.jspf" %>
+<script type="text/javascript">
+    $(".showMapButton").click(function(){
+        let catId = $(this).data("id-category");
+        $.ajax({
+            type: "POST",
+            url: "geoip",
+            data: {
+                catId: catId
+            },
+            dataType : "html",
+            success: function (html) {
+                $("#map").attr("src", html);
+                $(this).removeClass("active");
+                $(this).addClass("active");
+            }
+        });
+    })
+</script>
 </body>
 </html>
 
