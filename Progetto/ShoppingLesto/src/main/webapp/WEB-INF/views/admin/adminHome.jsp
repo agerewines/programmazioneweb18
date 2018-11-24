@@ -49,7 +49,7 @@
             <!-- Prodotti -->
             <ul class="list-inline">
                 <li class="list-inline-item">
-                    <h5>Manage the available products</h5>
+                    <h5><fmt:message key="admin.h.manage_available"/></h5>
                 </li>
                 <li class="list-inline-item">
                     <button type="button" class="btn btn-primary addProduct"
@@ -59,16 +59,16 @@
                     </button>
                 </li>
             </ul>
-            <p><small>Click on the images in order to delete them.</small></p>
+            <p><small><fmt:message key="admin.h.image"/></small></p>
             <table class="table table-striped" id="productTable">
                 <thead>
-                <tr>
+                <tr
                     <th scope="col"></th>
-                    <th style="width: 25%" scope="col">Name</th>
-                    <th style="width: 50%" scope="col">Description</th>
-                    <th style="width: 10%" scope="col">Photos</th>
-                    <th style="width: 5%" scope="col">Price</th>
-                    <th style="width: 10%" scope="col">Edit</th>
+                    <th style="width: 25%" scope="col"><fmt:message key="admin.h.name"/></th>
+                    <th style="width: 50%" scope="col"><fmt:message key="admin.h.description"/></th>
+                    <th style="width: 10%" scope="col"><fmt:message key="admin.h.photos"/></th>
+                    <th style="width: 5%" scope="col"><fmt:message key="admin.h.price"/></th>
+                    <th style="width: 10%" scope="col"><fmt:message key="admin.h.edit"/></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -125,7 +125,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addProdModalLabel">Add Product</h5>
+                <h5 class="modal-title" id="addProdModalLabel"><fmt:message key="product.h.add_product"/></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -135,25 +135,25 @@
                       enctype='multipart/form-data'>
                     <div class="form-row">
                         <div class="form-group col-md-12">
-                            <label for="nameProd">Name</label>
+                            <label for="nameProd"><fmt:message key="admin.h.name"/></label>
                             <input type="text" class="form-control" id="nameProd" placeholder="Name" name="nameProd" required>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-12">
-                            <label for="descriptionProd">Description</label>
+                            <label for="descriptionProd"><fmt:message key="admin.h.description"/></label>
                             <textarea class="form-control" id="descriptionProd" name="descriptionProd" rows="3"
                                       placeholder="Description"></textarea>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-12">
-                            <label for="priceProd">Price</label>
+                            <label for="priceProd"><fmt:message key="admin.h.price"/></label>
                             <input type="number" class="form-control" id="priceProd" placeholder="Price" name="price" step="0.01" required>
                         </div>
                     </div>
                     <div class="form-row">
-                        <label for="productCategory">Choose category</label>
+                        <label for="productCategory"><fmt:message key="admin.h.category"/></label>
                         <div class="form-group col-md-10 col-10">
                             <select id="productCategory" name="category" class="form-control" required>
                             </select>
@@ -169,11 +169,11 @@
                     <div class="form-row">
                         <div class="custom-file">
                             <input type="file" class="custom-file-input" id="photo2" name="photo">
-                            <label class="custom-file-label" for="photo2">Add photo</label>
+                            <label class="custom-file-label" for="photo2"><fmt:message key="admin.h.add_photo"/></label>
                         </div>
                     </div>
                     <hr/>
-                    <button type="submit" class="btn btn-primary">Add product</button>
+                    <button type="submit" class="btn btn-primary"><fmt:message key="admin.h.add_product"/></button>
                 </form>
             </div>
         </div>
@@ -186,7 +186,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modifyProdModalLabel">Edit Product</h5>
+                <h5 class="modal-title" id="modifyProdModalLabel"><fmt:message key="admin.h.edit_product"/></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -196,37 +196,37 @@
                       enctype='multipart/form-data'>
                     <div class="form-row">
                         <div class="form-group col-md-12">
-                            <label for="nameProdEdit">Name</label>
+                            <label for="nameProdEdit"><fmt:message key="admin.h.name"/></label>
                             <input type="text" class="form-control" id="nameProdEdit" placeholder="Name" name="nameProd" required>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-12">
-                            <label for="descriptionProdEdit">Description</label>
+                            <label for="descriptionProdEdit"><fmt:message key="admin.h.description"/></label>
                             <textarea class="form-control" id="descriptionProdEdit" name="descriptionProd" rows="3"
                                       placeholder="Description"></textarea>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-12">
-                            <label for="priceProdEdit">Price</label>
+                            <label for="priceProdEdit"><fmt:message key="admin.h.price"/></label>
                             <input type="number" class="form-control" id="priceProdEdit" placeholder="Price" name="priceEdit" step="0.01" required>
                         </div>
                     </div>
                     <div class="form-row">
-                        <label for="productCategoryEdit">Choose category</label>
+                        <label for="productCategoryEdit"><fmt:message key="admin.h.category"/></label>
                             <select id="productCategoryEdit" name="category" class="form-control">
                             </select>
                     </div>
                     <div class="form-row mt-4">
                         <div class="custom-file">
                             <input type="file" class="custom-file-input" id="photo" name="photo">
-                            <label class="custom-file-label" for="photo">Add photo</label>
+                            <label class="custom-file-label" for="photo"><fmt:message key="admin.h.add_photo"/></label>
                         </div>
                     </div>
                     <hr/>
                     <input type="hidden" name="prodId" id="hiddenProductEditId">
-                    <button type="submit" class="btn btn-primary">Edit product</button>
+                    <button type="submit" class="btn btn-primary"><fmt:message key="admin.h.edit_product"/></button>
                 </form>
             </div>
         </div>
@@ -239,7 +239,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="deleteProdModalLabel">Delete Product</h5>
+                <h5 class="modal-title" id="deleteProdModalLabel"><fmt:message key="admin.h.delete_product"/></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -247,11 +247,11 @@
             <div class="modal-body">
                 <form id="deleteProductForm" action="${pageContext.request.contextPath}/product/delete" method="POST">
                     <div class="form-row">
-                        <label>Are you sure you want to delete this product<br>You will delete this product from every list</label>
+                        <label><fmt:message key="admin.h.sure"/><br><fmt:message key="admin.h.sure2"/></label>
                     </div>
                     <input type="hidden" id="hiddenProdDeleteId" name="prodId">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <button type="submit" id="deleteProductButton" class="btn btn-primary">Delete product</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><fmt:message key="admin.h.cancel"/></button>
+                    <button type="submit" id="deleteProductButton" class="btn btn-primary"><fmt:message key="admin.h.delete_product"/></button>
                 </form>
             </div>
         </div>
