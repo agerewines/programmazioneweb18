@@ -66,7 +66,7 @@
                     <th scope="col"><fmt:message key="admin.h.name"/></th>
                     <th scope="col"><fmt:message key="admin.h.description"/></th>
                     <th scope="col"><fmt:message key="admin.h.photos"/></th>
-              <th scope="col"><fmt:message key="admin.h.edit"/></th>
+                    <th scope="col"><fmt:message key="admin.h.edit"/></th>
                 </tr>
                 </thead>
                 <tbody>

@@ -62,7 +62,7 @@
             <p><small><fmt:message key="admin.h.image"/></small></p>
             <table class="table table-striped" id="productTable">
                 <thead>
-                <tr
+                <tr>
                     <th scope="col"></th>
                     <th style="width: 25%" scope="col"><fmt:message key="admin.h.name"/></th>
                     <th style="width: 50%" scope="col"><fmt:message key="admin.h.description"/></th>
