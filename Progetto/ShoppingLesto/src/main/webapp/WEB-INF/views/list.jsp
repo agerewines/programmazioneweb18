@@ -2,6 +2,14 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<c:choose>
+    <c:when test="${not empty param.lang}">
+        <c:set var="language" value="${param.lang}" scope="session"/>
+    </c:when>
+    <c:otherwise>
+        <c:set var="language" value="${not empty param.language ? param.language : not empty language ? language : pageContext.request.locale}" scope="session" />
+    </c:otherwise>
+</c:choose>
 <c:set var="language"
        value="${not empty param.language ? param.language : not empty language ? language : pageContext.request.locale}"
        scope="session"/>
@@ -20,6 +28,7 @@
     <title>ShoppingLesto | List ${list.name} - Webprogramming18</title>
 
     <%@include file="parts/_imports.jspf" %>
+
 
 </head>
 <body id="page-top">
@@ -93,8 +102,11 @@
                                 <button type="button" class="btn btn-primary"
                                         style="padding: 0 .375rem 0 .375rem;"
                                         data-toggle="modal" data-target="#sharedUserModal">
-                                    <fmt:message key="list.button.shared"/>
-                                    <span class="badge badge-dark badge-pill">${fn:length(sharedWith)}</span>
+                                    <div class="d-lg-none">Shared With</div>
+                                    <div class="d-none d-lg-block">
+                                        <fmt:message key="list.button.shared"/>
+                                        <span class="badge badge-dark badge-pill">${fn:length(sharedWith)}</span>
+                                    </div>
                                 </button>
                             </li>
                         </c:if>
@@ -118,9 +130,10 @@
             <table class="table" id="tableProductInList">
                 <thead class="thead-light">
                 <tr>
-                    <th scope="col" width="70px">Images</th>
+                    <th scope="col"></th>
                     <th scope="col"><fmt:message key="list.th.name"/></th>
                     <th scope="col"><fmt:message key="list.th.description"/></th>
+                    <th scope="col" width="70px">Images</th>
                     <th scope="col">Price</th>
                     <th scope="col">Delete</th>
                 </tr>
@@ -128,14 +141,15 @@
                 <tbody>
                 <c:forEach items="${productsList}" var="prod">
                     <tr>
+                        <td></td>
+                        <td>${prod.name}</td>
+                        <td>${prod.description}</td>
                         <td>
                             <img class="rounded shadow mb-3 bg-white rounded" height="65" width="65"
                                  src="${pageContext.request.contextPath}/images?id=${prod.id}&resource=product"
                                  onerror="this.onerror=null;this.src='${pageContext.request.contextPath}/images/avatars/Products/default.png';"/>
                         </td>
-                        <td>${prod.name}</td>
-                        <td>${prod.description}</td>
-                        <td>${prod.price} €</td>
+                        <td>${prod.price} €</td>x
                         <td>
                             <button type="button" class="btn btn-primary removeProd"
                                     style="padding: 0 .375rem 0 .375rem;"
@@ -167,23 +181,43 @@
         <div class="col-md-1">
         </div>
         <div class="col-lg-10 col-md-10 col-12">
-            <div class="modal-dialog" role="document">
+            <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">Chat</h5>
                     </div>
                     <div class="modal-body">
-                        ...
+                        <div id="divMessages" style="max-height: 250px; overflow-y: scroll">
+                            <ul class="list-unstyled" id="messages">
+                            </ul>
+                        </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary">Submit</button>
+                        <div class="input-group mb-3">
+                            <div class="d-none d-lg-block">
+                                <div class="input-group-prepend">
+                                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Choose...</button>
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item chooseMessage">Sto andando a fare la spesa, manca qualcosa?</a>
+                                        <a class="dropdown-item chooseMessage">Lista modificata. Guarda cosa ho aggiunto</a>
+                                        <a class="dropdown-item chooseMessage">Spesa fatta. Ti puoi rilassare</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <input type="text" class="form-control" placeholder="Send message..." aria-label="Send message..." aria-describedby="submitMessage" id="message">
+                            <input type="hidden" id="listIdMessage" value="${list.id}">
+                            <input type="hidden" id="userIdMessage" value="${user.id}">
+                            <input type="hidden" id="sendMessageUrl" value="${pageContext.request.contextPath}/message/create">
+                            <div class="input-group-append">
+                                <button type="button" class="btn btn-primary" id="submitMessage">Submit</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
         <div class="col-md-1">
         </div>
-    </div>
 </div>
 <!-- Modal edit button -->
 <div class="modal fade" id="modifyListModal" tabindex="-1" role="dialog" aria-labelledby="modifyListModalLabel"
@@ -510,8 +544,58 @@
             "order" : [[1, "asc"]],
             "language" : {
                 "url" : getLang()
+            },
+            responsive: {
+                details: {
+                    type: 'column',
+                    target: 'tr'
+                }
+            },
+            columnDefs: [ {
+                className: 'control',
+                orderable: false,
+                targets:   0
+            } ]
+        });
+
+        let listId = $("#listIdMessage").val();
+        let userId = $("#userIdMessage").val();
+        $.ajax({
+            type: "POST",
+            url: "message/show",
+            dataType: "html",
+            data:  {
+                listId : listId,
+                userId : userId
+            },
+            success: function(html){
+                $("#messages").html(html);
+                $("#divMessages").animate({scrollTop: $('#divMessages').prop("scrollHeight")}, 1000);
             }
         });
+    });
+    var refreshMessage = setInterval(function(){
+        $.ajax({
+            type: "POST",
+            url: "message/show",
+            dataType: "html",
+            data:  {
+                listId : $("#listIdMessage").val(),
+                userId : $("#userIdMessage").val(),
+                lastMessageTime : $("#messages li").last().find("div h6 small").html()
+            },
+            success: function(html){
+                if(html !== ""){
+                    $("#messages").append(html);
+                    $("#divMessages").animate({scrollTop: $('#divMessages').prop("scrollHeight")}, 1000);
+                }
+            }
+        });
+    }, 2000);
+
+    $(".chooseMessage").click(function(){
+        let elem = $(this).html();
+        $("#message").val(elem);
     });
 
     var lang = document.documentElement.lang;
@@ -524,10 +608,47 @@
             default :  return "https://cdn.datatables.net/plug-ins/1.10.19/i18n/English.json";
                 break;
         }
-    };
+    }
+
     $('.removeProd').click(function () {
         $('#prodIdDelete').val($(this).data('id'));
-    })
+    });
+
+
+    // chat
+    $('#submitMessage').click(function(){
+        let listId = $("#listIdMessage").val();
+        let message = $("#message").val();
+        let url = $("#sendMessageUrl").val();
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: {
+                listId : listId,
+                message : message
+            }
+        }).done(function(){
+            $("#message").val('');
+            $.ajax({
+                type: "POST",
+                url: "message/show",
+                dataType: "html",
+                data:  {
+                    listId : $("#listIdMessage").val(),
+                    userId : $("#userIdMessage").val(),
+                    lastMessageTime : $("#messages li").last().find("div h6 small").html()
+                },
+                success: function(html){
+                    if(html !== ""){
+                        $("#messages").append(html);
+                        $("#divMessages").animate({scrollTop: $('#divMessages').prop("scrollHeight")}, 1000);
+                    }
+                }
+            });
+        });
+    });
+
+
 </script>
 </body>
 

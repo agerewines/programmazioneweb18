@@ -8,6 +8,14 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<c:choose>
+    <c:when test="${not empty param.lang}">
+        <c:set var="language" value="${param.lang}" scope="session"/>
+    </c:when>
+    <c:otherwise>
+        <c:set var="language" value="${not empty param.language ? param.language : not empty language ? language : pageContext.request.locale}" scope="session" />
+    </c:otherwise>
+</c:choose>
 <c:set var="language" value="${not empty param.language ? param.language : not empty language ? language : pageContext.request.locale}" scope="session" />
 <fmt:setLocale value="${language}" />
 <fmt:setBundle basename="i18n.text" />
@@ -37,7 +45,7 @@
         </div>
         <div class="col-lg-6 col-md-8 col-12">
             <c:choose>
-                <c:when test="${language eq 'it'}">
+                <c:when test="${language eq 'it_IT'}">
                     <h1>Informativa sulla Privacy</h1>
 
 

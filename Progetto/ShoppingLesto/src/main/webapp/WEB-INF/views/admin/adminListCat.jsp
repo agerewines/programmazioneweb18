@@ -8,6 +8,14 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<c:choose>
+    <c:when test="${not empty param.lang}">
+        <c:set var="language" value="${param.lang}" scope="session"/>
+    </c:when>
+    <c:otherwise>
+        <c:set var="language" value="${not empty param.language ? param.language : not empty language ? language : pageContext.request.locale}" scope="session" />
+    </c:otherwise>
+</c:choose>
 <c:set var="language" value="${not empty param.language ? param.language : not empty language ? language : pageContext.request.locale}" scope="session" />
 <fmt:setLocale value="${language}" />
 <fmt:setBundle basename="i18n.text" />
@@ -40,7 +48,7 @@
             <h2>Admin Panel</h2>
             <ul class="list-inline">
                 <li class="list-inline-item">
-                    <h5>Manage the category of lists</h5>
+                    <h5><fmt:message key="admin.h.manage_lists"/></h5>
                 </li>
                 <li class="list-inline-item">
                     <button type="button" class="btn btn-primary addListCat"
@@ -50,19 +58,23 @@
                     </button>
                 </li>
             </ul>
-            <p><small>Click on the images in order to delete them.</small></p>
+            <p><small><fmt:message key="admin.h.image"/></small></p>
             <table class="table table-striped table-hover">
                 <thead>
                 <tr>
-                    <th scope="col">Photos</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Description</th>
-                    <th scope="col">Edit</th>
+                    <th scope="col"></th>
+                    <th scope="col"><fmt:message key="admin.h.name"/></th>
+                    <th scope="col"><fmt:message key="admin.h.description"/></th>
+                    <th scope="col"><fmt:message key="admin.h.photos"/></th>
+                    <th scope="col"><fmt:message key="admin.h.edit"/></th>
                 </tr>
                 </thead>
                 <tbody>
                 <c:forEach items="${listCategory}" var="listCat">
                     <tr id="listCat${listCat.id}">
+                        <td></td>
+                        <td>${listCat.name}</td>
+                        <td>${listCat.description}</td>
                         <td>
                             <c:forEach items="${listCat.photos}" var="photo">
                                 <img class="rounded shadow mb-3 bg-white rounded deletePhoto image" height="65" width="65"
@@ -72,8 +84,6 @@
                                      onmouseover="mouseOverPhoto(this)" title="Click on the picture to delete it!"/>
                             </c:forEach>
                         </td>
-                        <td>${listCat.name}</td>
-                        <td>${listCat.description}</td>
                         <td>
                             <ul class="list-inline">
                                 <li class="list-inline-item">
@@ -112,7 +122,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addListCatModalLabel">Add List Category</h5>
+                <h5 class="modal-title" id="addListCatModalLabel"><fmt:message key="admin.h.add_list"/></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -122,21 +132,21 @@
                       enctype='multipart/form-data'>
                     <div class="form-row">
                         <div class="form-group col-md-12">
-                            <label for="nameListCat">Name</label>
+                            <label for="nameListCat"><fmt:message key="admin.h.name"/></label>
                             <select id="nameListCatAdd" name="nameListCat" class="form-control">
-                                <option value="Tempo Libero">Tempo libero</option>
-                                <option value="Alimentari">Alimentari</option>
-                                <option value="Videogiochi">Videogiochi</option>
-                                <option value="Tecnologia">Tecnologia</option>
-                                <option value="Accessori per la casa">Accessori per la casa</option>
-                                <option value="Elettrodomestici">Elettrodomestici</option>
-                                <option value="Fai da te">Fai da te</option>
+                                <option value="Tempo Libero"><fmt:message key="admin.h.free_time"/></option>
+                                <option value="Alimentari"><fmt:message key="admin.h.food"/></option>
+                                <option value="Videogiochi"><fmt:message key="admin.h.videogames"/></option>
+                                <option value="Tecnologia"><fmt:message key="admin.h.technology"/></option>
+                                <option value="Accessori per la casa"><fmt:message key="admin.h.home_accessories"/></option>
+                                <option value="Elettrodomestici"><fmt:message key="admin.h.appliances"/></option>
+                                <option value="Fai da te"><fmt:message key="admin.h.do_it_yourself"/></option>
                             </select>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-12">
-                            <label for="descriptionListCat">Description</label>
+                            <label for="descriptionListCat"><fmt:message key="admin.h.description"/></label>
                             <textarea class="form-control" name="descriptionListCat" rows="3"
                                       placeholder="Description"></textarea>
                         </div>
@@ -144,11 +154,11 @@
                     <div class="form-row">
                         <div class="custom-file">
                             <input type="file" class="custom-file-input" id="photo" name="photo">
-                            <label class="custom-file-label" for="photo">Add photo</label>
+                            <label class="custom-file-label" for="photo"><fmt:message key="admin.h.add_photo"/></label>
                         </div>
                     </div>
                     <hr/>
-                    <button type="submit" class="btn btn-primary">Add list category</button>
+                    <button type="submit" class="btn btn-primary"><fmt:message key="admin.h.add_list"/></button>
                 </form>
             </div>
         </div>
@@ -161,7 +171,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modifyListCatModalLabel">Edit List Category</h5>
+                <h5 class="modal-title" id="modifyListCatModalLabel"><fmt:message key="admin.h.edit_list"/></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -171,13 +181,13 @@
                       enctype='multipart/form-data'>
                     <div class="form-row">
                         <div class="form-group col-md-12">
-                            <label for="nameListCat">Name</label>
+                            <label for="nameListCat"><fmt:message key="admin.h.name"/></label>
                             <input type="text" class="form-control" id="nameListCat" placeholder="Name" name="nameListCat">
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-12">
-                            <label for="descriptionListCat">Description</label>
+                            <label for="descriptionListCat"><fmt:message key="admin.h.description"/></label>
                             <textarea class="form-control" id="descriptionListCat" name="descriptionListCat" rows="3"
                                       placeholder="Description"></textarea>
                         </div>
@@ -185,12 +195,12 @@
                     <div class="form-row">
                         <div class="custom-file">
                             <input type="file" class="custom-file-input" id="photo2" name="photo">
-                            <label class="custom-file-label" for="photo2">Add photo</label>
+                            <label class="custom-file-label" for="photo2"><fmt:message key="admin.h.add_photo"/></label>
                         </div>
                     </div>
                     <hr/>
                     <input type="hidden" name="listCatId" id="hiddenListCatId">
-                    <button type="submit" class="btn btn-primary">Edit list category</button>
+                    <button type="submit" class="btn btn-primary"><fmt:message key="admin.h.edit_list"/></button>
                 </form>
             </div>
         </div>
@@ -203,7 +213,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="deleteListCatModalLabel">Delete ListCategory</h5>
+                <h5 class="modal-title" id="deleteListCatModalLabel"><fmt:message key="admin.h.delete_list"/></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -211,11 +221,11 @@
             <div class="modal-body">
                 <form id="deleteListCatForm" action="${pageContext.request.contextPath}/list/category/delete" method="POST">
                     <div class="form-row">
-                        <label>Are you sure you want to delete this category<br>You will delete all list using this category</label>
+                        <label><fmt:message key="admin.h.sure"/><br><fmt:message key="admin.h.sure2"/></label>
                     </div>
                     <input type="hidden" id="hiddenListCatDeleteId" name="listCatId">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Delete list category</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><fmt:message key="admin.h.cancel"/></button>
+                    <button type="submit" class="btn btn-primary"><fmt:message key="admin.h.delete_list"/></button>
                 </form>
             </div>
         </div>
@@ -271,7 +281,18 @@
         "order" : [[1, "asc"]],
         "language" : {
             "url" : getLang()
-        }
+        },
+        responsive: {
+            details: {
+                type: 'column',
+                target: 'tr'
+            }
+        },
+        columnDefs: [ {
+            className: 'control',
+            orderable: false,
+            targets:   0
+        } ]
     });
 
     var lang = document.documentElement.lang;

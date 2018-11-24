@@ -8,6 +8,14 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<c:choose>
+    <c:when test="${not empty param.lang}">
+        <c:set var="language" value="${param.lang}" scope="session"/>
+    </c:when>
+    <c:otherwise>
+        <c:set var="language" value="${not empty param.language ? param.language : not empty language ? language : pageContext.request.locale}" scope="session" />
+    </c:otherwise>
+</c:choose>
 <c:set var="language" value="${not empty param.language ? param.language : not empty language ? language : pageContext.request.locale}" scope="session" />
 <fmt:setLocale value="${language}" />
 <fmt:setBundle basename="i18n.text" />
@@ -40,7 +48,7 @@
             <h2>Admin Panel</h2>
             <ul class="list-inline">
                 <li class="list-inline-item">
-                    <h5>Manage the category of products</h5>
+                    <h5><fmt:message key="admin.h.manage_product"/></h5>
                 </li>
                 <li class="list-inline-item">
                     <button type="button" class="btn btn-primary addProdCat"
@@ -50,19 +58,23 @@
                     </button>
                 </li>
             </ul>
-            <p><small>Click on the images in order to delete them.</small></p>
-            <table class="table table-striped">
+            <p><small><fmt:message key="admin.h.image"/></small></p>
+            <table class="table table-striped display nowrap">
                 <thead>
                 <tr>
-                    <th scope="col">Photos</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Description</th>
-                    <th scope="col">Edit</th>
+                    <th scope="col"></th>
+                    <th scope="col"><fmt:message key="admin.h.name"/></th>
+                    <th scope="col"><fmt:message key="admin.h.description"/></th>
+                    <th scope="col"><fmt:message key="admin.h.photos"/></th>
+                    <th scope="col"><fmt:message key="admin.h.edit"/></th>
                 </tr>
                 </thead>
                 <tbody>
                 <c:forEach items="${prodCategory}" var="prodCat">
                     <tr id="prodCat${prodCat.id}">
+                        <td></td>
+                        <td>${prodCat.name}</td>
+                        <td>${prodCat.description}</td>
                         <td>
                             <c:forEach items="${prodCat.photos}" var="photo">
                                 <img class="rounded shadow mb-3 bg-white rounded" height="65" width="65"
@@ -72,8 +84,6 @@
                                      onclick="deleteProdCatPhoto(${photo.id}, this)"  title="Click on the picture to delete it!"/>
                             </c:forEach>
                         </td>
-                        <td>${prodCat.name}</td>
-                        <td>${prodCat.description}</td>
                         <td>
                             <ul class="list-inline">
                                 <li class="list-inline-item">
@@ -111,7 +121,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addProdCatModalLabel">Add Product Category</h5>
+                <h5 class="modal-title" id="addProdCatModalLabel"><fmt:message key="admin.h.add_product_cat"/></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -121,13 +131,13 @@
                       enctype='multipart/form-data'>
                     <div class="form-row">
                         <div class="form-group col-md-12">
-                            <label for="nameProdCat">Name</label>
+                            <label for="nameProdCat"><fmt:message key="admin.h.name"/></label>
                             <input type="text" class="form-control" placeholder="Name" name="nameProdCat">
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-12">
-                            <label for="descriptionProdCat">Description</label>
+                            <label for="descriptionProdCat"><fmt:message key="admin.h.description"/></label>
                             <textarea class="form-control" name="descriptionProdCat" rows="3"
                                       placeholder="Description"></textarea>
                         </div>
@@ -135,11 +145,11 @@
                     <div class="form-row">
                         <div class="custom-file">
                             <input type="file" class="custom-file-input" id="photo" name="photo">
-                            <label class="custom-file-label" for="photo">Add photo</label>
+                            <label class="custom-file-label" for="photo"><fmt:message key="admin.h.add_photo"/></label>
                         </div>
                     </div>
                     <hr/>
-                    <button type="submit" class="btn btn-primary">Add product category</button>
+                    <button type="submit" class="btn btn-primary"><fmt:message key="admin.h.add_product_cat"/></button>
                 </form>
             </div>
         </div>
@@ -152,7 +162,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modifyProdCatModalLabel">Edit List Category</h5>
+                <h5 class="modal-title" id="modifyProdCatModalLabel"><fmt:message key="admin.h.edit_list"/></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -162,13 +172,13 @@
                       enctype='multipart/form-data'>
                     <div class="form-row">
                         <div class="form-group col-md-12">
-                            <label for="nameProdCat">Name</label>
+                            <label for="nameProdCat"><fmt:message key="admin.h.name"/></label>
                             <input type="text" class="form-control" id="nameProdCat" placeholder="Name" name="nameProdCat">
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-12">
-                            <label for="descriptionProdCat">Description</label>
+                            <label for="descriptionProdCat"><fmt:message key="admin.h.description"/></label>
                             <textarea class="form-control" id="descriptionProdCat" name="descriptionProdCat" rows="3"
                                       placeholder="Description"></textarea>
                         </div>
@@ -176,12 +186,12 @@
                     <div class="form-row">
                         <div class="custom-file">
                             <input type="file" class="custom-file-input" id="photo2" name="photo">
-                            <label class="custom-file-label" for="photo2">Add photo</label>
+                            <label class="custom-file-label" for="photo2"><fmt:message key="admin.h.add_photo"/></label>
                         </div>
                     </div>
                     <hr/>
                     <input type="hidden" name="prodCatId" id="hiddenProdCatId">
-                    <button type="submit" class="btn btn-primary">Edit product category</button>
+                    <button type="submit" class="btn btn-primary"><fmt:message key="admin.h.edit_product_cat"/></button>
                 </form>
             </div>
         </div>
@@ -194,7 +204,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="deleteProdCatModalLabel">Delete Product Category</h5>
+                <h5 class="modal-title" id="deleteProdCatModalLabel"><fmt:message key="admin.h.delete_product_cat"/></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -202,11 +212,11 @@
             <div class="modal-body">
                 <form id="deleteProdCatForm" action="${pageContext.request.contextPath}/product/category/delete" method="POST">
                     <div class="form-row">
-                        <label>Are you sure you want to delete this category<br>You will delete all product using this category</label>
+                        <label><fmt:message key="admin.h.sure"/><br><fmt:message key="admin.h.sure2"/></label>
                     </div>
                     <input type="hidden" id="hiddenProdCatDeleteId" name="prodCatId">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <button type="submit" id="deleteProductCategoryButton" class="btn btn-primary">Delete product category</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><fmt:message key="admin.h.cancel"/></button>
+                    <button type="submit" id="deleteProductCategoryButton" class="btn btn-primary"><fmt:message key="admin.h.delete_product_cat"/></button>
                 </form>
             </div>
         </div>
@@ -262,7 +272,18 @@
         "order" : [[1, "asc"]],
         "language" : {
             "url" : getLang()
-        }
+        },
+        responsive: {
+            details: {
+                type: 'column',
+                target: 'tr'
+            }
+        },
+        columnDefs: [ {
+            className: 'control',
+            orderable: false,
+            targets:   0
+        } ]
     });
 
     var lang = document.documentElement.lang;

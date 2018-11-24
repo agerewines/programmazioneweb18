@@ -1,7 +1,14 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<c:set var="language" value="${not empty param.language ? param.language : not empty language ? language : pageContext.request.locale}" scope="session" />
+<c:choose>
+    <c:when test="${not empty param.lang}">
+        <c:set var="language" value="${param.lang}" scope="session"/>
+    </c:when>
+    <c:otherwise>
+        <c:set var="language" value="${not empty param.language ? param.language : not empty language ? language : pageContext.request.locale}" scope="session" />
+    </c:otherwise>
+</c:choose>
 <fmt:setLocale value="${language}" />
 <fmt:setBundle basename="i18n.text" />
 <!DOCTYPE html>
@@ -23,6 +30,7 @@
 
 <%@include file="parts/_navigation.jspf" %>
 <%@include file="parts/_errors.jspf" %>
+
 
 <div class="container-fluid">
     <div class="row">
@@ -53,6 +61,8 @@
                 <div class="form-row">
                     <div class="form-group col-md-5">
                         <label for="password"><fmt:message key="login.label.password" /></label>
+                        <div class="col-sm-6" id="result" style="font-weight:bold;padding:6px 12px; display: inline">
+                        </div>
                         <input type="password" class="form-control" id="password" name="password"
                                placeholder="<fmt:message key="login.label.password" />">
                     </div>
@@ -66,11 +76,11 @@
                         <input class="form-control" type="checkbox" id="checkTerms" name="checkTerms" value="A"/>
                     </div>
                 </div>
-                <button type="submit" class="btn btn-primary"><fmt:message key="register.button.register" /></button>
+                <button type="submit" id="submitRegisterButton" class="btn btn-primary"><fmt:message key="register.button.register" /></button>
             </form>
             <div class="mt-4">
                 <hr/>
-                <fmt:message key="register.h.if" /> <a class="badge-pill btn-primary" href="${pageContext.request.contextPath}/login"><fmt:message key="register.h.here" /></a>!
+                <fmt:message key="register.h.if" /> <a class="btn btn-outline-warning" href="${pageContext.request.contextPath}/login"><fmt:message key="register.h.here" /></a>!
             </div>
         </div>
 
@@ -80,7 +90,29 @@
 </div>
 <%@include file="parts/_footer.jspf" %>
 <%@include file="parts/_importsjs.jspf" %>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#password').on('keyup', function () {
+            var strength = 0;
+            var password = $('#password').val();
+            var confirmation = $("#confirmation").val();
 
+            if (password.length > 7) strength += 1
+            if (password.match(/([a-z].*[A-Z])|([A-Z].*[a-z])/))  strength += 1
+            if (password.match(/([a-zA-Z])/) && password.match(/([0-9])/))  strength += 1
+            if (password.match(/([!,%,&,@,#,$,^,*,?,_,~,.])/))  strength += 1
+            if (password.match(/(.*[!,%,&,@,#,$,^,*,?,_,~,.].*[!,%,&,@,#,$,^,*,?,_,~,.])/)) strength += 1
+            if (strength <= 3) {
+                $('#submitRegisterButton').prop('disabled', true);
+                $('#result').html('Password debole').css('color', 'red');
+            } else {
+                $('#submitRegisterButton').prop('disabled', false);
+                $('#result').html('')
+            }
+        });
+
+    });
+</script>
 </body>
 
 </html>

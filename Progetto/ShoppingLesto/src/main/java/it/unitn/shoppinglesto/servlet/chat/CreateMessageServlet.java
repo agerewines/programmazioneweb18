@@ -1,4 +1,4 @@
-package it.unitn.shoppinglesto.servlet;
+package it.unitn.shoppinglesto.servlet.chat;
 
 import it.unitn.shoppinglesto.db.daos.ListCategoryDAO;
 import it.unitn.shoppinglesto.db.daos.MessageDAO;
@@ -56,7 +56,7 @@ public class CreateMessageServlet extends HttpServlet {
         }
         Integer listId = null;
         try {
-            listId = Integer.valueOf(request.getParameter("id"));
+            listId = Integer.valueOf(request.getParameter("listId"));
         } catch (RuntimeException ex) {
             response.sendError(500, ex.getMessage());
         }
