@@ -100,12 +100,6 @@ public class ImageServlet extends HttpServlet {
                         case "products":
                             path = productDAO.getSinglePhoto(id);
                             break;
-                        /*case "customproducts":
-                            product = productDAO.getCustomByPrimaryKey(id);
-                            if(product != null){
-                                path = product.getLogoPath();
-                            }
-                            break;*/
                         case "shoppingLists":
                             ShoppingList list = shoppingListDAO.getByPrimaryKey(id);
                             if (list != null)

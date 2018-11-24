@@ -43,7 +43,7 @@ public class AnonymousFilter implements Filter {
 
             String regex = "(/ShoppingLesto/\\S+)";
             boolean matches = Pattern.matches(regex, url);
-            if(matches && !url.equals("/ShoppingLesto/login") && !url.equals("/ShoppingLesto/register") && !url.startsWith("/ShoppingLesto/assets")){
+            if(matches && !url.equals("/ShoppingLesto/login") && !url.equals("/ShoppingLesto/register") && !url.startsWith("/ShoppingLesto/assets") && !url.startsWith("/ShoppingLesto/images") && !url.startsWith("/ShoppingLesto/message") && !url.equals("/ShoppingLesto/PrivacyPolicy")){
                 HttpSession session = req.getSession(false);
                 User user = (User) session.getAttribute("user");
                 boolean anon = false;

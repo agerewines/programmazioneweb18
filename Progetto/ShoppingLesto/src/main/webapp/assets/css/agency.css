@@ -708,3 +708,29 @@ ul.social-buttons li a:active, ul.social-buttons li a:focus, ul.social-buttons l
 .dataTables_wrapper{
   margin-bottom : 2em;
 }
+
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+  box-sizing: border-box;
+  display: inline-block;
+  min-width: 1.5em;
+  padding: 0.2em 0.2em;
+  margin-left: 2px;
+  text-align: center;
+  text-decoration: none !important;
+  cursor: pointer;
+  *cursor: hand;
+  color: #333 !important;
+  border: 1px solid transparent;
+  border-radius: 2px;
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+  color: white !important;
+  background: none !important;
+  border: none !important;
+}
+#langDropdown{
+  display: inline;
+}
+@media (max-width : 990px) {
+  #langDropdown { display:none; }
+}

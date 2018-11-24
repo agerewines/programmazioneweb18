@@ -1,6 +1,14 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<c:choose>
+    <c:when test="${not empty param.lang}">
+        <c:set var="language" value="${param.lang}" scope="session"/>
+    </c:when>
+    <c:otherwise>
+        <c:set var="language" value="${not empty param.language ? param.language : not empty language ? language : pageContext.request.locale}" scope="session" />
+    </c:otherwise>
+</c:choose>
 <c:set var="language" value="${not empty param.language ? param.language : not empty language ? language : pageContext.request.locale}" scope="session" />
 <fmt:setLocale value="${language}" />
 <fmt:setBundle basename="i18n.text" />
@@ -46,10 +54,11 @@
             <table class="table table-hover table-striped" id="allProductTable">
                 <thead>
                 <tr>
-                    <th style="width: 10%" scope="col">Photos</th>
+                    <th scope="col"></th>
                     <th style="width: 25%" scope="col">Name</th>
                     <th style="width: 45%" scope="col">Description</th>
                     <th style="width: 10%" scope="col">Category</th>
+                    <th style="width: 10%" scope="col">Photos</th>
                     <th style="width: 5%" scope="col">Price</th>
                     <th style="width: 5%" scope="col">Add</th>
                 </tr>
@@ -57,7 +66,7 @@
                 <tbody>
                 </tbody>
             </table>
-            <button type="button" id="showAll" class="btn btn-primary float-right m-2">
+            <button type="button" id="showAll" class="btn btn-primary float-left m-2">
                 Show all
             </button>
             <br/>
@@ -163,7 +172,19 @@
         "order" : [[1, "asc"]],
         "language" : {
             "url" : getLang()
-        }
+        },
+        responsive: {
+            details: {
+                type: 'column',
+                target: 'tr'
+            }
+        },
+        columnDefs: [ {
+            className: 'control',
+            orderable: false,
+            targets:   0
+        } ],
+        searching: false
     });
 
     var lang = document.documentElement.lang;
@@ -197,10 +218,14 @@
                 $.each(responseJson, function(key, value) {
                     var row = "";
                     row += "<tr>\n" +
+                        "            <td></td>" +
+                        "            <td>"+ value.name +"</td>\n" +
+                        "            <td>"+ value.description +"</td>\n" +
+                        "            <td>"+ value.category.name +"</td>\n" +
                         "            <td>\n";
                     if(value.photos == null){
                         row    += "<img class=\"rounded shadow mb-3 bg-white rounded\" height=\"65\" width=\"65\"\n" +
-                        "                             src=\"${pageContext.request.contextPath}/images/avatars/Products/default.png\" alt=\"default product photo\"/>"
+                            "                             src=\"${pageContext.request.contextPath}/images/avatars/Products/default.png\" alt=\"default product photo\"/>"
                     }else{
                         $.each(value.photos, function(photoKey, photoValue) {
                             row += "                            <img class=\"rounded shadow mb-3 bg-white rounded\" height=\"65\" width=\"65\"\n" +
@@ -210,9 +235,6 @@
 
                     }
                     row += "            </td>" +
-                        "            <td>"+ value.name +"</td>\n" +
-                        "            <td>"+ value.description +"</td>\n" +
-                        "            <td>"+ value.category.name +"</td>\n" +
                         "            <td>"+ value.price +" €</td>\n" +
                         "            <td>\n" +
                         "                <button type=\"button\" class=\"btn btn-primary addButton\"\n" +
@@ -250,10 +272,14 @@
                 $.each(responseJson, function(key, value) {
                     var row = "";
                     row += "<tr>\n" +
-                        "            <td>\n";
+                        "            <td></td>" +
+                        "            <td>"+ value.name +"</td>\n" +
+                        "            <td>"+ value.description +"</td>\n" +
+                        "            <td>"+ value.category.name +"</td>\n" +
+                        "            <td>";
                     if(value.photos == null){
                         row    += "<img class=\"rounded shadow mb-3 bg-white rounded\" height=\"65\" width=\"65\"\n" +
-                            "                             src=\"${pageContext.request.contextPath}/images/avatars/Products/default.png\" alt=\"default product photo\"/>"
+                            "                             src=\"${pageContext.request.contextPath}/images/avatars/Products/default.png\" alt=\"default product photo\"/>";
                     }else{
                         $.each(value.photos, function(photoKey, photoValue) {
                             row += "                            <img class=\"rounded shadow mb-3 bg-white rounded\" height=\"65\" width=\"65\"\n" +
@@ -262,11 +288,8 @@
                         });
 
                     }
-                    row += "            </td>" +
-                        "            <td>"+ value.name +"</td>\n" +
-                        "            <td>"+ value.description +"</td>\n" +
-                        "            <td>"+ value.category.name +"</td>\n" +
-                        "            <td>"+ value.price +" €</td>\n" +
+                    row +="</td>\n" +
+                        "               <td>"+ value.price +" €</td>\n" +
                         "            <td>\n" +
                         "                <button type=\"button\" class=\"btn btn-primary addButton\"\n" +
                         "                        style=\"padding: 0 .375rem 0 .375rem;\"\n" +

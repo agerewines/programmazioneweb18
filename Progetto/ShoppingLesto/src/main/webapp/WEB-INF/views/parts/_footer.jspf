@@ -2,11 +2,39 @@
 <footer class="footer-sticky">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-6">
-                <span class="copyright">ShoppingLesto 2018</span>
+            <div class="col-2">
+                <a href="${pageContext.request.contextPath}/PrivacyPolicy" class="btn btn-outline-warning mr-3">
+                    <div class="d-lg-none"><i class="fas fa-cookie-bite"></i></div>
+                    <div class="d-none d-lg-block">Privacy Policy</div>
+                </a>
             </div>
-            <div class="col-6">
-                <a href="${pageContext.request.contextPath}/PrivacyPolicy" class="quicklinks float-right">Privacy Policy</a>
+            <div class="col-8">
+                <span class="copyright text-center">
+                    <div class="d-lg-none"><i class="far fa-copyright"></i> ShoppingLesto</div>
+                    <div class="d-none d-lg-block"><i class="far fa-copyright"></i> ShoppingLesto 2018</div>
+                </span>
+            </div>
+            <div class="col-2">
+                <!-- Default dropup button -->
+                <div class="btn-group dropup m-2">
+                    <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                         <i class="fas fa-globe"></i>
+                         <p id="langDropdown">
+                             <c:choose>
+                                 <c:when test="${language eq 'en_US'}">
+                                     English
+                                 </c:when>
+                                 <c:otherwise>
+                                     Italian
+                                 </c:otherwise>
+                             </c:choose>
+                         </p>
+                    </button>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="?lang=en_US">English</a>
+                        <a class="dropdown-item" href="?lang=it_IT">Italian</a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

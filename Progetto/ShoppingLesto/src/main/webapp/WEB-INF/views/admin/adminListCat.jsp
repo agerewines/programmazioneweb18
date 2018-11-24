@@ -8,6 +8,14 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<c:choose>
+    <c:when test="${not empty param.lang}">
+        <c:set var="language" value="${param.lang}" scope="session"/>
+    </c:when>
+    <c:otherwise>
+        <c:set var="language" value="${not empty param.language ? param.language : not empty language ? language : pageContext.request.locale}" scope="session" />
+    </c:otherwise>
+</c:choose>
 <c:set var="language" value="${not empty param.language ? param.language : not empty language ? language : pageContext.request.locale}" scope="session" />
 <fmt:setLocale value="${language}" />
 <fmt:setBundle basename="i18n.text" />
@@ -54,15 +62,19 @@
             <table class="table table-striped table-hover">
                 <thead>
                 <tr>
-                    <th scope="col">Photos</th>
+                    <th scope="col"></th>
                     <th scope="col">Name</th>
                     <th scope="col">Description</th>
+                    <th scope="col">Photos</th>
                     <th scope="col">Edit</th>
                 </tr>
                 </thead>
                 <tbody>
                 <c:forEach items="${listCategory}" var="listCat">
                     <tr id="listCat${listCat.id}">
+                        <td></td>
+                        <td>${listCat.name}</td>
+                        <td>${listCat.description}</td>
                         <td>
                             <c:forEach items="${listCat.photos}" var="photo">
                                 <img class="rounded shadow mb-3 bg-white rounded deletePhoto image" height="65" width="65"
@@ -72,8 +84,6 @@
                                      onmouseover="mouseOverPhoto(this)" title="Click on the picture to delete it!"/>
                             </c:forEach>
                         </td>
-                        <td>${listCat.name}</td>
-                        <td>${listCat.description}</td>
                         <td>
                             <ul class="list-inline">
                                 <li class="list-inline-item">
@@ -271,7 +281,18 @@
         "order" : [[1, "asc"]],
         "language" : {
             "url" : getLang()
-        }
+        },
+        responsive: {
+            details: {
+                type: 'column',
+                target: 'tr'
+            }
+        },
+        columnDefs: [ {
+            className: 'control',
+            orderable: false,
+            targets:   0
+        } ]
     });
 
     var lang = document.documentElement.lang;

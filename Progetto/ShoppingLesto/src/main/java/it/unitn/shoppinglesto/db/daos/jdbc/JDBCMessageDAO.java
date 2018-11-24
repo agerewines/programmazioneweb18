@@ -12,7 +12,7 @@ import java.util.List;
 
 public class JDBCMessageDAO extends JDBCDAO<Message, Integer> implements MessageDAO {
 
-    protected JDBCMessageDAO(Connection con) {
+    public JDBCMessageDAO(Connection con) {
         super(con);
     }
 
@@ -214,5 +214,30 @@ public class JDBCMessageDAO extends JDBCDAO<Message, Integer> implements Message
         } catch (SQLException ex) {
             throw new DAOException("Impossible to get the shopping_list for the passed primary key", ex);
         }
+    }
+
+    @Override
+    public List<Message> getAllListMessages(Integer listId) throws DAOException {
+        List<Message> messages = new ArrayList<>();
+        try (PreparedStatement preparedStatement = CON.prepareStatement("SELECT * FROM Message WHERE listId = ? ORDER BY createdAT")) {
+            preparedStatement.setInt(1, listId);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    Message message = new Message();
+                    message.setId(resultSet.getInt("id"));
+                    message.setListId(resultSet.getInt("listId"));
+                    message.setUserId(resultSet.getInt("userId"));
+                    message.setCreatedAt(resultSet.getTimestamp("createdAt").toString());
+                    message.setText(resultSet.getString("text"));
+                    message.setUser(getUser(message.getUserId()));
+                    message.setList(getList(message.getListId()));
+                    messages.add(message);
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DAOException("Impossible to get the list of messages", ex);
+        }
+
+        return messages;
     }
 }

@@ -1,6 +1,14 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<c:choose>
+    <c:when test="${not empty param.lang}">
+        <c:set var="language" value="${param.lang}" scope="session"/>
+    </c:when>
+    <c:otherwise>
+        <c:set var="language" value="${not empty param.language ? param.language : not empty language ? language : pageContext.request.locale}" scope="session" />
+    </c:otherwise>
+</c:choose>
 <c:set var="language"
        value="${not empty param.language ? param.language : not empty language ? language : pageContext.request.locale}"
        scope="session"/>
@@ -47,7 +55,7 @@
                 </div>
             </div>
             <hr/>
-            <div class="d-flex justify-content-center">
+            <div class="justify-content-center">
                 <button type="button" class="btn btn-dark m-3" data-toggle="modal" data-target="#editUserModal">
                     Edit user
                 </button>
@@ -103,6 +111,8 @@
                     <p><em>Change your password here.</em></p>
                     <div class="form-row">
                         <label for="password">New password</label>
+                        <div class="col-sm-6" id="result" style="font-weight:bold;padding:6px 12px; display: inline">
+                    </div>
                         <input type="password" class="form-control" id="password" name="password"
                                placeholder="<fmt:message key="login.label.password" />" required>
                     </div>
@@ -115,7 +125,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Confirm</button>
+                    <button type="submit" class="btn btn-primary" id="confirmChangePassword">Confirm</button>
                 </div>
             </form>
         </div>
@@ -166,7 +176,29 @@
 </div>
 <%@include file="parts/_footer.jspf" %>
 <%@include file="parts/_importsjs.jspf" %>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#password').on('keyup', function () {
+            var strength = 0;
+            var password = $('#password').val();
+            var confirmation = $("#confirmation").val();
 
+            if (password.length > 7) strength += 1
+            if (password.match(/([a-z].*[A-Z])|([A-Z].*[a-z])/))  strength += 1
+            if (password.match(/([a-zA-Z])/) && password.match(/([0-9])/))  strength += 1
+            if (password.match(/([!,%,&,@,#,$,^,*,?,_,~,.])/))  strength += 1
+            if (password.match(/(.*[!,%,&,@,#,$,^,*,?,_,~,.].*[!,%,&,@,#,$,^,*,?,_,~,.])/)) strength += 1
+            if (strength <= 3) {
+                $('#confirmChangePassword').prop('disabled', true);
+                $('#result').html('Password debole').css('color', 'red');
+            } else {
+                $('#confirmChangePassword').prop('disabled', false);
+                $('#result').html('')
+            }
+        });
+
+    });
+</script>
 
 </body>
 
