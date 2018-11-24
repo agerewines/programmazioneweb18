@@ -566,14 +566,11 @@
             dataType: "html",
             data:  {
                 listId : listId,
-                userId : userId,
-                messages : $('#messages').html()
+                userId : userId
             },
             success: function(html){
-                if(html !== ""){
-                    $("#messages").html(html);
-                    $("#divMessages").animate({scrollTop: $('#divMessages').prop("scrollHeight")}, 1000);
-                }
+                $("#messages").html(html);
+                $("#divMessages").animate({scrollTop: $('#divMessages').prop("scrollHeight")}, 1000);
             }
         });
     });
@@ -585,16 +582,16 @@
             data:  {
                 listId : $("#listIdMessage").val(),
                 userId : $("#userIdMessage").val(),
-                messages : $('#messages').html()
+                lastMessageTime : $("#messages li").last().find("div h6 small").html()
             },
             success: function(html){
                 if(html !== ""){
-                    $("#messages").html(html);
+                    $("#messages").append(html);
                     $("#divMessages").animate({scrollTop: $('#divMessages').prop("scrollHeight")}, 1000);
                 }
             }
         });
-    }, 5000);
+    }, 2000);
 
     $(".chooseMessage").click(function(){
         let elem = $(this).html();
@@ -639,11 +636,11 @@
                 data:  {
                     listId : $("#listIdMessage").val(),
                     userId : $("#userIdMessage").val(),
-                    messages : $('#messages').html()
+                    lastMessageTime : $("#messages li").last().find("div h6 small").html()
                 },
                 success: function(html){
                     if(html !== ""){
-                        $("#messages").html(html);
+                        $("#messages").append(html);
                         $("#divMessages").animate({scrollTop: $('#divMessages').prop("scrollHeight")}, 1000);
                     }
                 }

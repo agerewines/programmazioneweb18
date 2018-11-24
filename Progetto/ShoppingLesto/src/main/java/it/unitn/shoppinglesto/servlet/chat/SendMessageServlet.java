@@ -63,21 +63,26 @@ public class SendMessageServlet extends HttpServlet {
         } catch (RuntimeException ex) {
             response.sendError(500, ex.getMessage());
         }
-        String messagesLoaded =  null;
+        Timestamp lastMessageTime = null;
         try {
-            messagesLoaded = request.getParameter("messages");
-            messagesLoaded = messagesLoaded.replaceAll("\\s+","");
+            lastMessageTime = request.getParameterMap().containsKey("lastMessageTime") ? Timestamp.valueOf(request.getParameter("lastMessageTime")) : null;
         } catch (RuntimeException ex) {
             response.sendError(500, ex.getMessage());
         }
         try {
-            List<Message> messages = messageDAO.getAllListMessages(listId);
-            StringBuffer sb = new StringBuffer();
+            List<Message> messages;
+            if(lastMessageTime != null){
+                messages = messageDAO.getNewMessages(listId, lastMessageTime);
+            }else{
+                messages = messageDAO.getAllListMessages(listId);
+            }
+            response.setContentType("text/xml");
+            response.setHeader("Cache-Control", "no-cache");
             for (Message m : messages) {
                 assert userId != null;
                 User user = userDAO.getById(m.getUserId());
                 if (userId.equals(m.getUserId())) {
-                    sb.append("<li class=\"media text-right mb-3\">\n" +
+                    response.getWriter().write("<li class=\"media text-right mb-3\">\n" +
                             "                                    <div class=\"media-body text-right\">\n" +
                             "                                       <p class=\"lead\">" + m.getText() + "</p>" +
                             "                                       <h6>" + user.getFullName() +
@@ -89,7 +94,7 @@ public class SendMessageServlet extends HttpServlet {
                             "   onerror=\"this.onerror=null;this.src='/ShoppingLesto/images/avatars/Users/default.jpeg';\"/>" +
                             "                                </li>");
                 } else {
-                    sb.append("<li class=\"media mb-3\">\n" +
+                    response.getWriter().write("<li class=\"media mb-3\">\n" +
                             "<img class=\"img-circle rounded mr-3\" height=\"50\" width=\"50\"\n" +
                             "   src='/ShoppingLesto/images?id=" + m.getUserId() + "&resource=user'\n" +
                             "   onerror=\"this.onerror=null;this.src='/ShoppingLesto/images/avatars/Users/default.jpeg';\"/>" +
@@ -101,14 +106,7 @@ public class SendMessageServlet extends HttpServlet {
                             "                                    </div>\n" +
                             "                                </li>");
                 }
-                sb.append("<hr/>");
-            }
-            String allMessages = sb.toString().replaceAll("\\s+", "");
-            boolean check = !allMessages.equals(messagesLoaded);
-            if(check){
-                response.setContentType("text/xml");
-                response.setHeader("Cache-Control", "no-cache");
-                response.getWriter().write(sb.toString());
+                response.getWriter().write("<hr/>");
             }
         } catch (DAOException e) {
             response.sendError(500, e.getMessage());
