@@ -1,6 +1,14 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<c:choose>
+    <c:when test="${not empty param.lang}">
+        <c:set var="language" value="${param.lang}" scope="session"/>
+    </c:when>
+    <c:otherwise>
+        <c:set var="language" value="${not empty param.language ? param.language : not empty language ? language : pageContext.request.locale}" scope="session" />
+    </c:otherwise>
+</c:choose>
 <c:set var="language" value="${not empty param.language ? param.language : not empty language ? language : pageContext.request.locale}" scope="session" />
 <fmt:setLocale value="${language}" />
 <fmt:setBundle basename="i18n.text" />
@@ -45,13 +53,13 @@
                     <label class="form-check-label" for="rememberMe" ><fmt:message key="login.label.remember" /></label>
                 </div>
                 <button type="submit" class="btn btn-primary"><fmt:message key="login.button.submit" /></button>
+                <button type="button" class="btn btn-outline-warning float-right" data-toggle="modal" data-target="#restorePasswordModal">
+                    Restore Password
+                </button>
             </form>
             <div class="mt-4">
                 <hr/>
-                <fmt:message key="login.h.if" /> <a class="btn btn-primary" href="${pageContext.request.contextPath}/register"><fmt:message key="register.h.here" /></a>!
-                <button type="button" class="btn btn-primary float-right" data-toggle="modal" data-target="#restorePasswordModal">
-                    Restore Password
-                </button>
+                <fmt:message key="login.h.if" /> <a class="btn btn-outline-warning" href="${pageContext.request.contextPath}/register"><fmt:message key="register.h.here" /></a>!
             </div>
 
         </div>
@@ -78,7 +86,7 @@
                             <input type="text" class="form-control" id="userMail" placeholder="E-Mail" name="userMail">
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-primary">Restore pw</button>
+                    <button type="submit" class="btn btn-primary">Restore password</button>
                 </form>
             </div>
         </div>

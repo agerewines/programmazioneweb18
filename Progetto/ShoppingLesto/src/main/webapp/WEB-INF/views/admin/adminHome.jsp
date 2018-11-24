@@ -8,6 +8,14 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<c:choose>
+    <c:when test="${not empty param.lang}">
+        <c:set var="language" value="${param.lang}" scope="session"/>
+    </c:when>
+    <c:otherwise>
+        <c:set var="language" value="${not empty param.language ? param.language : not empty language ? language : pageContext.request.locale}" scope="session" />
+    </c:otherwise>
+</c:choose>
 <c:set var="language" value="${not empty param.language ? param.language : not empty language ? language : pageContext.request.locale}" scope="session" />
 <fmt:setLocale value="${language}" />
 <fmt:setBundle basename="i18n.text" />
@@ -54,10 +62,11 @@
             <p><small><fmt:message key="admin.h.image"/></small></p>
             <table class="table table-striped" id="productTable">
                 <thead>
-                <tr>
-                    <th style="width: 10%" scope="col"><fmt:message key="admin.h.photos"/></th>
+                <tr
+                    <th scope="col"></th>
                     <th style="width: 25%" scope="col"><fmt:message key="admin.h.name"/></th>
                     <th style="width: 50%" scope="col"><fmt:message key="admin.h.description"/></th>
+                    <th style="width: 10%" scope="col"><fmt:message key="admin.h.photos"/></th>
                     <th style="width: 5%" scope="col"><fmt:message key="admin.h.price"/></th>
                     <th style="width: 10%" scope="col"><fmt:message key="admin.h.edit"/></th>
                 </tr>
@@ -65,6 +74,9 @@
                 <tbody>
                 <c:forEach items="${products}" var="prod">
                     <tr id="prod${prod.id}">
+                        <td></td>
+                        <td>${prod.name}</td>
+                        <td>${prod.description}</td>
                         <td>
                             <c:forEach items="${prod.photos}" var="photo">
                                 <img class="rounded shadow mb-3 bg-white rounded deletePhoto image" height="65" width="65"
@@ -74,8 +86,6 @@
                                      onmouseover="mouseOverPhoto(this)" title="Click on the picture to delete it!"/>
                             </c:forEach>
                         </td>
-                        <td>${prod.name}</td>
-                        <td>${prod.description}</td>
                         <td>${prod.price} €</td>
                         <td>
                             <ul class="list-inline">
@@ -326,7 +336,18 @@
         "order" : [[1, "asc"]],
         "language" : {
             "url" : getLang()
-        }
+        },
+        responsive: {
+            details: {
+                type: 'column',
+                target: 'tr'
+            }
+        },
+        columnDefs: [ {
+            className: 'control',
+            orderable: false,
+            targets:   0
+        } ]
     });
 
     var lang = document.documentElement.lang;
