@@ -47,6 +47,10 @@
                                        href="${pageContext.request.contextPath}/home"><fmt:message
                                             key="navigation.a.lists"/></a>
                                 </li>
+                                <li class="nav-item">
+                                    <a class="nav-link js-scroll-trigger"
+                                       href="${pageContext.request.contextPath}/geoip">Locate shops</a>
+                                </li>
                             </c:otherwise>
                         </c:choose>
                         <li class="nav-item dropdown">

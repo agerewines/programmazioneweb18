@@ -2,19 +2,21 @@
 <footer class="footer-sticky">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-2">
-                <a href="${pageContext.request.contextPath}/PrivacyPolicy" class="btn btn-outline-warning mr-3">
+            <div class="col-lg-1">
+            </div>
+            <div class="col-lg-1 col-2">
+                <a href="${pageContext.request.contextPath}/PrivacyPolicy" class="btn btn-outline-warning">
                     <div class="d-lg-none"><i class="fas fa-cookie-bite"></i></div>
                     <div class="d-none d-lg-block">Privacy Policy</div>
                 </a>
             </div>
-            <div class="col-7">
+            <div class="col-8">
                 <span class="copyright text-center">
                     <div class="d-lg-none"><i class="far fa-copyright"></i> ShoppingLesto</div>
                     <div class="d-none d-lg-block"><i class="far fa-copyright"></i> ShoppingLesto 2018</div>
                 </span>
             </div>
-            <div class="col-3">
+            <div class="col-2">
                 <!-- Default dropup button -->
                 <div class="btn-group dropup mt-1">
                     <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

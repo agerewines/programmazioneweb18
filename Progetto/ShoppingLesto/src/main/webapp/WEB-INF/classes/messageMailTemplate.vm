@@ -332,7 +332,7 @@
             <div class="content">
 
                 <!-- START CENTERED WHITE CONTAINER -->
-                <span class="preheader">Restore password on ShoppingLesto</span>
+                <span class="preheader">New Message in chat</span>
                 <table role="presentation" class="main">
 
                     <!-- START MAIN CONTENT AREA -->
@@ -340,34 +340,11 @@
                         <td class="wrapper">
                             <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                                 <tr>
-                                    <td>
-                                        <h3>Use this password to enter the website Shoppinglesto.</h3>
-                                        <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
-                                            <tbody>
-                                            <tr>
-                                                <td align="left">
-                                                    <table role="presentation" border="0" cellpadding="0" cellspacing="0">
-                                                        <tbody>
-                                                        <tr>
-                                                            <td> <a href="http://shoppinglesto.alessandrogerevini.com" target="_blank">Go to the website</a> </td>
-                                                        </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
-                                        <table>
-                                            <tbody>
-                                                <tr>
-                                                    <td> Username: $mail</td>
-                                                </tr>
-                                                <tr>
-                                                    <td> Password: $pw</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </td>
+                                    <div>
+                                        <h3>There is a new message in $listName.</h3>
+                                        <p>Message: $message</p>
+                                        <p><small> Written by: $userName</small></p>
+                                    </div>
                                 </tr>
                             </table>
                         </td>

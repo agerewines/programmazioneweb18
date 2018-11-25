@@ -40,12 +40,16 @@
             <ul class="nav nav-pills mb-3 nav-fill" id="pills-tab" role="tablist">
                 <c:forEach items="${userLists}" var="list">
                     <li class="nav-item">
-                        <a class="btn btn-outline-warning m-2 showMapButton" target="map" data-toggle="pill" href="" data-id-category="${list.categoryId}" role="tab">${list.name}</a>
+                        <a class="btn btn-warning m-2 showMapButton" target="map" data-toggle="pill" href="" data-id-category="${list.categoryId}" role="tab">
+                            ${list.name}
+                            <br/>
+                            ${list.user.firstName} • ${list.category.name}
+                        </a>
                     </li>
                 </c:forEach>
             </ul>
             <div class="tab-content">
-                    <iframe src="" width="100%" height="700px" frameborder="0" style="border:0" allowfullscreen id="map"></iframe>
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m16!1m12!1m3!1d22154.981200143142!2d11.1333!3d46.0667!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!2m1!1sMarket!5e0!3m2!1sit!2sit!4v1542911270560" width="100%" height="600px" frameborder="0" style="border:0" allowfullscreen id="map"></iframe>
             </div>
         </div>
         <div class="col-md-1">

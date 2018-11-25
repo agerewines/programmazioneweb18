@@ -629,22 +629,6 @@
             }
         }).done(function(){
             $("#message").val('');
-            $.ajax({
-                type: "POST",
-                url: "message/show",
-                dataType: "html",
-                data:  {
-                    listId : $("#listIdMessage").val(),
-                    userId : $("#userIdMessage").val(),
-                    lastMessageTime : $("#messages li").last().find("div h6 small").html()
-                },
-                success: function(html){
-                    if(html !== ""){
-                        $("#messages").append(html);
-                        $("#divMessages").animate({scrollTop: $('#divMessages').prop("scrollHeight")}, 1000);
-                    }
-                }
-            });
         });
     });
 
