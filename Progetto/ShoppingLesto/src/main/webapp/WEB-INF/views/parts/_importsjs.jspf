@@ -20,7 +20,18 @@
 
 <!-- Custom scripts for this template -->
 <script src="${pageContext.request.contextPath}/assets/js/agency.min.js"></script>
-<script>
+<script type="text/javascript">
     $("#errorModal").modal('show');
     $("#infoModal").modal('show');
+
+
+    function changeLang(lang) {
+        var url = new URL(document.location.href);
+        if(url.searchParams.has('lang')){
+            url.searchParams.set('lang', lang);
+        }else{
+            url.searchParams.append('lang', lang)
+        }
+        document.location.replace(url.href);
+    }
 </script>

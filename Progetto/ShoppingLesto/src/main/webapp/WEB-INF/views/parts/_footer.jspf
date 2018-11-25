@@ -31,8 +31,8 @@
                          </p>
                     </button>
                     <div class="dropdown-menu">
-                        <a class="dropdown-item" href="?lang=en_US">English</a>
-                        <a class="dropdown-item" href="?lang=it_IT">Italian</a>
+                        <a class="dropdown-item langChange" onclick="changeLang('en_US')">English</a>
+                        <a class="dropdown-item langChange" onclick="changeLang('it_IT')">Italian</a>
                     </div>
                 </div>
             </div>
