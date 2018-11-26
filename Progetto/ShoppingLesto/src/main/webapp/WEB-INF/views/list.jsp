@@ -149,7 +149,7 @@
                                  src="${pageContext.request.contextPath}/images?id=${prod.id}&resource=product"
                                  onerror="this.onerror=null;this.src='${pageContext.request.contextPath}/images/avatars/Products/default.png';"/>
                         </td>
-                        <td>${prod.price} €</td>x
+                        <td>${prod.price} €</td>
                         <td>
                             <button type="button" class="btn btn-primary removeProd"
                                     style="padding: 0 .375rem 0 .375rem;"
@@ -194,22 +194,26 @@
                     </div>
                     <div class="modal-footer">
                         <div class="input-group mb-3">
-                            <div class="d-none d-lg-block">
                                 <div class="input-group-prepend">
-                                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Choose...</button>
+                                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <div class="d-lg-none"><i class="fas fa-stream"></i></div>
+                                        <div class="d-none d-lg-block">Choose...</div>
+                                    </button>
                                     <div class="dropdown-menu">
                                         <a class="dropdown-item chooseMessage">Sto andando a fare la spesa, manca qualcosa?</a>
                                         <a class="dropdown-item chooseMessage">Lista modificata. Guarda cosa ho aggiunto</a>
                                         <a class="dropdown-item chooseMessage">Spesa fatta. Ti puoi rilassare</a>
                                     </div>
                                 </div>
-                            </div>
                             <input type="text" class="form-control" placeholder="Send message..." aria-label="Send message..." aria-describedby="submitMessage" id="message">
                             <input type="hidden" id="listIdMessage" value="${list.id}">
                             <input type="hidden" id="userIdMessage" value="${user.id}">
                             <input type="hidden" id="sendMessageUrl" value="${pageContext.request.contextPath}/message/create">
                             <div class="input-group-append">
-                                <button type="button" class="btn btn-primary" id="submitMessage">Submit</button>
+                                <button type="button" class="btn btn-primary" id="submitMessage">
+                                    <div class="d-lg-none"><i class="fas fa-location-arrow"></i></div>
+                                    <div class="d-none d-lg-block">Send</div>
+                                </button>
                             </div>
                         </div>
                     </div>

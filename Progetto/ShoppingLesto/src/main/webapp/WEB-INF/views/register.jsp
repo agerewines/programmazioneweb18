@@ -76,7 +76,7 @@
                         <input class="form-control" type="checkbox" id="checkTerms" name="checkTerms" value="A"/>
                     </div>
                 </div>
-                <button type="submit" id="submitRegisterButton" class="btn btn-primary"><fmt:message key="register.button.register" /></button>
+                <button type="submit" id="submitRegisterButton" class="btn btn-primary" disabled><fmt:message key="register.button.register" /></button>
             </form>
             <div class="mt-4">
                 <hr/>

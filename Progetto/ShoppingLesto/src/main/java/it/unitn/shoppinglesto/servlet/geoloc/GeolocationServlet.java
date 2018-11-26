@@ -74,7 +74,7 @@ public class GeolocationServlet extends HttpServlet {
                 }
                 Category category = listCategoryDAO.getByPrimaryKey(catId);
                 String mapUrl = "https://www.google.com/maps/embed?pb=!1m16!1m12!1m3!1d22154.981200143142!2d" + longitude + "!3d" + latitude + "!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!2m1!1s" + category.getName() + "!5e0!3m2!1sit!2sit!4v1542911270560";
-                response.setContentType("text/xml");
+                response.setContentType("text/html");
                 response.setHeader("Cache-Control", "no-cache");
                 response.getWriter().write(mapUrl);
             } catch (GeoIp2Exception | DAOException e) {

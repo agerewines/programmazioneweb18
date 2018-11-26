@@ -27,14 +27,14 @@
                                      English
                                  </c:when>
                                  <c:otherwise>
-                                     Italian
+                                     Italiano
                                  </c:otherwise>
                              </c:choose>
                          </p>
                     </button>
                     <div class="dropdown-menu">
                         <a class="dropdown-item langChange" onclick="changeLang('en_US')">English</a>
-                        <a class="dropdown-item langChange" onclick="changeLang('it_IT')">Italian</a>
+                        <a class="dropdown-item langChange" onclick="changeLang('it_IT')">Italiano</a>
                     </div>
                 </div>
             </div>

@@ -76,7 +76,7 @@ public class SendMessageServlet extends HttpServlet {
             }else{
                 messages = messageDAO.getAllListMessages(listId);
             }
-            response.setContentType("text/xml");
+            response.setContentType("text/html");
             response.setHeader("Cache-Control", "no-cache");
             for (Message m : messages) {
                 assert userId != null;
