@@ -2,13 +2,36 @@
 <footer class="footer-sticky">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-lg-1">
-            </div>
-            <div class="col-lg-1 col-2">
-                <a href="${pageContext.request.contextPath}/PrivacyPolicy" class="btn btn-outline-warning">
-                    <div class="d-lg-none"><i class="fas fa-cookie-bite"></i></div>
-                    <div class="d-none d-lg-block">Privacy Policy</div>
-                </a>
+            <div class="col-2">
+                <!-- Default dropup button -->
+                <div class="btn-group dropup mt-1">
+                    <button type="button" class="btn btn-warning btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-globe"></i>
+                        <p id="langDropdown">
+                            <c:choose>
+                                <c:when test="${language eq 'en_US'}">
+                                    English
+                                </c:when>
+                                <c:otherwise>
+                                    Italiano
+                                </c:otherwise>
+                            </c:choose>
+                        </p>
+                    </button>
+                    <div class="dropdown-menu">
+                        <c:choose>
+                            <c:when test="${language eq 'en_US'}">
+                                <a class="dropdown-item langChange disabled" style="line-height: 25px; !important;" onclick="changeLang('en_US')">English</a>
+                                <a class="dropdown-item langChange" style="line-height: 25px; !important;" onclick="changeLang('it_IT')">Italiano</a>
+                            </c:when>
+                            <c:otherwise>
+                                <a class="dropdown-item langChange" style="line-height: 25px; !important;" onclick="changeLang('en_US')">English</a>
+                                <a class="dropdown-item langChange disabled" style="line-height: 25px; !important;" onclick="changeLang('it_IT')">Italiano</a>
+                            </c:otherwise>
+                        </c:choose>
+
+                    </div>
+                </div>
             </div>
             <div class="col-8">
                 <span class="copyright text-center">
@@ -17,26 +40,10 @@
                 </span>
             </div>
             <div class="col-2">
-                <!-- Default dropup button -->
-                <div class="btn-group dropup mt-1">
-                    <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                         <i class="fas fa-globe"></i>
-                         <p id="langDropdown">
-                             <c:choose>
-                                 <c:when test="${language eq 'en_US'}">
-                                     English
-                                 </c:when>
-                                 <c:otherwise>
-                                     Italiano
-                                 </c:otherwise>
-                             </c:choose>
-                         </p>
-                    </button>
-                    <div class="dropdown-menu">
-                        <a class="dropdown-item langChange" onclick="changeLang('en_US')">English</a>
-                        <a class="dropdown-item langChange" onclick="changeLang('it_IT')">Italiano</a>
-                    </div>
-                </div>
+                <a href="${pageContext.request.contextPath}/PrivacyPolicy" class="btn btn-outline-warning">
+                    <div class="d-lg-none"><i class="fas fa-cookie-bite"></i></div>
+                    <div class="d-none d-lg-block">Privacy Policy</div>
+                </a>
             </div>
         </div>
     </div>

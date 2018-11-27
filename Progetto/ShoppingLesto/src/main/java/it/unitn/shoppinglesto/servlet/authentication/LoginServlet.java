@@ -83,13 +83,9 @@ public class LoginServlet extends HttpServlet {
         }
 
         if(hasError){
-            user = new User();
-            user.setMail(email);
-            user.setPassword(password);
-
             request.setAttribute("errorMessage", message);
             request.setAttribute("action", "login");
-            request.setAttribute("user", user);
+            request.setAttribute("userMail", email);
 
             RequestDispatcher rd = getServletContext().getRequestDispatcher("/WEB-INF/views/login.jsp");
             rd.forward(request, response);

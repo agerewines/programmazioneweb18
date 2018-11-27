@@ -55,9 +55,7 @@
 <%@include file="parts/_errors.jspf" %>
 <div class="container-fluid">
     <div class="row justify-content-md-center">
-        <div class="col-md-1 col-lg-1">
-        </div>
-        <div class="col-lg-10 col-md-10 col-12">
+        <div class="col-xl-10 col-lg-12 col-md-10 col-12">
             <div class="row">
                 <div class="col-12 col-md-12 col-lg-3 mb-4">
                     <h2><fmt:message key="home.li.lists"/></h2>
@@ -65,7 +63,7 @@
                         <c:forEach items="${userLists}" var="list">
                             <a class="list-group-item list-group-item-action showMapButton" data-id-category="${list.categoryId}">
                                 <div class="media">
-                                    <img id="listPic" class="align-self-center mr-3 rounded" height="64" width="64" src="${pageContext.request.contextPath}/images?id=${list.id}&resource=shoppingLists" onerror="this.onerror=null;this.src='${pageContext.request.contextPath}/images/avatars/Lists/default.png';"/>
+                                    <img id="listPic" class="align-self-center mr-2 rounded" height="64" width="64" src="${pageContext.request.contextPath}/images?id=${list.id}&resource=shoppingLists" onerror="this.onerror=null;this.src='${pageContext.request.contextPath}/images/avatars/Lists/default.png';"/>
                                     <div class="media-body">
                                         <h5 class="mb-1">${list.name}</h5>
                                         <p>${list.user.fullName} • ${list.category.name}</p>
@@ -83,8 +81,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-1">
-        </div>
+
     </div>
 </div>
 

@@ -2,6 +2,7 @@
 <!-- Bootstrap core JavaScript -->
 <script src="${pageContext.request.contextPath}/assets/vendor/jquery/jquery.min.js"></script>
 <script src="${pageContext.request.contextPath}/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
 
 
 <!-- Plugin JavaScript -->
@@ -24,7 +25,6 @@
     $("#errorModal").modal('show');
     $("#infoModal").modal('show');
 
-
     function changeLang(lang) {
         var url = new URL(document.location.href);
         if(url.searchParams.has('lang')){
@@ -34,4 +34,29 @@
         }
         document.location.replace(url.href);
     }
+    <c:if test="${not empty user}">
+
+    setInterval(function(){
+        $.ajax({
+            type: "POST",
+            url: "notification/market",
+            dataType: "html",
+            success: function(html){
+                $("#notificationBox").append(html);
+            }
+        });
+    }, 1000);
+
+    function removeNotification(elem){
+        $(elem).fadeOut(300, function() { $(elem).remove(); });
+    }
+    setInterval(function (){
+        var element =  document.getElementsByClassName('notify');
+        if (element.length != 0) {
+            $("#notificationBall").addClass('mail-status unread');
+        }else{
+            $("#notificationBall").removeClass('mail-status unread');
+        }
+    }, 100);
+    </c:if>
 </script>

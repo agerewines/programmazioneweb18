@@ -41,12 +41,12 @@
             <form  method="POST" action="${pageContext.request.contextPath}/login">
                 <div class="form-group">
                     <label for="email"><fmt:message key="login.label.email" /></label>
-                    <input type="email" class="form-control" id="email" name="email" aria-describedby="emailHelp" placeholder="<fmt:message key="login.label.email" />"  value="${user.mail}">
+                    <input type="email" class="form-control" id="email" name="email" aria-describedby="emailHelp" placeholder="<fmt:message key="login.label.email" />"  value="${userMail}">
                     <small id="emailHelp" class="form-text text-muted"><fmt:message key="login.label.never" /></small>
                 </div>
                 <div class="form-group">
                     <label for="password"><fmt:message key="login.label.password" /></label>
-                    <input type="password" class="form-control" id="password" name="password" value="${user.password}" placeholder="<fmt:message key="login.label.password" />">
+                    <input type="password" class="form-control" id="password" name="password" placeholder="<fmt:message key="login.label.password" />">
                 </div>
                 <div class="form-group form-check">
                     <input type="checkbox" class="form-check-input" id="rememberMe"  name="rememberMe" value="Y">

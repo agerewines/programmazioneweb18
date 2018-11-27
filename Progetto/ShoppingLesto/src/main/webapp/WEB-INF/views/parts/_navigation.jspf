@@ -51,6 +51,25 @@
                                     <a class="nav-link js-scroll-trigger"
                                        href="${pageContext.request.contextPath}/geoip">Locate shops</a>
                                 </li>
+                                <li class="nav-item js-scroll-trigger dropdown text-center">
+                                    <a class="nav-link dropdown-toggle notification-indicator " href="#"
+                                       id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
+                                       aria-expanded="false">
+                                        <span class="" id="notificationBall"></span>
+                                        <i class="fas fa-bell"></i>
+                                    </a>
+
+                                    <div class="dropdown-menu dropdown-menu-right" style="width: 18rem;"
+                                         aria-labelledby="navbarDropdownMenuLink">
+                                        <h6 class="card-header">Notification box</h6>
+                                        <ul class="list-group" id="notificationBox"
+                                            style="overflow: scroll; height: 300px;">
+                                            <li class="list-group-item text-center notify"
+                                                onclick="removeNotification(this)">C'&#232; una notifica quiii
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
                             </c:otherwise>
                         </c:choose>
                         <li class="nav-item dropdown">
@@ -62,7 +81,8 @@
                                 <a class="dropdown-item"
                                    href="${pageContext.request.contextPath}/user/profile"><fmt:message
                                         key="navigation.a.account"/></a>
-                                <a class="dropdown-item" href="${pageContext.request.contextPath}/logout"><fmt:message
+                                <a class="dropdown-item"
+                                   href="${pageContext.request.contextPath}/logout"><fmt:message
                                         key="navigation.a.logout"/></a>
                             </div>
                         </li>

@@ -226,6 +226,10 @@
         <servlet-name>SendMessageServlet</servlet-name>
         <servlet-class>it.unitn.shoppinglesto.servlet.chat.SendMessageServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>NotificationMarketServlet</servlet-name>
+        <servlet-class>it.unitn.shoppinglesto.servlet.notification.NotificationMarketServlet</servlet-class>
+    </servlet>
     <listener>
         <description>ServletContextListener</description>
         <listener-class>it.unitn.shoppinglesto.listeners.WebAppContextListener</listener-class>
@@ -401,6 +405,10 @@
     <servlet-mapping>
         <servlet-name>SendMessageServlet</servlet-name>
         <url-pattern>/message/show</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>NotificationMarketServlet</servlet-name>
+        <url-pattern>/notification/market</url-pattern>
     </servlet-mapping>
   <welcome-file-list>
         <welcome-file>/WEB-INF/views/index.jsp</welcome-file>

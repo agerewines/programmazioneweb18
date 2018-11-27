@@ -177,6 +177,7 @@
         <div class="col-md-1">
         </div>
     </div>
+    <c:if test="${!anon}">
     <div class="row justify-content-center">
         <div class="col-md-1">
         </div>
@@ -195,24 +196,26 @@
                     <div class="modal-footer">
                         <div class="input-group mb-3">
                                 <div class="input-group-prepend">
-                                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <div class="d-lg-none"><i class="fas fa-stream"></i></div>
-                                        <div class="d-none d-lg-block">Choose...</div>
+                                    <button class="btn btn-outline-secondary d-lg-none" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fas fa-stream"></i>
+                                    </button>
+                                    <button class="btn btn-outline-secondary dropdown-toggle d-none d-lg-block" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <fmt:message key="list.chat.choose"/>
                                     </button>
                                     <div class="dropdown-menu">
-                                        <a class="dropdown-item chooseMessage">Sto andando a fare la spesa, manca qualcosa?</a>
-                                        <a class="dropdown-item chooseMessage">Lista modificata. Guarda cosa ho aggiunto</a>
-                                        <a class="dropdown-item chooseMessage">Spesa fatta. Ti puoi rilassare</a>
+                                        <a class="dropdown-item chooseMessage"><fmt:message key="list.chat.pred1"/></a>
+                                        <a class="dropdown-item chooseMessage"><fmt:message key="list.chat.pred2"/></a>
+                                        <a class="dropdown-item chooseMessage"><fmt:message key="list.chat.pred3"/></a>
                                     </div>
                                 </div>
-                            <input type="text" class="form-control" placeholder="Send message..." aria-label="Send message..." aria-describedby="submitMessage" id="message">
+                            <input type="text" class="form-control" placeholder="<fmt:message key="list.chat.sendplaceholder"/>." aria-label="<fmt:message key="list.chat.sendplaceholder"/>" aria-describedby="submitMessage" id="message">
                             <input type="hidden" id="listIdMessage" value="${list.id}">
                             <input type="hidden" id="userIdMessage" value="${user.id}">
                             <input type="hidden" id="sendMessageUrl" value="${pageContext.request.contextPath}/message/create">
                             <div class="input-group-append">
                                 <button type="button" class="btn btn-primary" id="submitMessage">
                                     <div class="d-lg-none"><i class="fas fa-location-arrow"></i></div>
-                                    <div class="d-none d-lg-block">Send</div>
+                                    <div class="d-none d-lg-block"><fmt:message key="list.chat.send"/></div>
                                 </button>
                             </div>
                         </div>
@@ -222,6 +225,7 @@
         </div>
         <div class="col-md-1">
         </div>
+        </c:if>
 </div>
 <!-- Modal edit button -->
 <div class="modal fade" id="modifyListModal" tabindex="-1" role="dialog" aria-labelledby="modifyListModalLabel"
@@ -355,7 +359,7 @@
                     </c:if>
                     <input type="hidden" id="listIdDelete" name="listId" value="${list.id}">
                     <button type="submit" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary"><fmt:message key="list.h.delete_list"/></button>
+                    <button type="submit" class="btn btn-danger"><fmt:message key="list.h.delete_list"/></button>
                 </form>
             </div>
         </div>
@@ -474,7 +478,7 @@
                     <input type="hidden" id="listIdDeleteSharedUser" name="listId" value="${list.id}">
                     <input type="hidden" id="userIdDeleteSharedUser" name="user">
                     <button type="submit" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Delete shared user</button>
+                    <button type="submit" class="btn btn-danger">Delete shared user</button>
                 </form>
             </div>
         </div>
@@ -501,7 +505,7 @@
                     <input type="hidden" id="listIdDeleteProduct" name="listId" value="${list.id}">
                     <input type="hidden" id="prodIdDelete" name="prodId">
                     <button type="submit" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Remove product</button>
+                    <button type="submit" class="btn btn-danger">Remove product</button>
                 </form>
             </div>
         </div>
@@ -561,7 +565,7 @@
                 targets:   0
             } ]
         });
-
+        <c:if test="${!anon}">
         let listId = $("#listIdMessage").val();
         let userId = $("#userIdMessage").val();
         $.ajax({
@@ -577,7 +581,9 @@
                 $("#divMessages").animate({scrollTop: $('#divMessages').prop("scrollHeight")}, 1000);
             }
         });
+        </c:if>
     });
+    <c:if test="${!anon}">
     var refreshMessage = setInterval(function(){
         $.ajax({
             type: "POST",
@@ -596,7 +602,7 @@
             }
         });
     }, 2000);
-
+    </c:if>
     $(".chooseMessage").click(function(){
         let elem = $(this).html();
         $("#message").val(elem);

@@ -1,5 +1,6 @@
 <%@page pageEncoding="UTF-8" %>
 <!-- Bootstrap core CSS -->
+<link rel="shortcut icon" href="${pageContext.request.contextPath}/images/favicon/favicon.ico?" type="image/x-icon" />
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 <link href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" rel="stylesheet">
 <link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet">
@@ -15,3 +16,27 @@
 
 <!-- Custom styles for this template -->
 <link href="${pageContext.request.contextPath}/assets/css/agency.css" rel="stylesheet">
+
+<!-- cookie -->
+<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.css" />
+<script src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.js"></script>
+<script>
+    window.addEventListener("load", function(){
+        window.cookieconsent.initialise({
+            "palette": {
+                "popup": {
+                    "background": "#000"
+                },
+                "button": {
+                    "background": "#f1d600"
+                }
+            },
+            "theme": "edgeless",
+            "content": {
+                "message": "<fmt:message  key="cookie.message"/>",
+                "dismiss":  "<fmt:message  key="cookie.dismiss"/>",
+                "link":  "<fmt:message  key="cookie.link"/>",
+                "href": "/PrivacyPolicy"
+            }
+        })});
+</script>

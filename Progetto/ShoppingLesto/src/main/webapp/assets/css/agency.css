@@ -734,3 +734,22 @@ ul.social-buttons li a:active, ul.social-buttons li a:focus, ul.social-buttons l
 @media (max-width : 990px) {
   #langDropdown { display:none; }
 }
+
+.notification-indicator .mail-status.unread {
+  display: inline-block;
+}
+
+.notification-indicator .mail-status {
+  background-clip: padding-box;
+  background-image: linear-gradient(#ffc107,#e0a800);
+  border: 2px solid #24292e;
+  border-radius: 50%;
+  color: #fff;
+  display: none;
+  height: 14px;
+  left: 22px;
+  position: relative;
+  top: -5px;
+  width: 14px;
+  z-index: 2;
+}
