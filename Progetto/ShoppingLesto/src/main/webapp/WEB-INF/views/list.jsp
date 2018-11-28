@@ -102,7 +102,10 @@
                                 <button type="button" class="btn btn-primary"
                                         style="padding: 0 .375rem 0 .375rem;"
                                         data-toggle="modal" data-target="#sharedUserModal">
-                                    <div class="d-lg-none">Shared With</div>
+                                    <div class="d-lg-none">
+                                        <fmt:message key="list.button.sharedwith"/>
+                                        <span class="badge badge-dark badge-pill">${fn:length(sharedWith)}</span>
+                                    </div>
                                     <div class="d-none d-lg-block">
                                         <fmt:message key="list.button.shared"/>
                                         <span class="badge badge-dark badge-pill">${fn:length(sharedWith)}</span>
@@ -133,9 +136,9 @@
                     <th scope="col"></th>
                     <th scope="col"><fmt:message key="list.th.name"/></th>
                     <th scope="col"><fmt:message key="list.th.description"/></th>
-                    <th scope="col" width="70px">Images</th>
-                    <th scope="col">Price</th>
-                    <th scope="col">Delete</th>
+                    <th scope="col" width="70px"><fmt:message key="list.th.image"/></th>
+                    <th scope="col"><fmt:message key="list.th.price"/></th>
+                    <th scope="col"><fmt:message key="list.th.delete"/></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -422,7 +425,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="editPermitModalLabel">Edit Permit</h5>
+                <h5 class="modal-title" id="editPermitModalLabel"><fmt:message key="list.edit.permit"/></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -435,20 +438,17 @@
                     <div class="form-row">
                         <div class="form-check form-check-inline">
                             <input class="form-check-input" id="editPermitAdd" type="checkbox" name="add" value="add">
-                            <label class="form-check-label" for="editPermitAdd"><fmt:message
-                                    key="list.label.add"/></label>
+                            <label class="form-check-label" for="editPermitAdd"><fmt:message key="list.label.add"/></label>
                         </div>
                         <div class="form-check form-check-inline">
                             <input class="form-check-input" id="editPermitEdit" type="checkbox" name="edit"
                                    value="edit">
-                            <label class="form-check-label" for="editPermitEdit"><fmt:message
-                                    key="list.label.edit"/></label>
+                            <label class="form-check-label" for="editPermitEdit"><fmt:message key="list.label.edit"/></label>
                         </div>
                         <div class="form-check form-check-inline">
                             <input class="form-check-input" id="editPermitShare" type="checkbox" name="share"
                                    value="share">
-                            <label class="form-check-label" for="editPermitShare"><fmt:message
-                                    key="list.label.share"/></label>
+                            <label class="form-check-label" for="editPermitShare"><fmt:message key="list.label.share"/></label>
                         </div>
                     </div>
                     <br/>
@@ -467,7 +467,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="deleteSharedUserModalLabel">Delete shared user</h5>
+                <h5 class="modal-title" id="deleteSharedUserModalLabel"><fmt:message key="list.delete.shareduser"/></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -477,8 +477,8 @@
                     <label id="confirmLabelDeleteSharedUser"></label> <br/>
                     <input type="hidden" id="listIdDeleteSharedUser" name="listId" value="${list.id}">
                     <input type="hidden" id="userIdDeleteSharedUser" name="user">
-                    <button type="submit" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-danger">Delete shared user</button>
+                    <button type="submit" class="btn btn-secondary" data-dismiss="modal"><fmt:message key="modal.cancel"/></button>
+                    <button type="submit" class="btn btn-danger"><fmt:message key="list.delete.shareduser"/></button>
                 </form>
             </div>
         </div>
@@ -490,22 +490,21 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="deleteProductModalLabel">Remove product</h5>
+                <h5 class="modal-title" id="deleteProductModalLabel"><fmt:message key="list.remove.product"/></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
                 <form action="${pageContext.request.contextPath}/list/product/delete" method="POST">
-                    <label id="confirmLabelDeleteProduct">Are you sure you want to delete this product from this
-                        list?</label> <br/>
+                    <label id="confirmLabelDeleteProduct"><fmt:message key="list.remove.product.label"/></label> <br/>
                     <c:if test="${anon}">
                         <input type="hidden" id="anonymous" name="anonymous" value="true">
                     </c:if>
                     <input type="hidden" id="listIdDeleteProduct" name="listId" value="${list.id}">
                     <input type="hidden" id="prodIdDelete" name="prodId">
-                    <button type="submit" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-danger">Remove product</button>
+                    <button type="submit" class="btn btn-secondary" data-dismiss="modal"><fmt:message key="modal.cancel"/></button>
+                    <button type="submit" class="btn btn-danger"><fmt:message key="list.remove.product"/></button>
                 </form>
             </div>
         </div>

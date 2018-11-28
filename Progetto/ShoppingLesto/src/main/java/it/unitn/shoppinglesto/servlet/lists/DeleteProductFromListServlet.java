@@ -2,7 +2,9 @@ package it.unitn.shoppinglesto.servlet.lists;
 
 import it.unitn.shoppinglesto.db.daos.ProductDAO;
 import it.unitn.shoppinglesto.db.daos.ShoppingListDAO;
+import it.unitn.shoppinglesto.db.daos.SuggestionDAO;
 import it.unitn.shoppinglesto.db.entities.Product;
+import it.unitn.shoppinglesto.db.entities.Suggestion;
 import it.unitn.shoppinglesto.db.entities.User;
 import it.unitn.shoppinglesto.db.exceptions.DAOException;
 import it.unitn.shoppinglesto.db.exceptions.DAOFactoryException;
@@ -15,11 +17,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.sql.Time;
+import java.time.LocalTime;
 
 @WebServlet(name = "DeleteProductFromListServlet")
 public class DeleteProductFromListServlet extends HttpServlet {
     private ShoppingListDAO shoppingListDAO;
     private ProductDAO productDAO;
+    private SuggestionDAO suggestionDAO;
 
     @Override
     public void init() throws ServletException {
@@ -37,7 +42,13 @@ public class DeleteProductFromListServlet extends HttpServlet {
         } catch (DAOFactoryException ex) {
             throw new ServletException("Impossible to get shopping list dao from dao factory!", ex);
         }
+        try {
+            suggestionDAO = daoFactory.getDAO(SuggestionDAO.class);
+        } catch (DAOFactoryException ex) {
+            throw new ServletException("Impossible to get shopping list dao from dao factory!", ex);
+        }
     }
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);
         boolean anon = false;
@@ -65,6 +76,29 @@ public class DeleteProductFromListServlet extends HttpServlet {
                 shoppingListDAO.deleteProductFromList(listId, prodId);
                 if(prod.isCustom())
                     productDAO.delete(prodId);
+
+                // controllo se é presente un'istanza di suggestion
+                Suggestion s = suggestionDAO.getByProdAndListId(prodId, listId);
+                if (s == null && !anon){
+                    // se non c'é la creo con counter 1
+                    // Integer idProd, Integer idList, Integer counter, Integer average, Time first, Time last, boolean seen
+                    Time time = new Time(System.currentTimeMillis());
+                    s = new Suggestion(prodId, listId, 1,0,time, time,false );
+                    s.setId(suggestionDAO.save(s));
+                }else {
+                    // se c'é faccio l'update con aumento del counter e modifica ultima aggiunta
+                    assert s != null;
+                    s.setCounter(s.getCounter() + 1);
+
+                    LocalTime first = s.getFirst().toLocalTime();
+                    LocalTime last = LocalTime.now();
+                    LocalTime diff = last.minusNanos(first.toNanoOfDay());
+                    s.setLast(Time.valueOf(last));
+                    s.setAverage(diff.toSecondOfDay()/s.getCounter());
+                    s.setSeen(true);
+
+                    suggestionDAO.update(s);
+                }
             }catch (DAOException e){
                 response.sendError(500, e.getMessage());
             }

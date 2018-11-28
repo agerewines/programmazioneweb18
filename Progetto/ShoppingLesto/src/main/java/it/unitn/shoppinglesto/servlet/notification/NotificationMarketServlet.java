@@ -16,7 +16,6 @@ import java.io.IOException;
 @WebServlet(name = "NotificationMarketServlet")
 public class NotificationMarketServlet extends HttpServlet {
     private UserDAO userDAO;
-    static int counter = 0;
 
 
     @Override
@@ -41,10 +40,10 @@ public class NotificationMarketServlet extends HttpServlet {
         }
         boolean check = true;
         // check for supermarket
-        if(!check) {
+        if(check) {
             response.setContentType("text/html");
             response.setHeader("Cache-Control", "no-cache");
-            response.getWriter().write("<li class=\"list-group-item text-center notify\" onclick=\"removeNotification(this)\">" + counter+++ "</li>");
+            response.getWriter().write("<li class=\"list-group-item text-center notify\" onclick=\"removeNotification(this)\"> NotiFICA market</li>");
         }
 
     }

@@ -3,6 +3,7 @@ package it.unitn.shoppinglesto.servlet.lists;
 import it.unitn.shoppinglesto.db.daos.*;
 import it.unitn.shoppinglesto.db.entities.Product;
 import it.unitn.shoppinglesto.db.entities.ShoppingList;
+import it.unitn.shoppinglesto.db.entities.Suggestion;
 import it.unitn.shoppinglesto.db.entities.User;
 import it.unitn.shoppinglesto.db.exceptions.DAOException;
 import it.unitn.shoppinglesto.db.exceptions.DAOFactoryException;
@@ -50,27 +51,26 @@ public class AddProductToListServlet extends HttpServlet {
         String message = null;
         boolean hasError = false;
         Integer listId = null, prodId = null;
-        try{
+        try {
             listId = Integer.parseInt(request.getParameter("listId"));
             prodId = Integer.parseInt(request.getParameter("prodId"));
-        }catch (RuntimeException ex) {
+        } catch (RuntimeException ex) {
             response.sendError(500, "Error retrieving prod and list id");
         }
         // lo aggiungo alla lista
-        if(listId != null && prodId != null){
-            try{
+        if (listId != null && prodId != null) {
+            try {
                 shoppingListDAO.addProductToList(listId, prodId);
-            }catch (DAOException e){
+            } catch (DAOException e) {
                 response.sendError(500, e.getMessage());
             }
             message = "Product successfully added into list";
             session.setAttribute("successMessage", message);
-        }
-        else{
+        } else {
             message = "Error getting product and list id";
             session.setAttribute("errorMessage", message);
         }
-        if(anon)
+        if (anon)
             response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath() + "/list?anonymous=true&id=" + listId));
         else
             response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath() + "/list?id=" + listId));

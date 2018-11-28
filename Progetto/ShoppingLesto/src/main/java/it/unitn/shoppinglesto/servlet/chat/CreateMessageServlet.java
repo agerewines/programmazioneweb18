@@ -80,7 +80,7 @@ public class CreateMessageServlet extends HttpServlet {
 
                 // send mail to users
                 list = shoppingListDAO.getByPrimaryKey(listId);
-                Integer ownerId = shoppingListDAO.getListOwner(list);
+                Integer ownerId = shoppingListDAO.getListOwner(listId);
                 List<User> sendTo = shoppingListDAO.getSharedUser(list);
                 sendTo.add(userDAO.getById(ownerId));
 

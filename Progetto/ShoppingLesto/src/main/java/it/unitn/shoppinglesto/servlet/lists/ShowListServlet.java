@@ -12,9 +12,11 @@ import it.unitn.shoppinglesto.db.entities.User;
 import it.unitn.shoppinglesto.db.exceptions.DAOException;
 import it.unitn.shoppinglesto.db.exceptions.DAOFactoryException;
 import it.unitn.shoppinglesto.db.factories.DAOFactory;
+import it.unitn.shoppinglesto.utils.UtilityHelper;
 
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -30,6 +32,7 @@ import java.util.List;
 
 @WebServlet(name = "ShowListServlet")
 public class ShowListServlet extends HttpServlet {
+    private final String TEMPLISTCOOKIENAME = "templist_shoppingLesto_token";
     private UserDAO userDAO;
     private ShoppingListDAO shoppingListDAO;
     private ProductDAO productDAO;
@@ -84,27 +87,38 @@ public class ShowListServlet extends HttpServlet {
 
         if (user != null && !anon) {
             try {
-                list = shoppingListDAO.getByPrimaryKey(listId);
-                shoppingListDAO.getPermissions(user, list);
-
-                list.setUser(userDAO.getById(list.getUserId()));
-                list.setCategory(listCategoryDAO.getByPrimaryKey(list.getCategoryId()));
-                if (list == null) {
+                if (listId == null) {
                     response.sendError(500, "There is no list selected!");
                     return;
                 } else {
-                    if (!shoppingListDAO.isUserInList(user, list))
-                        response.sendError(500, "You're not in this list!");
-                    else productList = productDAO.getProductsByList(list);
+                    if (!shoppingListDAO.isUserInList(user, listId))
+                        response.sendError(404, "You're not in this list!");
+                    else {
+                        list = shoppingListDAO.getByPrimaryKey(listId);
+                        shoppingListDAO.getPermissions(user, list);
+
+                        list.setUser(userDAO.getById(list.getUserId()));
+                        list.setCategory(listCategoryDAO.getByPrimaryKey(list.getCategoryId()));
+                        productList = productDAO.getProductsByList(list);
+                    }
                 }
             } catch (DAOException e) {
                 response.sendError(500, e.getMessage());
             }
         } else {
             try {
-                list = shoppingListDAO.getByPrimaryKey(listId);
-                list.setCategory(listCategoryDAO.getByPrimaryKey(list.getCategoryId()));
-                productList = productDAO.getProductsByList(list);
+                Integer cookieList = Integer.parseInt(Objects.requireNonNull(UtilityHelper.getCookieValue(request, TEMPLISTCOOKIENAME)));
+                if (listId == null) {
+                    response.sendError(500, "There is no list selected!");
+                    return;
+                } else if (listId == cookieList) {
+                    list = shoppingListDAO.getByPrimaryKey(listId);
+                    list.setCategory(listCategoryDAO.getByPrimaryKey(list.getCategoryId()));
+                    productList = productDAO.getProductsByList(list);
+                } else {
+                    response.sendError(404, "You're not in this list!");
+                }
+
             } catch (DAOException ex) {
                 Logger.getLogger(ShowListServlet.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -117,7 +131,7 @@ public class ShowListServlet extends HttpServlet {
         List<User> sharedWith = new ArrayList<>();
         try {
             categories = listCategoryDAO.getAll();
-            if(!anon){
+            if (!anon) {
                 listUsers = shoppingListDAO.getSharableUsers(list);
                 sharedWith = shoppingListDAO.getSharedUser(list);
                 request.setAttribute("listUsers", listUsers);

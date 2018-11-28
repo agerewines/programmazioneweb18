@@ -77,7 +77,7 @@ public interface ShoppingListDAO extends DAO<ShoppingList, Integer> {
      * @return {@code true} if {@link User user} is in {@link ShoppingList list}.
      * @throws DAOException if an error occurs during the operation.
      */
-    public boolean isUserInList(User user, ShoppingList shoppingList) throws DAOException;
+    public boolean isUserInList(User user, Integer listId) throws DAOException;
 
     /**
      * Update the @{link ShoppingList list} passed as parameter and returns it.
@@ -130,7 +130,7 @@ public interface ShoppingListDAO extends DAO<ShoppingList, Integer> {
     public boolean editPermit(ShoppingList list, User userToShare, boolean edit, boolean add, boolean share) throws DAOException;
 
 
-    public Integer getListOwner(ShoppingList shoppingList) throws DAOException;
+    public Integer getListOwner(Integer listId) throws DAOException;
 
     /**
      * Get a list of {@link User user} that the {@link ShoppingList shoppingList} is shared with

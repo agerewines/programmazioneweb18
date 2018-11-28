@@ -2,7 +2,9 @@
 <!-- Bootstrap core JavaScript -->
 <script src="${pageContext.request.contextPath}/assets/vendor/jquery/jquery.min.js"></script>
 <script src="${pageContext.request.contextPath}/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
 
 
 <!-- Plugin JavaScript -->
@@ -21,42 +23,76 @@
 
 <!-- Custom scripts for this template -->
 <script src="${pageContext.request.contextPath}/assets/js/agency.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.js"></script>
+
+
 <script type="text/javascript">
     $("#errorModal").modal('show');
     $("#infoModal").modal('show');
 
     function changeLang(lang) {
         var url = new URL(document.location.href);
-        if(url.searchParams.has('lang')){
+        if (url.searchParams.has('lang')) {
             url.searchParams.set('lang', lang);
-        }else{
+        } else {
             url.searchParams.append('lang', lang)
         }
         document.location.replace(url.href);
     }
+
     <c:if test="${not empty user}">
+        setInterval(function () {
+            $.ajax({
+                type: "POST",
+                url: "${pageContext.request.contextPath}/notification/market",
+                dataType: "html",
+                success: function (html) {
+                    $("#notificationBox").append(html);
+                }
+            });
+        }, 1000);
 
-    setInterval(function(){
-        $.ajax({
-            type: "POST",
-            url: "notification/market",
-            dataType: "html",
-            success: function(html){
-                $("#notificationBox").append(html);
-            }
-        });
-    }, 1000);
-
-    function removeNotification(elem){
-        $(elem).fadeOut(300, function() { $(elem).remove(); });
-    }
-    setInterval(function (){
-        var element =  document.getElementsByClassName('notify');
-        if (element.length != 0) {
-            $("#notificationBall").addClass('mail-status unread');
-        }else{
-            $("#notificationBall").removeClass('mail-status unread');
+        function removeNotification(elem) {
+            $(elem).fadeOut(300, function () {
+                $(elem).remove();
+            });
         }
-    }, 100);
+
+        setInterval(function () {
+            var element = document.getElementsByClassName('notify');
+            if (element.length != 0) {
+                $("#notificationBall").addClass('mail-status unread');
+            } else {
+                $("#notificationBall").removeClass('mail-status unread');
+            }
+        }, 100);
+
+        setInterval(function () {
+            $.ajax({
+                type: "POST",
+                url: "${pageContext.request.contextPath}/notification/expire",
+                dataType: "html",
+                success: function (html) {
+                    $("#notificationBox").html(html);
+                }
+            });
+        }, 25000);
+
+        function expireNotificationDismiss(elem){
+            let suggestionId = $(elem).data("suggestion-id");
+            $.ajax({
+                type: "POST",
+                url: "${pageContext.request.contextPath}/notification/expire/dismiss",
+                dataType: "html",
+                data : {
+                    suggestionId : suggestionId
+                },
+                success: function () {
+                    $(elem).fadeOut(300, function () {
+                        $(elem).remove();
+                    });
+                }
+            });
+        }
     </c:if>
 </script>

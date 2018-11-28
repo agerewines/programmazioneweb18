@@ -24,7 +24,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>ShoppingLesto | User ${user.fullName} - Webprogramming18</title>
+    <title>ShoppingLesto | ${user.fullName} - Webprogramming18</title>
 
     <%@include file="parts/_imports.jspf" %>
 
@@ -57,13 +57,14 @@
             <hr/>
             <div class="justify-content-center">
                 <button type="button" class="btn btn-dark m-3" data-toggle="modal" data-target="#editUserModal">
-                    Edit user
+                    <fmt:message key="user.button.edit"/>
                 </button>
                 <button type="button" class="btn btn-dark m-3" data-toggle="modal" data-target="#changePasswordModal">
-                    Change password
+                    <fmt:message key="user.button.changepw"/>
+
                 </button>
                 <button type="button" class="btn btn-danger m-3" data-toggle="modal" data-target="#deleteAccountModal">
-                    Delete Account
+                    <fmt:message key="user.button.delete"/>
                 </button>
             </div>
         </div>
@@ -79,17 +80,17 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="deleteAccountModalTitle">Delete Account</h5>
+                <h5 class="modal-title" id="deleteAccountModalTitle"><fmt:message key="user.button.delete"/></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                Are you sure you want to delete this account?
+                <fmt:message key="user.labe.suredelete" />
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <a href="${pageContext.request.contextPath}/user/delete" class="btn btn-danger">Delete</a>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal"><fmt:message key="modal.cancel"/></button>
+                <a href="${pageContext.request.contextPath}/user/delete" class="btn btn-danger"><fmt:message key="user.button.delete"/></a>
             </div>
         </div>
     </div>
@@ -101,16 +102,16 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="changePasswordModalTitle">Change Password</h5>
+                <h5 class="modal-title" id="changePasswordModalTitle"><fmt:message key="user.button.changepw" /></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <form action="${pageContext.request.contextPath}/user/changepw" method="POST" id="changepw">
                 <div class="modal-body">
-                    <p><em>Change your password here.</em></p>
+                    <p><em><fmt:message key="user.button.changepw" /></em></p>
                     <div class="form-row">
-                        <label for="password">New password</label>
+                        <label for="password"><fmt:message key="user.label.newpassword" /></label>
                         <div class="col-sm-6" id="result" style="font-weight:bold;padding:6px 12px; display: inline">
                     </div>
                         <input type="password" class="form-control" id="password" name="password"
@@ -124,8 +125,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary" id="confirmChangePassword">Confirm</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><fmt:message key="modal.cancel"/></button>
+                    <button type="submit" class="btn btn-primary" id="confirmChangePassword"><fmt:message key="user.changepw.confirm"/></button>
                 </div>
             </form>
         </div>
@@ -138,7 +139,7 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="editUserModalTitle">Edit user</h5>
+                <h5 class="modal-title" id="editUserModalTitle"><fmt:message key="user.button.edit"/></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -148,14 +149,14 @@
                       enctype="multipart/form-data">
                     <div class="form-row">
                         <div class="form-group col-md-6">
-                            <label for="firstName">First Name</label>
-                            <input type="text" class="form-control" id="firstName" placeholder="First Name"
+                            <label for="firstName"><fmt:message key="register.label.first_name"/></label>
+                            <input type="text" class="form-control" id="firstName" placeholder="<fmt:message key="register.label.first_name"/>"
                                    name="firstName"
                                    value="${user.firstName}">
                         </div>
                         <div class="form-group col-md-6">
-                            <label for="lastName">Last Name</label>
-                            <input type="text" class="form-control" id="lastName" placeholder="Last Name"
+                            <label for="lastName"><fmt:message key="register.label.last_name"/></label>
+                            <input type="text" class="form-control" id="lastName" placeholder="<fmt:message key="register.label.last_name"/>"
                                    name="lastName"
                                    value="${user.lastName}">
                         </div>
@@ -164,11 +165,11 @@
                         <div class="form-group  col-md-12">
                             <div class="custom-file">
                                 <input type="file" class="custom-file-input" id="avatar" name="avatar">
-                                <label class="custom-file-label" for="avatar">Add your avatar</label>
+                                <label class="custom-file-label" for="avatar"><fmt:message key="list.label.add_avatar"/></label>
                             </div>
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-primary">Modify</button>
+                    <button type="submit" class="btn btn-primary"><fmt:message key="user.button.edit"/></button>
                 </form>
             </div>
         </div>

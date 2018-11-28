@@ -230,6 +230,10 @@
         <servlet-name>NotificationMarketServlet</servlet-name>
         <servlet-class>it.unitn.shoppinglesto.servlet.notification.NotificationMarketServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>SuggestionServlet</servlet-name>
+        <servlet-class>it.unitn.shoppinglesto.servlet.notification.SuggestionServlet</servlet-class>
+    </servlet>
     <listener>
         <description>ServletContextListener</description>
         <listener-class>it.unitn.shoppinglesto.listeners.WebAppContextListener</listener-class>
@@ -409,6 +413,10 @@
     <servlet-mapping>
         <servlet-name>NotificationMarketServlet</servlet-name>
         <url-pattern>/notification/market</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SuggestionServlet</servlet-name>
+        <url-pattern>/notification/expire</url-pattern>
     </servlet-mapping>
   <welcome-file-list>
         <welcome-file>/WEB-INF/views/index.jsp</welcome-file>
