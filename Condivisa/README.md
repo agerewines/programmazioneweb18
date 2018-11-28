@@ -1,6 +1,6 @@
 # Documenti condivisi
 
-Database: Derby   
+Database: MySQL   
 Pattern: MVC, Beans, Servlet, JSP   
 Grafica: Bootstrap   
 
