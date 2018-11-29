@@ -41,7 +41,7 @@
     }
 
     <c:if test="${not empty user}">
-        setInterval(function () {
+        /*setInterval(function () {
             $.ajax({
                 type: "POST",
                 url: "${pageContext.request.contextPath}/notification/market",
@@ -50,14 +50,13 @@
                     $("#notificationBox").append(html);
                 }
             });
-        }, 1000);
+        }, 25000); */
 
         function removeNotification(elem) {
             $(elem).fadeOut(300, function () {
                 $(elem).remove();
             });
-        }
-
+        }/*
         setInterval(function () {
             var element = document.getElementsByClassName('notify');
             if (element.length != 0) {
@@ -77,7 +76,7 @@
                 }
             });
         }, 25000);
-
+*/
         function expireNotificationDismiss(elem){
             let suggestionId = $(elem).data("suggestion-id");
             $.ajax({

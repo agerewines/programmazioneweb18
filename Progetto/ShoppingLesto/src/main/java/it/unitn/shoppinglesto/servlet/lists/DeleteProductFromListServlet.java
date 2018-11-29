@@ -76,28 +76,28 @@ public class DeleteProductFromListServlet extends HttpServlet {
                 shoppingListDAO.deleteProductFromList(listId, prodId);
                 if(prod.isCustom())
                     productDAO.delete(prodId);
+                else{
+                    // controllo se é presente un'istanza di suggestion
+                    boolean hasSuggestion = suggestionDAO.hasSuggestion(prodId, listId);
+                    if(hasSuggestion && !anon){
+                        Suggestion s = suggestionDAO.getByProdAndListId(prodId, listId);
+                        s.setCounter(s.getCounter() + 1);
 
-                // controllo se é presente un'istanza di suggestion
-                Suggestion s = suggestionDAO.getByProdAndListId(prodId, listId);
-                if (s == null && !anon){
-                    // se non c'é la creo con counter 1
-                    // Integer idProd, Integer idList, Integer counter, Integer average, Time first, Time last, boolean seen
-                    Time time = new Time(System.currentTimeMillis());
-                    s = new Suggestion(prodId, listId, 1,0,time, time,false );
-                    s.setId(suggestionDAO.save(s));
-                }else {
-                    // se c'é faccio l'update con aumento del counter e modifica ultima aggiunta
-                    assert s != null;
-                    s.setCounter(s.getCounter() + 1);
+                        LocalTime first = s.getFirst().toLocalTime();
+                        LocalTime last = LocalTime.now();
+                        LocalTime diff = last.minusNanos(first.toNanoOfDay());
+                        s.setLast(Time.valueOf(last));
+                        s.setAverage(diff.toSecondOfDay()/s.getCounter());
+                        s.setSeen(true);
 
-                    LocalTime first = s.getFirst().toLocalTime();
-                    LocalTime last = LocalTime.now();
-                    LocalTime diff = last.minusNanos(first.toNanoOfDay());
-                    s.setLast(Time.valueOf(last));
-                    s.setAverage(diff.toSecondOfDay()/s.getCounter());
-                    s.setSeen(true);
-
-                    suggestionDAO.update(s);
+                        suggestionDAO.update(s);
+                    }else{
+                        // se non c'é la creo con counter 1
+                        // Integer idProd, Integer idList, Integer counter, Integer average, Time first, Time last, boolean seen
+                        Time time = new Time(System.currentTimeMillis());
+                        Suggestion s = new Suggestion(prodId, listId, 1,0,time, time,false );
+                        s.setId(suggestionDAO.save(s));
+                    }
                 }
             }catch (DAOException e){
                 response.sendError(500, e.getMessage());

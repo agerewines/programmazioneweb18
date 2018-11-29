@@ -92,8 +92,7 @@
                 <form action="${pageContext.request.contextPath}/product/add" method="POST">
                     <label><fmt:message key="product.h.sure" /></label> <br/>
                     <input id="hiddenProdId" type="hidden" name="prodId">
-                    <div id="prova"></div>
-                    <c:if test="${!anon}">
+                    <c:if test="${anon}">
                         <input id="hiddenAnon" type="hidden" name="anonymous" value="true">
                     </c:if>
                     <input id="hiddenListId" type="hidden" name="listId" value="${param.listId}">
@@ -155,6 +154,9 @@
                         </div>
                     </div>
                     <input type="hidden" name="custom" value="1">
+                    <c:if test="${anon}">
+                        <input id="hiddenAnon" type="hidden" name="anonymous" value="true">
+                    </c:if>
                     <input type="hidden" name="listId" value="${param.listId}">
                     <button type="submit" class="btn btn-primary"><fmt:message key="admin.h.add_product" /></button>
                 </form>
@@ -168,6 +170,13 @@
 <%@include file="parts/_importsjs.jspf" %>
 
 <script type="text/javascript">
+
+    var timeout = null;
+    var addProd = function (e) {
+        console.log($(e.target).data('id'));
+        $('#hiddenProdId').val($(this).data('id'));
+    };
+
     $(document).ready(function(){
         var lang = document.documentElement.lang;
         function getLang(){
@@ -198,12 +207,6 @@
             } ],
             searching: false
         });
-
-        var timeout = null;
-        var addProd = function (e) {
-            console.log($(e.target).data('id'));
-            $('#hiddenProdId').val($(this).data('id'));
-        };
 
         $('.search-box').keyup(function(e) {
             if (timeout !== null) {
@@ -246,7 +249,6 @@
                             "            </td>\n" +
                             "        </tr>\n";
                         datatable.row.add($(row)).draw();
-                        datatable.language.url(getLang())
                     });
                     $('.addButton').click(addProd);
                 });

@@ -68,8 +68,8 @@ public class NewCustomProductServlet extends HttpServlet {
         }
 
         String rootPath = System.getProperty("catalina.home");
-        String name = request.getParameter("name");
-        String description = request.getParameter("description");
+        String name = request.getParameter("nameProd");
+        String description = request.getParameter("descriptionProd");
         int categoryId = Integer.parseInt(request.getParameter("category"));
         int listId = Integer.parseInt(request.getParameter("listId"));
         Double price = Double.parseDouble(request.getParameter("price"));
@@ -105,10 +105,14 @@ public class NewCustomProductServlet extends HttpServlet {
                         prodPhoto.setPath(UtilityHelper.uploadFileToDirectory(listCategoryUploadDir, fileName, filePart));
                         product.addPhoto(prodPhoto);
                         productDAO.addPhoto(prodPhoto);
-                        shoppingListDAO.addProductToList(listId, product.getId());
                     } catch (DAOException | IOException ex) {
                         response.sendError(500, ex.getMessage());
                     }
+                }
+                try {
+                    shoppingListDAO.addProductToList(listId, product.getId());
+                } catch (DAOException e) {
+                    response.sendError(500, e.getMessage());
                 }
             }
 

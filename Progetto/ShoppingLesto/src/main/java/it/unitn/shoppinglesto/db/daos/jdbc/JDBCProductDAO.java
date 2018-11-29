@@ -94,7 +94,7 @@ public class JDBCProductDAO extends JDBCDAO<Product, Integer> implements Product
             preparedStatement.setString(2, prod.getDescription());
             preparedStatement.setInt(3, prod.getCategoryId());
             preparedStatement.setBoolean(4, prod.isCustom());
-            preparedStatement.setDouble(4, prod.getPrice());
+            preparedStatement.setDouble(5, prod.getPrice());
             preparedStatement.executeUpdate();
             try(ResultSet rs  = preparedStatement.getGeneratedKeys()){
                 if(rs.next()){

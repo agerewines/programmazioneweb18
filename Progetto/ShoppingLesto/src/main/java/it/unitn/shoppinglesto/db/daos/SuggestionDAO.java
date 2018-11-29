@@ -12,4 +12,6 @@ public interface SuggestionDAO extends DAO<Suggestion, Integer> {
     public Suggestion getByProdAndListId(Integer prodId, Integer listId) throws DAOException;
 
     public Suggestion update(Suggestion suggestion) throws DAOException;
+
+    public boolean hasSuggestion(Integer prodId, Integer listId) throws DAOException;
 }

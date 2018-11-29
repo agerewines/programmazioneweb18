@@ -244,5 +244,26 @@ public class JDBCSuggestionDAO extends JDBCDAO<Suggestion, Integer> implements S
         }
     }
 
+    @Override
+    public boolean hasSuggestion(Integer prodId, Integer listId) throws DAOException {
+        if(prodId == null || listId == null){
+            throw new DAOException("primary key is null");
+        }
+        Suggestion suggestion = null;
+        long count = 0L;
+        try(PreparedStatement preparedStatement = CON.prepareStatement("SELECT COUNT(*) FROM Suggestion WHERE idProd = ? AND idList = ?")){
+            preparedStatement.setInt(1, prodId);
+            preparedStatement.setInt(2, listId);
+            try(ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    count = resultSet.getLong(1);
+                }
+            }
+        } catch (SQLException e) {
+            throw new DAOException("cannot retrieve suggestion");
+        }
+        return count > 0L;
+    }
+
 
 }
