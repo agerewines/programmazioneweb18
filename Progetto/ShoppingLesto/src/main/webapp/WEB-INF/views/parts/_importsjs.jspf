@@ -56,7 +56,7 @@
             $(elem).fadeOut(300, function () {
                 $(elem).remove();
             });
-        }/*
+        }
         setInterval(function () {
             var element = document.getElementsByClassName('notify');
             if (element.length != 0) {
@@ -75,8 +75,8 @@
                     $("#notificationBox").html(html);
                 }
             });
-        }, 25000);
-*/
+        }, 2000);
+
         function expireNotificationDismiss(elem){
             let suggestionId = $(elem).data("suggestion-id");
             $.ajax({

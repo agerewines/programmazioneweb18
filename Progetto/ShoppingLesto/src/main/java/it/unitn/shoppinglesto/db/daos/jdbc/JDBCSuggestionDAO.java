@@ -89,17 +89,19 @@ public class JDBCSuggestionDAO extends JDBCDAO<Suggestion, Integer> implements S
         List<Suggestion> suggestions = new ArrayList<>();
         try(PreparedStatement preparedStatement = CON.prepareStatement("SELECT * FROM Suggestion")){
             try(ResultSet resultSet = preparedStatement.executeQuery()){
-                resultSet.next();
-                Suggestion suggestion = new Suggestion();
-                suggestion.setId(resultSet.getInt("id"));
-                suggestion.setIdProd(resultSet.getInt("idProd"));
-                suggestion.setIdList(resultSet.getInt("idList"));
-                suggestion.setAverage(resultSet.getInt("average"));
-                suggestion.setCounter(resultSet.getInt("counter"));
-                suggestion.setFirst(resultSet.getTime("first"));
-                suggestion.setLast(resultSet.getTime("last"));
-                suggestion.setSeen(resultSet.getBoolean("seen"));
-                suggestions.add(suggestion);
+                while (resultSet.next()) {
+                    Suggestion suggestion = new Suggestion();
+                    suggestion.setId(resultSet.getInt("id"));
+                    suggestion.setIdProd(resultSet.getInt("idProd"));
+                    suggestion.setIdList(resultSet.getInt("idList"));
+                    suggestion.setAverage(resultSet.getInt("average"));
+                    suggestion.setCounter(resultSet.getInt("counter"));
+                    suggestion.setFirst(resultSet.getTime("first"));
+                    suggestion.setLast(resultSet.getTime("last"));
+                    suggestion.setSeen(resultSet.getBoolean("seen"));
+                    suggestions.add(suggestion);
+
+                }
             }
 
         } catch (SQLException e) {
@@ -173,17 +175,19 @@ public class JDBCSuggestionDAO extends JDBCDAO<Suggestion, Integer> implements S
         try(PreparedStatement preparedStatement = CON.prepareStatement("SELECT * FROM Suggestion WHERE idList = ?")){
             preparedStatement.setInt(1, listId);
             try(ResultSet resultSet = preparedStatement.executeQuery()){
-                resultSet.next();
-                Suggestion suggestion = new Suggestion();
-                suggestion.setId(resultSet.getInt("id"));
-                suggestion.setIdProd(resultSet.getInt("idProd"));
-                suggestion.setIdList(resultSet.getInt("idList"));
-                suggestion.setAverage(resultSet.getInt("average"));
-                suggestion.setCounter(resultSet.getInt("counter"));
-                suggestion.setFirst(resultSet.getTime("first"));
-                suggestion.setLast(resultSet.getTime("last"));
-                suggestion.setSeen(resultSet.getBoolean("seen"));
-                suggestions.add(suggestion);
+                while(resultSet.next()){
+                    Suggestion suggestion = new Suggestion();
+                    suggestion.setId(resultSet.getInt("id"));
+                    suggestion.setIdProd(resultSet.getInt("idProd"));
+                    suggestion.setIdList(resultSet.getInt("idList"));
+                    suggestion.setAverage(resultSet.getInt("average"));
+                    suggestion.setCounter(resultSet.getInt("counter"));
+                    suggestion.setFirst(resultSet.getTime("first"));
+                    suggestion.setLast(resultSet.getTime("last"));
+                    suggestion.setSeen(resultSet.getBoolean("seen"));
+                    suggestions.add(suggestion);
+                }
+
             }
 
         } catch (SQLException e) {
@@ -234,6 +238,7 @@ public class JDBCSuggestionDAO extends JDBCDAO<Suggestion, Integer> implements S
             prepStm.setTime(5, suggestion.getFirst());
             prepStm.setTime(6, suggestion.getLast());
             prepStm.setBoolean(7, suggestion.isSeen());
+            prepStm.setInt(8, suggestion.getId());
             if (prepStm.executeUpdate() == 1) {
                 return suggestion;
             } else {
@@ -254,6 +259,26 @@ public class JDBCSuggestionDAO extends JDBCDAO<Suggestion, Integer> implements S
         try(PreparedStatement preparedStatement = CON.prepareStatement("SELECT COUNT(*) FROM Suggestion WHERE idProd = ? AND idList = ?")){
             preparedStatement.setInt(1, prodId);
             preparedStatement.setInt(2, listId);
+            try(ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    count = resultSet.getLong(1);
+                }
+            }
+        } catch (SQLException e) {
+            throw new DAOException("cannot retrieve suggestion");
+        }
+        return count > 0L;
+    }
+
+    @Override
+    public boolean hasSuggestions(Integer listId) throws DAOException {
+        if(listId == null){
+            throw new DAOException("primary key is null");
+        }
+        Suggestion suggestion = null;
+        long count = 0L;
+        try(PreparedStatement preparedStatement = CON.prepareStatement("SELECT COUNT(*) FROM Suggestion WHERE idList = ?")){
+            preparedStatement.setInt(1, listId);
             try(ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
                     count = resultSet.getLong(1);

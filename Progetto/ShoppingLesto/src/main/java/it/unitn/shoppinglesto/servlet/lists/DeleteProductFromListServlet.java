@@ -88,7 +88,6 @@ public class DeleteProductFromListServlet extends HttpServlet {
                         LocalTime diff = last.minusNanos(first.toNanoOfDay());
                         s.setLast(Time.valueOf(last));
                         s.setAverage(diff.toSecondOfDay()/s.getCounter());
-                        s.setSeen(true);
 
                         suggestionDAO.update(s);
                     }else{

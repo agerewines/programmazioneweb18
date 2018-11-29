@@ -70,11 +70,12 @@ public class SuggestionServlet extends HttpServlet {
             List<ShoppingList> userList = shoppingListDAO.getUserLists(user);
             List<Suggestion> suggestions = new ArrayList<>();
             for (ShoppingList list: userList) {
-                suggestions.addAll(suggestionDAO.getAllListSuggestion(list.getId()));
+                if(suggestionDAO.hasSuggestions(list.getId()))
+                    suggestions.addAll(suggestionDAO.getAllListSuggestion(list.getId()));
             }
             if(!suggestions.isEmpty()){
                 for (Suggestion s : suggestions) {
-                    if(s.isSeen()){
+                    if(!s.isSeen()){
                         int counter = s.getCounter();
                         if( counter>= 3 ){
                             LocalTime last = s.getLast().toLocalTime();
