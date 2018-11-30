@@ -736,6 +736,13 @@ ul.social-buttons li a:active, ul.social-buttons li a:focus, ul.social-buttons l
   #langDropdown { display:none; }
 }
 
+.notification-indicator {
+  color : #fff;
+}
+.notificationBoxUL {
+  overflow: scroll;
+  height: 300px;
+}
 .notification-indicator .mail-status.unread {
   display: inline-block;
 }
@@ -753,4 +760,14 @@ ul.social-buttons li a:active, ul.social-buttons li a:focus, ul.social-buttons l
   top: -5px;
   width: 14px;
   z-index: 2;
+}
+
+.notificationBoxDD {
+  width: 25rem;
+}
+
+@media (max-width: 766px){
+  .notificationBoxDD {
+    width: 15rem;
+  }
 }

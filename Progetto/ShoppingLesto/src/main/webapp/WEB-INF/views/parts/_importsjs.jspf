@@ -2,9 +2,7 @@
 <!-- Bootstrap core JavaScript -->
 <script src="${pageContext.request.contextPath}/assets/vendor/jquery/jquery.min.js"></script>
 <script src="${pageContext.request.contextPath}/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
-        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
-        crossorigin="anonymous"></script>
+<script src="${pageContext.request.contextPath}/assets/vendor/bootstrap/js/popper.min.js"></script>
 
 
 <!-- Plugin JavaScript -->
@@ -75,10 +73,12 @@
                     $("#notificationBox").html(html);
                 }
             });
-        }, 2000);
+        }, 10000);
 
         function expireNotificationDismiss(elem){
             let suggestionId = $(elem).data("suggestion-id");
+            let listId = $(elem).data("list-id");
+            location.href="${pageContext.request.contextPath}/list?id=" + listId;
             $.ajax({
                 type: "POST",
                 url: "${pageContext.request.contextPath}/notification/expire/dismiss",

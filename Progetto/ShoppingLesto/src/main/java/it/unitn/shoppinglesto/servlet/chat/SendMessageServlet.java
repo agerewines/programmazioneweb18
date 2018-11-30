@@ -114,6 +114,7 @@ public class SendMessageServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        throw new ServletException("Cannot enter this page");
 
     }
 }

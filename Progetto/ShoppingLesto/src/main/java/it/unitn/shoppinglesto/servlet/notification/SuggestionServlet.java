@@ -23,7 +23,6 @@ import java.util.List;
 
 @WebServlet(name = "SuggestionServlet")
 public class SuggestionServlet extends HttpServlet {
-    private UserDAO userDAO;
     private ShoppingListDAO shoppingListDAO;
     private SuggestionDAO suggestionDAO;
     private ProductDAO productDAO;
@@ -34,11 +33,6 @@ public class SuggestionServlet extends HttpServlet {
         DAOFactory daoFactory = (DAOFactory) super.getServletContext().getAttribute("daoFactory");
         if (daoFactory == null) {
             throw new ServletException("Impossible to get dao factory!");
-        }
-        try {
-            userDAO = daoFactory.getDAO(UserDAO.class);
-        } catch (DAOFactoryException ex) {
-            throw new ServletException("Impossible to get user dao from dao factory!", ex);
         }
         try {
             shoppingListDAO = daoFactory.getDAO(ShoppingListDAO.class);
@@ -80,7 +74,8 @@ public class SuggestionServlet extends HttpServlet {
                         if( counter>= 3 ){
                             LocalTime last = s.getLast().toLocalTime();
                             LocalTime expire = last.plusSeconds(s.getAverage());
-                            if(expire.isAfter(last)){
+                            System.out.println(expire.toString() + ", " + LocalTime.now());
+                            if(expire.isBefore(LocalTime.now())){
                                 NotificationExpire newNews = new NotificationExpire();
                                 newNews.setList(shoppingListDAO.getByPrimaryKey(s.getIdList()));
                                 newNews.setProduct(productDAO.getByPrimaryKey(s.getIdProd()));
@@ -101,7 +96,9 @@ public class SuggestionServlet extends HttpServlet {
             response.setContentType("text/html");
             response.setHeader("Cache-Control", "no-cache");
             for (NotificationExpire news: allNews) {
-                response.getWriter().write("<li class=\"list-group-item text-center notify\" onclick=\"expireNotificationDismiss(this)\" data-suggestion-id=\"" + news.getSuggestion().getId() + "\"> " + news.getProduct().getName() + " in " + news.getList().getName() + " is about to expire</li>");
+                response.getWriter().write("<li class=\"list-group-item text-center notify\" onclick=\"expireNotificationDismiss(this)\" data-suggestion-id=\"" + news.getSuggestion().getId() + " data-list-id=\"" + news.getSuggestion().getIdList() + "\"> " +
+                        "   <strong>" + news.getProduct().getName() + "</strong> in <strong>" + news.getList().getName() + "</strong> is about to expire" +
+                        "</li>");
             }
         }
 
@@ -109,6 +106,7 @@ public class SuggestionServlet extends HttpServlet {
 
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        throw new ServletException("Cannot enter this page");
 
     }
 }

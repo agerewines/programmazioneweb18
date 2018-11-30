@@ -12,6 +12,22 @@
         </c:choose>
         <c:choose>
             <c:when test="${not empty user}">
+                <div class="dropdown nav navbar-bar alight-right ml-auto">
+                    <a class="nav-link dropdown-toggle notification-indicator" href="#"
+                       id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
+                       aria-expanded="false">
+                        <span class="" id="notificationBall"></span>
+                        <i class="fas fa-bell"></i>
+                    </a>
+
+                    <div class="dropdown-menu dropdown-menu-right notificationBoxDD"
+                         aria-labelledby="navbarDropdownMenuLink" id="notificationDD">
+                        <h6 class="card-header"><fmt:message key="home.nav.notificationbox"/></h6>
+                        <ul class="list-group notificationBoxUL " id="notificationBox">
+                        </ul>
+                    </div>
+                </div>
+
                 <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
                         data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false"
                         aria-label="Toggle navigation">
@@ -22,8 +38,8 @@
             <c:otherwise>
             </c:otherwise>
         </c:choose>
-        <div class="collapse navbar-collapse" id="navbarResponsive">
-            <ul class="navbar-nav text-uppercase ml-auto">
+        <div class="collapse navbar-collapse justify-content-end" id="navbarResponsive">
+            <ul class="navbar-nav text-uppercase">
                 <c:choose>
                     <c:when test="${not empty user}">
                         <c:choose>
@@ -50,25 +66,6 @@
                                 <li class="nav-item">
                                     <a class="nav-link js-scroll-trigger"
                                        href="${pageContext.request.contextPath}/geoip"><fmt:message key="home.nav.locate"/></a>
-                                </li>
-                                <li class="nav-item js-scroll-trigger dropdown text-center">
-                                    <a class="nav-link dropdown-toggle notification-indicator " href="#"
-                                       id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
-                                       aria-expanded="false">
-                                        <span class="" id="notificationBall"></span>
-                                        <i class="fas fa-bell"></i>
-                                    </a>
-
-                                    <div class="dropdown-menu dropdown-menu-right" style="width: 25rem;"
-                                         aria-labelledby="navbarDropdownMenuLink">
-                                        <h6 class="card-header"><fmt:message key="home.nav.notificationbox"/></h6>
-                                        <ul class="list-group" id="notificationBox"
-                                            style="overflow: scroll; height: 300px;">
-                                            <li class="list-group-item text-center notify"
-                                                onclick="removeNotification(this)">C'&#232; una notifica quiii
-                                            </li>
-                                        </ul>
-                                    </div>
                                 </li>
                             </c:otherwise>
                         </c:choose>
