@@ -44,8 +44,8 @@
                 <input class="form-control form-control-sm ml-3 w-75 search-box" type="text" placeholder="<fmt:message key="search" />" aria-label="Search">
                 <button type="button" class="btn btn-primary float-right m-2 addProduct"
                         data-toggle="modal" data-target="#addCustomProductModal">
-                    <div class="d-lg-none"><i class="fas fa-plus"></i></div>
-                    <div class="d-none d-lg-block"><fmt:message key="addproduct.customprod" /></div>
+                    <div class="d-xl-none"><i class="fas fa-plus"></i></div>
+                    <div class="d-none d-xl-block"><fmt:message key="addproduct.customprod" /></div>
                 </button>
             </form>
             <br/>
@@ -168,6 +168,8 @@
 
 <%@include file="parts/_footer.jspf" %>
 <%@include file="parts/_importsjs.jspf" %>
+<script src="${pageContext.request.contextPath}/assets/js/blockUI.js"></script>
+
 
 <script type="text/javascript">
 
@@ -266,11 +268,19 @@
                 });
         });
 
+        function showLoad(){
+            $.blockUI({ message: '<h1><img src=\"${pageContext.request.contextPath}/assets/img/Preloader_2.gif\" /> Just a moment...</h1>' });
+        }
+        function dismissLoad(){
+            $.unblockUI();
+        }
+
         $('#showAll').click(function(e) {
             $.ajax({
                 'url': "/ShoppingLesto/list/availableproduct?listId=" + new URLSearchParams(window.location.search).get('listId'),
                 'method': "GET",
-                'contentType': 'application/json'
+                'contentType': 'application/json',
+                beforeSend : showLoad(),
             }).done(function (responseJson) {
                 datatable.clear().draw();
                 $.each(responseJson, function(key, value) {
@@ -304,10 +314,12 @@
                         "        </tr>\n";
                     datatable.row.add($(row)).draw()
                 });
+                dismissLoad();
                 $('.addButton').click(addProd);
             });
         });
     })
+
 
 </script>
 </body>
