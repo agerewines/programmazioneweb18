@@ -109,7 +109,7 @@ public class EditCategoryServlet extends HttpServlet {
 
         if (hasError) {
             session.setAttribute("errorMessage", message);
-            response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath() + "/home"));
+            response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath() + "/admin/listCat"));
         } else {
             message = "List was successfully updated";
             session.setAttribute("successMessage", message);

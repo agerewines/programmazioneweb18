@@ -148,9 +148,12 @@
                         <td>${prod.name}</td>
                         <td>${prod.description}</td>
                         <td>
-                            <img class="rounded shadow mb-3 bg-white rounded" height="65" width="65"
-                                 src="${pageContext.request.contextPath}/images?id=${prod.id}&resource=product"
-                                 onerror="this.onerror=null;this.src='${pageContext.request.contextPath}/images/avatars/Products/default.png';"/>
+                            <c:forEach items="${prod.photos}" var="photo">
+                                <img class="rounded shadow mb-3 bg-white rounded" height="65" width="65"
+                                     src="${pageContext.request.contextPath}/images?id=${photo.id}&resource=products"
+                                     onerror="this.onerror=null;this.src='${pageContext.request.contextPath}/images/avatars/Products/default.png';"/>
+                            </c:forEach>
+
                         </td>
                         <td>${prod.price} €</td>
                         <td>
