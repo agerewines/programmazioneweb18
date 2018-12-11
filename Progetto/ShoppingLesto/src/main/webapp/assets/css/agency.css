@@ -186,10 +186,11 @@ header.masthead {
   text-align: center;
   color: white;
   background-size: 100%;
-  background: url("../img/header-bg.jpg") no-repeat center;
+  background: url("../img/header-bg.jpg") center;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
+
 }
 
 header.masthead .intro-text {
@@ -735,6 +736,13 @@ ul.social-buttons li a:active, ul.social-buttons li a:focus, ul.social-buttons l
   #langDropdown { display:none; }
 }
 
+.notification-indicator {
+  color : #fff;
+}
+.notificationBoxUL {
+  overflow: scroll;
+  height: 300px;
+}
 .notification-indicator .mail-status.unread {
   display: inline-block;
 }
@@ -752,4 +760,14 @@ ul.social-buttons li a:active, ul.social-buttons li a:focus, ul.social-buttons l
   top: -5px;
   width: 14px;
   z-index: 2;
+}
+
+.notificationBoxDD {
+  width: 25rem;
+}
+
+@media (max-width: 766px){
+  .notificationBoxDD {
+    width: 15rem;
+  }
 }

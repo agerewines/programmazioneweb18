@@ -22,7 +22,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>ShoppingLesto | Add Product - Webprogramming18</title>
+    <title>ShoppingLesto | <fmt:message key="admin.h.add_product" /> - Webprogramming18</title>
 
     <%@include file="parts/_imports.jspf" %>
 
@@ -41,11 +41,11 @@
             <!-- Search form -->
             <form class="form-inline md-form form-sm mt-0">
                 <i class="fa fa-search" aria-hidden="true"></i>
-                <input class="form-control form-control-sm ml-3 w-75 search-box" type="text" placeholder="Search" aria-label="Search">
+                <input class="form-control form-control-sm ml-3 w-75 search-box" type="text" placeholder="<fmt:message key="search" />" aria-label="Search">
                 <button type="button" class="btn btn-primary float-right m-2 addProduct"
                         data-toggle="modal" data-target="#addCustomProductModal">
-                    <div class="d-lg-none"><i class="fas fa-plus"></i></div>
-                    <div class="d-none d-lg-block">Add custom product</div>
+                    <div class="d-xl-none"><i class="fas fa-plus"></i></div>
+                    <div class="d-none d-xl-block"><fmt:message key="addproduct.customprod" /></div>
                 </button>
             </form>
             <br/>
@@ -55,19 +55,19 @@
                 <thead>
                 <tr>
                     <th scope="col"></th>
-                    <th style="width: 25%" scope="col">Name</th>
-                    <th style="width: 45%" scope="col">Description</th>
-                    <th style="width: 10%" scope="col">Category</th>
-                    <th style="width: 10%" scope="col">Photos</th>
-                    <th style="width: 5%" scope="col">Price</th>
-                    <th style="width: 5%" scope="col">Add</th>
+                    <th style="width: 25%" scope="col"><fmt:message key="list.th.name" /></th>
+                    <th style="width: 45%" scope="col"><fmt:message key="list.th.description" /></th>
+                    <th style="width: 10%" scope="col"><fmt:message key="new_list.label.category" /></th>
+                    <th style="width: 10%" scope="col"><fmt:message key="list.th.image" /></th>
+                    <th style="width: 5%" scope="col"><fmt:message key="list.th.price" /></th>
+                    <th style="width: 5%" scope="col"><fmt:message key="product.th.add" /></th>
                 </tr>
                 </thead>
                 <tbody>
                 </tbody>
             </table>
             <button type="button" id="showAll" class="btn btn-primary float-left m-2">
-                Show all
+                <fmt:message key="addproduct.showall" />
             </button>
             <br/>
         </div>
@@ -92,8 +92,7 @@
                 <form action="${pageContext.request.contextPath}/product/add" method="POST">
                     <label><fmt:message key="product.h.sure" /></label> <br/>
                     <input id="hiddenProdId" type="hidden" name="prodId">
-                    <div id="prova"></div>
-                    <c:if test="${!anon}">
+                    <c:if test="${anon}">
                         <input id="hiddenAnon" type="hidden" name="anonymous" value="true">
                     </c:if>
                     <input id="hiddenListId" type="hidden" name="listId" value="${param.listId}">
@@ -122,25 +121,25 @@
                       enctype='multipart/form-data'>
                     <div class="form-row">
                         <div class="form-group col-md-12">
-                            <label for="nameProd">Name</label>
-                            <input type="text" class="form-control" id="nameProd" placeholder="Name" name="nameProd">
+                            <label for="nameProd"><fmt:message key="list.th.name" /></label>
+                            <input type="text" class="form-control" id="nameProd" placeholder="<fmt:message key="list.th.name" />" name="nameProd">
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-12">
-                            <label for="descriptionProd">Description</label>
+                            <label for="descriptionProd"><fmt:message key="list.th.description" /></label>
                             <textarea class="form-control" id="descriptionProd" name="descriptionProd" rows="3"
-                                      placeholder="Description"></textarea>
+                                      placeholder="<fmt:message key="list.th.description" />"></textarea>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-12">
-                            <label for="priceProd">Price</label>
-                            <input type="number" class="form-control" id="priceProd" placeholder="Price" name="price" step="0.01">
+                            <label for="priceProd"><fmt:message key="list.th.price" /></label>
+                            <input type="number" class="form-control" id="priceProd" placeholder="<fmt:message key="list.th.price" />" name="price" step="0.01">
                         </div>
                     </div>
                     <div class="form-row">
-                        <label for="productCategory">Choose category</label>
+                        <label for="productCategory"><fmt:message key="list.label.choose_category" /></label>
                         <div class="form-group col-md-12">
                             <select id="productCategory" name="category" class="form-control">
                             </select>
@@ -150,13 +149,16 @@
                         <div class="form-group  col-md-12">
                             <div class="custom-file">
                                 <input type="file" class="custom-file-input" id="photo" name="photo">
-                                <label class="custom-file-label" for="photo">Add photo</label>
+                                <label class="custom-file-label" for="photo"><fmt:message key="admin.h.add_photo" /></label>
                             </div>
                         </div>
                     </div>
                     <input type="hidden" name="custom" value="1">
+                    <c:if test="${anon}">
+                        <input id="hiddenAnon" type="hidden" name="anonymous" value="true">
+                    </c:if>
                     <input type="hidden" name="listId" value="${param.listId}">
-                    <button type="submit" class="btn btn-primary">Add product</button>
+                    <button type="submit" class="btn btn-primary"><fmt:message key="admin.h.add_product" /></button>
                 </form>
             </div>
         </div>
@@ -166,107 +168,119 @@
 
 <%@include file="parts/_footer.jspf" %>
 <%@include file="parts/_importsjs.jspf" %>
+<script src="${pageContext.request.contextPath}/assets/js/blockUI.js"></script>
+
 
 <script type="text/javascript">
-    var datatable =  $('#allProductTable').DataTable({
-        "order" : [[1, "asc"]],
-        "language" : {
-            "url" : getLang()
-        },
-        responsive: {
-            details: {
-                type: 'column',
-                target: 'tr'
-            }
-        },
-        columnDefs: [ {
-            className: 'control',
-            orderable: false,
-            targets:   0
-        } ],
-        searching: false
-    });
 
-    var lang = document.documentElement.lang;
-    function getLang(){
-        switch (lang){
-            case "it_IT" : return "https://cdn.datatables.net/plug-ins/1.10.19/i18n/Italian.json";
-                break;
-            case "en_US" : return "https://cdn.datatables.net/plug-ins/1.10.19/i18n/English.json";
-                break;
-            default :  return "https://cdn.datatables.net/plug-ins/1.10.19/i18n/English.json";
-                break;
-        }
-    };
     var timeout = null;
     var addProd = function (e) {
         console.log($(e.target).data('id'));
         $('#hiddenProdId').val($(this).data('id'));
     };
 
-    $('.search-box').keyup(function(e) {
-        if (timeout !== null) {
-            clearTimeout(timeout);
+    $(document).ready(function(){
+        var lang = document.documentElement.lang;
+        function getLang(){
+            switch (lang){
+                case "it_IT" : return "https://cdn.datatables.net/plug-ins/1.10.19/i18n/Italian.json";
+                    break;
+                case "en_US" : return "https://cdn.datatables.net/plug-ins/1.10.19/i18n/English.json";
+                    break;
+                default :  return "https://cdn.datatables.net/plug-ins/1.10.19/i18n/English.json";
+                    break;
+            }
         }
-        timeout = setTimeout(function() {
-            $.ajax({
-                'url': "/ShoppingLesto/list/availableproduct?listId=" + new URLSearchParams(window.location.search).get('listId') + "&q=" + e.target.value,
-                'method': "GET",
-                'contentType': 'application/json'
-            }).done(function (responseJson) {
-                datatable.clear().draw();
-                $.each(responseJson, function(key, value) {
-                    var row = "";
-                    row += "<tr>\n" +
-                        "            <td></td>" +
-                        "            <td>"+ value.name +"</td>\n" +
-                        "            <td>"+ value.description +"</td>\n" +
-                        "            <td>"+ value.category.name +"</td>\n" +
-                        "            <td>\n";
-                    if(value.photos == null){
-                        row    += "<img class=\"rounded shadow mb-3 bg-white rounded\" height=\"65\" width=\"65\"\n" +
-                            "                             src=\"${pageContext.request.contextPath}/images/avatars/Products/default.png\" alt=\"default product photo\"/>"
-                    }else{
-                        $.each(value.photos, function(photoKey, photoValue) {
-                            row += "                            <img class=\"rounded shadow mb-3 bg-white rounded\" height=\"65\" width=\"65\"\n" +
-                                "                                 src=\"${pageContext.request.contextPath}/images?id=\""+ photoValue.id +"\"&resource=products\"\n" +
-                                "                                 onerror=\"this.onerror=null;this.src='${pageContext.request.contextPath}/images/avatars/Products/default.png';\"/>\n";
-                        });
+        var datatable =  $('#allProductTable').DataTable({
+            "order" : [[1, "asc"]],
+            "language" : {
+                "url" : getLang()
+            },
+            responsive: {
+                details: {
+                    type: 'column',
+                    target: 'tr'
+                }
+            },
+            columnDefs: [ {
+                className: 'control',
+                orderable: false,
+                targets:   0
+            } ],
+            searching: false
+        });
 
-                    }
-                    row += "            </td>" +
-                        "            <td>"+ value.price +" €</td>\n" +
-                        "            <td>\n" +
-                        "                <button type=\"button\" class=\"btn btn-primary addButton\"\n" +
-                        "                        style=\"padding: 0 .375rem 0 .375rem;\"\n" +
-                        "                        data-toggle=\"modal\" data-target=\"#addProductModal\" data-id=\""+ value.id +"\">\n" +
-                        "                    <i class=\"fas fa-plus\"></i>\n" +
-                        "                </button>\n" +
-                        "            </td>\n" +
-                        "        </tr>\n";
-                    datatable.row.add($(row)).draw()
+        $('.search-box').keyup(function(e) {
+            if (timeout !== null) {
+                clearTimeout(timeout);
+            }
+            timeout = setTimeout(function() {
+                $.ajax({
+                    'url': "/ShoppingLesto/list/availableproduct?listId=" + new URLSearchParams(window.location.search).get('listId') + "&q=" + e.target.value,
+                    'method': "GET",
+                    'contentType': 'application/json'
+                }).done(function (responseJson) {
+                    datatable.clear().draw();
+                    $.each(responseJson, function(key, value) {
+                        var row = "";
+                        row += "<tr>\n" +
+                            "            <td></td>" +
+                            "            <td>"+ value.name +"</td>\n" +
+                            "            <td>"+ value.description +"</td>\n" +
+                            "            <td>"+ value.category.name +"</td>\n" +
+                            "            <td>\n";
+                        if(value.photos == null){
+                            row    += "<img class=\"rounded shadow mb-3 bg-white rounded\" height=\"65\" width=\"65\"\n" +
+                                "                             src=\"${pageContext.request.contextPath}/images/avatars/Products/default.png\" alt=\"default product photo\"/>"
+                        }else{
+                            $.each(value.photos, function(photoKey, photoValue) {
+                                row += "                            <img class=\"rounded shadow mb-3 bg-white rounded\" height=\"65\" width=\"65\"\n" +
+                                    "                                 src=\"${pageContext.request.contextPath}/images?id=\""+ photoValue.id +"\"&resource=products\"\n" +
+                                    "                                 onerror=\"this.onerror=null;this.src='${pageContext.request.contextPath}/images/avatars/Products/default.png';\"/>\n";
+                            });
+
+                        }
+                        row += "            </td>" +
+                            "            <td>"+ value.price +" €</td>\n" +
+                            "            <td>\n" +
+                            "                <button type=\"button\" class=\"btn btn-primary addButton\"\n" +
+                            "                        style=\"padding: 0 .375rem 0 .375rem;\"\n" +
+                            "                        data-toggle=\"modal\" data-target=\"#addProductModal\" data-id=\""+ value.id +"\">\n" +
+                            "                    <i class=\"fas fa-plus\"></i>\n" +
+                            "                </button>\n" +
+                            "            </td>\n" +
+                            "        </tr>\n";
+                        datatable.row.add($(row)).draw();
+                    });
+                    $('.addButton').click(addProd);
                 });
-                $('.addButton').click(addProd);
-            });
-        }, 300);
-    });
+            }, 300);
+        });
 
-    $('.addProduct').click(function(){       // When HTML DOM "click" event is invoked on element with ID "somebutton", execute the following function...
-        $.get("category/all")
-            .done(function(responseJson) {                 // Execute Ajax GET request on URL of "someservlet" and execute the following function with Ajax response JSON...
-                var opts = "";
-                $.each(responseJson, function(key, value) {               // Iterate over the JSON object.
-                    opts += "<option value='" + key + "'>" + value + "</option>";
+        $('.addProduct').click(function(){       // When HTML DOM "click" event is invoked on element with ID "somebutton", execute the following function...
+            $.get("category/all")
+                .done(function(responseJson) {                 // Execute Ajax GET request on URL of "someservlet" and execute the following function with Ajax response JSON...
+                    var opts = "";
+                    $.each(responseJson, function(key, value) {               // Iterate over the JSON object.
+                        opts += "<option value='" + key + "'>" + value + "</option>";
+                    });
+                    $("#productCategory").append(opts);
                 });
-                $("#productCategory").append(opts);
-            });
-    });
+        });
 
-    $('#showAll').click(function(e) {
+        function showLoad(){
+            $.blockUI({ message: '<h1><img src=\"${pageContext.request.contextPath}/assets/img/Preloader_2.gif\" /> Just a moment...</h1>' });
+        }
+        function dismissLoad(){
+            $.unblockUI();
+        }
+
+        $('#showAll').click(function(e) {
             $.ajax({
                 'url': "/ShoppingLesto/list/availableproduct?listId=" + new URLSearchParams(window.location.search).get('listId'),
                 'method': "GET",
-                'contentType': 'application/json'
+                'contentType': 'application/json',
+                beforeSend : showLoad(),
             }).done(function (responseJson) {
                 datatable.clear().draw();
                 $.each(responseJson, function(key, value) {
@@ -300,9 +314,13 @@
                         "        </tr>\n";
                     datatable.row.add($(row)).draw()
                 });
+                dismissLoad();
                 $('.addButton').click(addProd);
             });
-    });
+        });
+    })
+
+
 </script>
 </body>
 

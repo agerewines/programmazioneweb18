@@ -26,6 +26,12 @@
 
     <%@include file="parts/_imports.jspf" %>
 
+    <style>
+        body{
+            background-color: #303030;
+        }
+    </style>
+
 </head>
 <body id="page-top" style="margin-top: 0%">
 

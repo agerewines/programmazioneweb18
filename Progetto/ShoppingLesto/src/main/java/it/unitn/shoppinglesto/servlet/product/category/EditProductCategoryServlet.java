@@ -94,7 +94,7 @@ public class EditProductCategoryServlet extends HttpServlet {
 
         if (hasError) {
             session.setAttribute("errorMessage", message);
-            response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath() + "/home"));
+            response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath() + "/admin/prodCat"));
         } else {
             message = "Product category was successfully updated";
             session.setAttribute("successMessage", message);

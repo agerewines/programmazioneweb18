@@ -300,12 +300,12 @@ public class JDBCShoppingListDAO extends JDBCDAO<ShoppingList, Integer> implemen
     }
 
     @Override
-    public boolean isUserInList(User user, ShoppingList shoppingList) throws DAOException {
+    public boolean isUserInList(User user, Integer listId) throws DAOException {
         try (PreparedStatement stm = CON.prepareStatement("SELECT * FROM UserList WHERE sharedListId = ? AND invitedUser = ?")) {
-            stm.setInt(1, shoppingList.getId());
+            stm.setInt(1, listId);
             stm.setInt(2, user.getId());
             try (ResultSet rs = stm.executeQuery()) {
-                return (rs.next() || user.getId().equals(getListOwner(shoppingList)));
+                return (rs.next() || user.getId().equals(getListOwner(listId)));
             }
         } catch (SQLException ex) {
             throw new DAOException("Impossible to know if the user is in the list", ex);
@@ -478,10 +478,10 @@ public class JDBCShoppingListDAO extends JDBCDAO<ShoppingList, Integer> implemen
         }
     }
 
-    public Integer getListOwner(ShoppingList shoppingList) throws DAOException {
+    public Integer getListOwner(Integer listId) throws DAOException {
         Integer owner = null;
         try (PreparedStatement preparedStatement = CON.prepareStatement("SELECT user_id FROM List WHERE list_id = ?")) {
-            preparedStatement.setInt(1, shoppingList.getId());
+            preparedStatement.setInt(1, listId);
             try (ResultSet rs = preparedStatement.executeQuery()) {
                 if (rs.next())
                     owner = rs.getInt(1);
