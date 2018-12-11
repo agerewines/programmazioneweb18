@@ -235,7 +235,7 @@
                         }else{
                             $.each(value.photos, function(photoKey, photoValue) {
                                 row += "                            <img class=\"rounded shadow mb-3 bg-white rounded\" height=\"65\" width=\"65\"\n" +
-                                    "                                 src=\"${pageContext.request.contextPath}/images?id=\""+ photoValue.id +"\"&resource=products\"\n" +
+                                    "                                 src=\"${pageContext.request.contextPath}/images?id="+ photoValue.id +"&resource=products\"\n" +
                                     "                                 onerror=\"this.onerror=null;this.src='${pageContext.request.contextPath}/images/avatars/Products/default.png';\"/>\n";
                             });
 
@@ -297,7 +297,7 @@
                     }else{
                         $.each(value.photos, function(photoKey, photoValue) {
                             row += "                            <img class=\"rounded shadow mb-3 bg-white rounded\" height=\"65\" width=\"65\"\n" +
-                                "                                 src=\"${pageContext.request.contextPath}/images?id=\""+ photoValue.id +"\"&resource=products\"\n" +
+                                "                                 src=\"${pageContext.request.contextPath}/images?id="+ photoValue.id +"&resource=products\"\n" +
                                 "                                 onerror=\"this.onerror=null;this.src='${pageContext.request.contextPath}/images/avatars/Products/default.png';\"/>\n";
                         });
 
