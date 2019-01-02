@@ -280,7 +280,7 @@
                 'url': "/ShoppingLesto/list/availableproduct?listId=" + new URLSearchParams(window.location.search).get('listId'),
                 'method': "GET",
                 'contentType': 'application/json',
-                beforeSend : showLoad(),
+                beforeSend : showLoad()
             }).done(function (responseJson) {
                 datatable.clear().draw();
                 $.each(responseJson, function(key, value) {

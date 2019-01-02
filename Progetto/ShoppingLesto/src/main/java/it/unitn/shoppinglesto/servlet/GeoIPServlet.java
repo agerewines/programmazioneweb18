@@ -71,7 +71,7 @@ public class GeoIPServlet extends HttpServlet {
         int listId = -23;
         String ip = request.getRemoteAddr();
 
-        ip = "193.205.210.82";
+        //ip = "193.205.210.82";
 
         if (ip != null) {
             ServletContext context = this.getServletContext();

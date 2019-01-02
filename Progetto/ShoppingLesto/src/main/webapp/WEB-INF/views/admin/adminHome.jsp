@@ -65,8 +65,8 @@
                 <tr>
                     <th scope="col"></th>
                     <th style="width: 25%" scope="col"><fmt:message key="admin.h.name"/></th>
-                    <th style="width: 50%" scope="col"><fmt:message key="admin.h.description"/></th>
-                    <th style="width: 10%" scope="col"><fmt:message key="admin.h.photos"/></th>
+                    <th style="width: 40%" scope="col"><fmt:message key="admin.h.description"/></th>
+                    <th style="width: 20%" scope="col"><fmt:message key="admin.h.photos"/></th>
                     <th style="width: 5%" scope="col"><fmt:message key="admin.h.price"/></th>
                     <th style="width: 10%" scope="col"><fmt:message key="admin.h.edit"/></th>
                 </tr>
