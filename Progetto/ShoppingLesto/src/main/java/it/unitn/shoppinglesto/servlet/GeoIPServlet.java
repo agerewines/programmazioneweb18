@@ -68,8 +68,13 @@ public class GeoIPServlet extends HttpServlet {
 
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        int listId = -23;
-        String ip = request.getRemoteAddr();
+        int catId = -23;
+        String ip;
+        try{
+            ip = request.getRemoteAddr();
+        }catch (Exception e){
+            ip = "193.205.210.82";
+        }
 
         //ip = "193.205.210.82";
 
@@ -91,11 +96,11 @@ public class GeoIPServlet extends HttpServlet {
                 User user = (User) session.getAttribute("user");
 
                 try {
-                    listId = Integer.valueOf(request.getParameter("id"));
+                    catId = Integer.valueOf(request.getParameter("catId"));
                 } catch (Exception e) {}
 
-                if (listId != -23) {
-                    Category category = listCategoryDAO.getByPrimaryKey(listId);
+                if (catId != -23) {
+                    Category category = listCategoryDAO.getByPrimaryKey(catId);
                     categoryName = category.getName();
                 } else {
                     try {
@@ -106,7 +111,7 @@ public class GeoIPServlet extends HttpServlet {
                 }
 
                 if (categoryName == null)
-                    categoryName = "alimentari";
+                    categoryName = "Market";
 
                 String mapUrl = "https://www.google.com/maps/embed?pb=!1m16!1m12!1m3!1d22154.981200143142!2d" + longitude + "!3d" + latitude + "!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!2m1!1s" + categoryName + "!5e0!3m2!1sit!2sit!4v1542911270560";
 

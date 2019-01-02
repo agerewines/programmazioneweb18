@@ -74,7 +74,9 @@
                     </div>
                 </div>
                 <div class="col-12 col-md-12 col-lg-9 mb-4">
-                    <div class="d-none d-lg-block" id="mapLabel"><h2><fmt:message key="home.h2.map"/></h2></div>
+                    <div class="d-none d-lg-block" id="mapLabel">
+                        <h2 style="display: inline"><fmt:message key="home.h2.map"/></h2>
+                    </div>
                     <div class="tab-content">
                         <iframe class="rounded" src="https://www.google.com/maps/embed?pb=!1m16!1m12!1m3!1d22154.981200143142!2d11.1333!3d46.0667!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!2m1!1sMarket!5e0!3m2!1sit!2sit!4v1542911270560" width="100%" height="700px" style="border: none;" allowfullscreen id="map"></iframe>
                     </div>
@@ -88,6 +90,7 @@
 <%@include file="parts/_footer.jspf" %>
 <%@include file="parts/_importsjs.jspf" %>
 <script type="text/javascript">
+
     $(".showMapButton").click(function(){
         let catId = $(this).data("id-category");
         $('.showMapButton').removeClass('active');
@@ -108,7 +111,24 @@
                 }
             }
         });
+    });
+    $(document).ready(function(){
+        $(this).addClass('active');
+        $.ajax({
+            type: "POST",
+            url: "geoip",
+            dataType : "html",
+            success: function (html) {
+                $("#map").attr("src", html);
+                if(!$('#mapLabel').is(':visible')){
+                    $('html, body').animate({
+                        scrollTop: $("#map").offset().top
+                    },1000);
+                }
+            }
+        });
     })
+
 </script>
 </body>
 </html>
