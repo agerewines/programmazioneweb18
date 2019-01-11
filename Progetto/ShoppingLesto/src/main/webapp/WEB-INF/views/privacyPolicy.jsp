@@ -49,12 +49,12 @@
                     <h1>Informativa sulla Privacy</h1>
 
 
-                    <p>Data di entrata in vigore: November 18, 2018</p>
+                    <p>Data di entrata in vigore: January 10, 2019</p>
 
 
                     <p>ShoppingLesto ("noi" o "nostro") gestisce il shoppinglesto.alessandrogerevini.com sito web (in appresso il "Servizio").</p>
 
-                    <p>Questa pagina vi informa delle nostre politiche riguardanti la raccolta, l'uso e la divulgazione dei dati personali quando usate il nostro Servizio e le scelte che avete associato a quei dati. <a href="https://privacypolicies.com/free-privacy-policy-generator/">Informativa sulla Privacy via Privacy Policies</a>.</p>
+                    <p>Questa pagina vi informa delle nostre politiche riguardanti la raccolta, l'uso e la divulgazione dei dati personali quando usate il nostro Servizio e le scelte che avete associato a quei dati. <a href="https://privacypolicies.com/blog/privacy-policy-template/">Credits: Privacy Policies: Modello di politica sulla privacy</a>.</p>
 
                     <p>Utilizziamo i vostri dati per fornire e migliorare il Servizio. Utilizzando il Servizio, accettate la raccolta e l'utilizzo delle informazioni in conformità con questa informativa. Se non diversamente definito nella presente Informativa sulla privacy, i termini utilizzati nella presente Informativa hanno la stessa valenza dei nostri Termini e condizioni, accessibili da shoppinglesto.alessandrogerevini.com</p>
 
@@ -87,7 +87,7 @@
                     <p>Durante l'utilizzo del nostro Servizio, potremmo chiedervi di fornirci alcune informazioni di identificazione personale che possono essere utilizzate per contattarvi o identificarvi ("Dati personali"). Le informazioni di identificazione personale possono includere, ma non sono limitate a:</p>
 
                     <ul>
-                        <li>Indirizzo email</li>    <li>Nome e cognome</li>            <li>Cookie e dati di utilizzo</li>
+                        <li>Indirizzo email</li>    <li>Nome e cognome</li>        <li>AIndirizzo, stato, provincia, codice postale, città</li>    <li>Cookie e dati di utilizzo</li>
                     </ul>
 
                     <h4>Dati di utilizzo</h4>
@@ -103,6 +103,7 @@
                         <li><strong>Cookie di sessione.</strong> Utilizziamo i cookie di sessione per gestire il nostro servizio.</li>
                         <li><strong>Cookie di preferenza.</strong> Utilizziamo i cookie di preferenza per ricordare le vostre preferenze e varie impostazioni.</li>
                         <li><strong>Cookie di sicurezza.</strong> Utilizziamo i cookie di sicurezza per motivi di sicurezza.</li>
+                        <li><strong>Cookie di terze party.</strong> Utilizziamo i cookie di terze parti per la ricerca tramite geolocalizzazione di negozi nei dintorni.</li>
                     </ul>
 
                     <h2>Uso dei dati</h2>
@@ -145,7 +146,7 @@
 
 
                     <h2>Link ad altri siti</h2>
-                    <p>OIl nostro servizio può contenere collegamenti ad altri siti non gestiti da noi. Cliccando su un link di terze parti, sarete indirizzati al sito di quella terza parte. Ti consigliamo vivamente di rivedere l'Informativa sulla privacy di ogni sito che visiti.</p>
+                    <p>Il nostro servizio può contenere collegamenti ad altri siti non gestiti da noi. Cliccando su un link di terze parti, sarete indirizzati al sito di quella terza parte. Ti consigliamo vivamente di rivedere l'Informativa sulla privacy di ogni sito che visiti.</p>
                     <p>Non abbiamo alcun controllo e non ci assumiamo alcuna responsabilità per il contenuto, le politiche sulla privacy o le pratiche di qualsiasi sito o servizio di terzi.</p>
 
 
@@ -171,12 +172,12 @@
                     <h1>Privacy Policy</h1>
 
 
-                    <p>Effective date: November 18, 2018</p>
+                    <p>Effective date: January 10, 2019</p>
 
 
                     <p>ShoppingLesto ("us", "we", or "our") operates the shoppinglesto.alessandrogerevini.com website (hereinafter referred to as the "Service").</p>
 
-                    <p>This page informs you of our policies regarding the collection, use, and disclosure of personal data when you use our Service and the choices you have associated with that data. Our Privacy Policy  for ShoppingLesto is managed with the help of <a href="https://privacypolicies.com/free-privacy-policy-generator/">Privacy Policies</a>.</p>
+                    <p>This page informs you of our policies regarding the collection, use, and disclosure of personal data when you use our Service and the choices you have associated with that data. Our Privacy Policy  for ShoppingLesto is based on the <a href="https://privacypolicies.com/blog/privacy-policy-template/">Privacy Policy Template from Privacy Policies</a>.</p>
 
                     <p>We use your data to provide and improve the Service. By using the Service, you agree to the collection and use of information in accordance with this policy. Unless otherwise defined in this Privacy Policy, the terms used in this Privacy Policy have the same meanings as in our Terms and Conditions, accessible from shoppinglesto.alessandrogerevini.com</p>
 
@@ -192,7 +193,7 @@
                     <p>While using our Service, we may ask you to provide us with certain personally identifiable information that can be used to contact or identify you ("Personal Data"). Personally identifiable information may include, but is not limited to:</p>
 
                     <ul>
-                        <li>Email address</li><li>First name and last name</li><li>Cookies and Usage Data</li>
+                        <li>Email address</li><li>First name and last name</li><li>Address, State, Province, ZIP/Postal code, City</li><li>Cookies and Usage Data</li>
                     </ul>
 
                     <h4>Usage Data</h4>
@@ -208,6 +209,7 @@
                         <li><strong>Session Cookies.</strong> We use Session Cookies to operate our Service.</li>
                         <li><strong>Preference Cookies.</strong> We use Preference Cookies to remember your preferences and various settings.</li>
                         <li><strong>Security Cookies.</strong> We use Security Cookies for security purposes.</li>
+                        <li><strong>Third party Cookies.</strong> We use Third Party Cookies for location purposes.</li>
                     </ul>
 
                     <h2>Use of Data</h2>

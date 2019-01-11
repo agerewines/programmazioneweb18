@@ -60,7 +60,9 @@ public class SuggestionServlet extends HttpServlet {
         }
         boolean hasNews = false;
         List<NotificationExpire> allNews = new ArrayList<>();
+        boolean inIta = true;
         try {
+            inIta = request.getHeader("Content-Language").equals("it-IT");
             List<ShoppingList> userList = shoppingListDAO.getUserLists(user);
             List<Suggestion> suggestions = new ArrayList<>();
             for (ShoppingList list: userList) {
@@ -96,9 +98,15 @@ public class SuggestionServlet extends HttpServlet {
             response.setContentType("text/html");
             response.setHeader("Cache-Control", "no-cache");
             for (NotificationExpire news: allNews) {
-                response.getWriter().write("<li class=\"list-group-item text-center notify\" onclick=\"expireNotificationDismiss(this)\" data-suggestion-id=\"" + news.getSuggestion().getId() + " data-list-id=\"" + news.getSuggestion().getIdList() + "\"> " +
-                        "   <strong>" + news.getProduct().getName() + "</strong> in <strong>" + news.getList().getName() + "</strong> is about to expire" +
-                        "</li>");
+                if(!inIta){
+                    response.getWriter().write("<li class=\"list-group-item text-center notify\" onclick=\"expireNotificationDismiss(this)\" data-suggestion-id=\"" + news.getSuggestion().getId() + "\" data-list-id=\"" + news.getSuggestion().getIdList() + "\"> " +
+                            "   <strong>" + news.getProduct().getName() + "</strong> in <strong>" + news.getList().getName() + "</strong> is about to expire" +
+                            "</li>");
+                }else{
+                    response.getWriter().write("<li class=\"list-group-item text-center notify\" onclick=\"expireNotificationDismiss(this)\" data-suggestion-id=\"" + news.getSuggestion().getId() + "\" data-list-id=\"" + news.getSuggestion().getIdList() + "\"> " +
+                            "   <strong>" + news.getProduct().getName() + "</strong> nella lista <strong>" + news.getList().getName() + "</strong> sta per scadere" +
+                            "</li>");
+                }
             }
         }
 

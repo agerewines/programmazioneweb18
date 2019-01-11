@@ -39,16 +39,6 @@
     }
 
     <c:if test="${not empty user}">
-        /*setInterval(function () {
-            $.ajax({
-                type: "POST",
-                url: "${pageContext.request.contextPath}/notification/market",
-                dataType: "html",
-                success: function (html) {
-                    $("#notificationBox").append(html);
-                }
-            });
-        }, 25000); */
 
         function removeNotification(elem) {
             $(elem).fadeOut(300, function () {

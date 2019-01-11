@@ -91,27 +91,7 @@
 <%@include file="parts/_importsjs.jspf" %>
 <script type="text/javascript">
 
-    $(".showMapButton").click(function(){
-        let catId = $(this).data("id-category");
-        $('.showMapButton').removeClass('active');
-        $(this).addClass('active');
-        $.ajax({
-            type: "POST",
-            url: "geoip",
-            data: {
-                catId: catId
-            },
-            dataType : "html",
-            success: function (html) {
-                $("#map").attr("src", html);
-                if(!$('#mapLabel').is(':visible')){
-                    $('html, body').animate({
-                        scrollTop: $("#map").offset().top
-                    },1000);
-                }
-            }
-        });
-    });
+
     $(document).ready(function(){
         $(this).addClass('active');
         $.ajax({
@@ -126,6 +106,47 @@
                     },1000);
                 }
             }
+        });
+        {
+            let catId = 7;
+            $.ajax({
+                type: "POST",
+                url: "geoip",
+                data: {
+                    catId: catId
+                },
+                dataType : "html",
+                success: function (html) {
+                    $("#map").attr("src", html);
+                    if(!$('#mapLabel').is(':visible')){
+                        $('html, body').animate({
+                            scrollTop: $("#map").offset().top
+                        },1000);
+                    }
+                }
+            });
+        }
+
+        $(".showMapButton").click(function(){
+            let catId = $(this).data("id-category");
+            $('.showMapButton').removeClass('active');
+            $(this).addClass('active');
+            $.ajax({
+                type: "POST",
+                url: "geoip",
+                data: {
+                    catId: catId
+                },
+                dataType : "html",
+                success: function (html) {
+                    $("#map").attr("src", html);
+                    if(!$('#mapLabel').is(':visible')){
+                        $('html, body').animate({
+                            scrollTop: $("#map").offset().top
+                        },1000);
+                    }
+                }
+            });
         });
     })
 

@@ -56,9 +56,9 @@
                 <tr>
                     <th scope="col"></th>
                     <th style="width: 25%" scope="col"><fmt:message key="list.th.name" /></th>
-                    <th style="width: 45%" scope="col"><fmt:message key="list.th.description" /></th>
+                    <th style="width: 40%" scope="col"><fmt:message key="list.th.description" /></th>
                     <th style="width: 10%" scope="col"><fmt:message key="new_list.label.category" /></th>
-                    <th style="width: 10%" scope="col"><fmt:message key="list.th.image" /></th>
+                    <th style="width: 15%" scope="col"><fmt:message key="list.th.image" /></th>
                     <th style="width: 5%" scope="col"><fmt:message key="list.th.price" /></th>
                     <th style="width: 5%" scope="col"><fmt:message key="product.th.add" /></th>
                 </tr>

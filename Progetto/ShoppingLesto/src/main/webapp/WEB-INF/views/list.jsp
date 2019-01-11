@@ -136,7 +136,7 @@
                     <th scope="col"></th>
                     <th scope="col"><fmt:message key="list.th.name"/></th>
                     <th scope="col"><fmt:message key="list.th.description"/></th>
-                    <th scope="col" width="70px"><fmt:message key="list.th.image"/></th>
+                    <th scope="col" width="20%"><fmt:message key="list.th.image"/></th>
                     <th scope="col"><fmt:message key="list.th.price"/></th>
                     <th scope="col"><fmt:message key="list.th.delete"/></th>
                 </tr>
