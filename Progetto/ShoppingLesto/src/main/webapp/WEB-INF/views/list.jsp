@@ -7,7 +7,9 @@
         <c:set var="language" value="${param.lang}" scope="session"/>
     </c:when>
     <c:otherwise>
-        <c:set var="language" value="${not empty param.language ? param.language : not empty language ? language : pageContext.request.locale}" scope="session" />
+        <c:set var="language"
+               value="${not empty param.language ? param.language : not empty language ? language : pageContext.request.locale}"
+               scope="session"/>
     </c:otherwise>
 </c:choose>
 <c:set var="language"
@@ -201,23 +203,29 @@
                     </div>
                     <div class="modal-footer">
                         <div class="input-group mb-3">
-                                <div class="input-group-prepend">
-                                    <button class="btn btn-outline-secondary d-lg-none" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <i class="fas fa-stream"></i>
-                                    </button>
-                                    <button class="btn btn-outline-secondary dropdown-toggle d-none d-lg-block" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <fmt:message key="list.chat.choose"/>
-                                    </button>
-                                    <div class="dropdown-menu">
-                                        <a class="dropdown-item chooseMessage"><fmt:message key="list.chat.pred1"/></a>
-                                        <a class="dropdown-item chooseMessage"><fmt:message key="list.chat.pred2"/></a>
-                                        <a class="dropdown-item chooseMessage"><fmt:message key="list.chat.pred3"/></a>
-                                    </div>
+                            <div class="input-group-prepend">
+                                <button class="btn btn-outline-secondary d-lg-none" type="button" data-toggle="dropdown"
+                                        aria-haspopup="true" aria-expanded="false">
+                                    <i class="fas fa-stream"></i>
+                                </button>
+                                <button class="btn btn-outline-secondary dropdown-toggle d-none d-lg-block"
+                                        type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <fmt:message key="list.chat.choose"/>
+                                </button>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item chooseMessage"><fmt:message key="list.chat.pred1"/></a>
+                                    <a class="dropdown-item chooseMessage"><fmt:message key="list.chat.pred2"/></a>
+                                    <a class="dropdown-item chooseMessage"><fmt:message key="list.chat.pred3"/></a>
                                 </div>
-                            <input type="text" class="form-control" placeholder="<fmt:message key="list.chat.sendplaceholder"/>." aria-label="<fmt:message key="list.chat.sendplaceholder"/>" aria-describedby="submitMessage" id="message">
+                            </div>
+                            <input type="text" class="form-control"
+                                   placeholder="<fmt:message key="list.chat.sendplaceholder"/>."
+                                   aria-label="<fmt:message key="list.chat.sendplaceholder"/>"
+                                   aria-describedby="submitMessage" id="message">
                             <input type="hidden" id="listIdMessage" value="${list.id}">
                             <input type="hidden" id="userIdMessage" value="${user.id}">
-                            <input type="hidden" id="sendMessageUrl" value="${pageContext.request.contextPath}/message/create">
+                            <input type="hidden" id="sendMessageUrl"
+                                   value="${pageContext.request.contextPath}/message/create">
                             <div class="input-group-append">
                                 <button type="button" class="btn btn-primary" id="submitMessage">
                                     <div class="d-lg-none"><i class="fas fa-location-arrow"></i></div>
@@ -232,420 +240,441 @@
         <div class="col-md-1">
         </div>
         </c:if>
-</div>
-<!-- Modal edit button -->
-<div class="modal fade" id="modifyListModal" tabindex="-1" role="dialog" aria-labelledby="modifyListModalLabel"
-     aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modifyListModalLabel"><fmt:message key="list.h.edit_list"/></h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form action="${pageContext.request.contextPath}/list/modify" method="POST"
-                      enctype='multipart/form-data'>
-                    <div class="form-row">
-                        <div class="form-group col-md-12">
-                            <label for="nameList"><fmt:message key="list.label.name"/></label>
-                            <input type="text" class="form-control" id="nameList" placeholder="Name" name="nameList"
-                                   value="${list.name}">
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group col-md-12">
-                            <label for="descriptionList"><fmt:message key="list.label.description"/></label>
-                            <textarea class="form-control" id="descriptionList" name="descriptionList" rows="3"
-                                      placeholder="Description">${list.description}</textarea>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <label for="avatar"><fmt:message key="list.label.choose_category"/></label>
-                        <select id="category" name="category" class="form-control">
-                            <option selected value="-1"><fmt:message key="list.option.choose"/></option>
-                            <c:forEach items="${listCategories}" var="category">
-                                <option value="${category.id}">${category.name}</option>
-                            </c:forEach>
-                        </select>
-                    </div>
-                    <hr/>
-                    <div class="form-row mb-4">
-                        <div class="custom-file">
-                            <input type="file" class="custom-file-input" id="avatar" name="avatar"
-                                   value="${list.image}">
-                            <label class="custom-file-label" for="avatar">Add photo</label>
-                        </div>
-                    </div>
-                    <input type="hidden" id="listId" name="listId" value="${list.id}">
-
-                    <button type="submit" class="btn btn-primary"><fmt:message key="list.h.edit_list"/></button>
-                </form>
-            </div>
-        </div>
     </div>
-</div>
-<!-- Modal share button -->
-<div class="modal fade" id="shareListModal" tabindex="-1" role="dialog" aria-labelledby="shareListModalLabel"
-     aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="shareListModalLabel"><fmt:message key="list.h.share_list"/></h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form action="${pageContext.request.contextPath}/list/share" method="POST">
-                    <div class="form-row">
-                        <label for="user"><fmt:message key="list.label.chose_user"/></label>
-                        <select id="user" name="user" class="form-control">
-                            <option selected value="-1"><fmt:message key="list.option.choose"/></option>
-                            <c:forEach items="${listUsers}" var="user">
-                                <option value="${user.id}">${user.fullName}</option>
-                            </c:forEach>
-                        </select>
-                    </div>
-                    <br/>
-                    <div class="form-row">
-                        <label><fmt:message key="list.label.chose_permission"/></label>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" id="checkAdd" name="add" value="add">
-                            <label class="form-check-label" for="checkAdd"><fmt:message key="list.label.add"/></label>
+    <!-- Modal edit button -->
+    <div class="modal fade" id="modifyListModal" tabindex="-1" role="dialog" aria-labelledby="modifyListModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modifyListModalLabel"><fmt:message key="list.h.edit_list"/></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="${pageContext.request.contextPath}/list/modify" method="POST"
+                          enctype='multipart/form-data'>
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <label for="nameList"><fmt:message key="list.label.name"/></label>
+                                <input type="text" class="form-control" id="nameList" placeholder="Name" name="nameList"
+                                       value="${list.name}">
+                            </div>
                         </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" id="checkEdit" name="edit" value="edit">
-                            <label class="form-check-label" for="checkEdit"><fmt:message key="list.label.edit"/></label>
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <label for="descriptionList"><fmt:message key="list.label.description"/></label>
+                                <textarea class="form-control" id="descriptionList" name="descriptionList" rows="3"
+                                          placeholder="Description">${list.description}</textarea>
+                            </div>
                         </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" id="checkShare" name="share"
-                                   value="share">
-                            <label class="form-check-label" for="checkShare"><fmt:message
-                                    key="list.label.share"/></label>
-                        </div>
-                    </div>
-                    <br/>
-                    <input type="hidden" id="listIdShare" name="listId" value="${list.id}">
-                    <button type="submit" class="btn btn-primary"><fmt:message key="list.button.share_list"/></button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Modal delete button -->
-<div class="modal fade" id="deleteListModal" tabindex="-1" role="dialog" aria-labelledby="deleteListModalLabel"
-     aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="deleteListModalLabel"><fmt:message key="list.h.delete_list"/></h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form action="${pageContext.request.contextPath}/list/delete" method="POST" id="deleteItemForm">
-                    <label><fmt:message key="list.label.sure"/> ${list.name}?</label> <br/>
-                    <c:if test="${not empty sharedWith}">
-                        <label>
-                            <fmt:message key="list.label.even"/>
-                            <ul>
-                                <c:forEach items="${sharedWith}" var="sharedUser">
-                                    <li>${sharedUser.fullName}</li>
+                        <div class="form-row">
+                            <label for="avatar"><fmt:message key="list.label.choose_category"/></label>
+                            <select id="category" name="category" class="form-control">
+                                <option selected value="-1"><fmt:message key="list.option.choose"/></option>
+                                <c:forEach items="${listCategories}" var="category">
+                                    <option value="${category.id}">${category.name}</option>
                                 </c:forEach>
-                            </ul>
-                        </label> <br/>
-                    </c:if>
-                    <c:if test="${anon}">
-                        <input type="hidden" id="anonymous" name="anonymous" value="true">
-                    </c:if>
-                    <input type="hidden" id="listIdDelete" name="listId" value="${list.id}">
-                    <button type="submit" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-danger"><fmt:message key="list.h.delete_list"/></button>
-                </form>
+                            </select>
+                        </div>
+                        <hr/>
+                        <div class="form-row mb-4">
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" id="avatar" name="avatar"
+                                       value="${list.image}">
+                                <label class="custom-file-label" for="avatar"><fmt:message
+                                        key="admin.h.add_photo"/></label>
+                            </div>
+                        </div>
+                        <input type="hidden" id="listId" name="listId" value="${list.id}">
+
+                        <button type="submit" class="btn btn-primary"><fmt:message key="list.h.edit_list"/></button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-</div>
-<!-- Modal shared user -->
-<div class="modal fade" id="sharedUserModal" tabindex="-1" role="dialog" aria-labelledby="sharedUserModalTitle"
-     aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="sharedUserModalTitle"><fmt:message key="list.h.shared_users"/></h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+    <!-- Modal share button -->
+    <div class="modal fade" id="shareListModal" tabindex="-1" role="dialog" aria-labelledby="shareListModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="shareListModalLabel"><fmt:message key="list.h.share_list"/></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="${pageContext.request.contextPath}/list/share" method="POST">
+                        <div class="form-row">
+                            <label for="user"><fmt:message key="list.label.chose_user"/></label>
+                            <select id="user" name="user" class="form-control">
+                                <option selected value="-1"><fmt:message key="list.option.choose"/></option>
+                                <c:forEach items="${listUsers}" var="user">
+                                    <option value="${user.id}">${user.fullName}</option>
+                                </c:forEach>
+                            </select>
+                        </div>
+                        <br/>
+                        <div class="form-row">
+                            <label><fmt:message key="list.label.chose_permission"/></label>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="checkAdd" name="add" value="add">
+                                <label class="form-check-label" for="checkAdd"><fmt:message
+                                        key="list.label.add"/></label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="checkEdit" name="edit" value="edit">
+                                <label class="form-check-label" for="checkEdit"><fmt:message
+                                        key="list.label.edit"/></label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="checkShare" name="share"
+                                       value="share">
+                                <label class="form-check-label" for="checkShare"><fmt:message
+                                        key="list.label.share"/></label>
+                            </div>
+                        </div>
+                        <br/>
+                        <input type="hidden" id="listIdShare" name="listId" value="${list.id}">
+                        <button type="submit" class="btn btn-primary"><fmt:message
+                                key="list.button.share_list"/></button>
+                    </form>
+                </div>
             </div>
-            <div class="modal-body">
-                <ul class="list-group">
-                    <c:forEach items="${sharedWith}" var="sharedUser">
-                        <li class="list-group-item">
-                            <ul class="list-inline">
-                                <li class="list-inline-item">
-                                        ${sharedUser.fullName}
-                                </li>
-                                <c:if test="${list.share and sharedUser.id ne user.id}">
+        </div>
+    </div>
+    <!-- Modal delete button -->
+    <div class="modal fade" id="deleteListModal" tabindex="-1" role="dialog" aria-labelledby="deleteListModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteListModalLabel"><fmt:message key="list.h.delete_list"/></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="${pageContext.request.contextPath}/list/delete" method="POST" id="deleteItemForm">
+                        <label><fmt:message key="list.label.sure"/> ${list.name}?</label> <br/>
+                        <c:if test="${not empty sharedWith}">
+                            <label>
+                                <fmt:message key="list.label.even"/>
+                                <ul>
+                                    <c:forEach items="${sharedWith}" var="sharedUser">
+                                        <li>${sharedUser.fullName}</li>
+                                    </c:forEach>
+                                </ul>
+                            </label> <br/>
+                        </c:if>
+                        <c:if test="${anon}">
+                            <input type="hidden" id="anonymous" name="anonymous" value="true">
+                        </c:if>
+                        <input type="hidden" id="listIdDelete" name="listId" value="${list.id}">
+                        <button type="submit" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-danger"><fmt:message key="list.h.delete_list"/></button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal shared user -->
+    <div class="modal fade" id="sharedUserModal" tabindex="-1" role="dialog" aria-labelledby="sharedUserModalTitle"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="sharedUserModalTitle"><fmt:message key="list.h.shared_users"/></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <ul class="list-group">
+                        <c:forEach items="${sharedWith}" var="sharedUser">
+                            <li class="list-group-item">
+                                <ul class="list-inline">
                                     <li class="list-inline-item">
-                                        <button type="button" class="btn btn-primary editPermit"
-                                                style="padding: 0 .375rem 0 .375rem;"
-                                                data-toggle="modal" data-target="#editPermitModal"
-                                                data-id="${sharedUser.id}"
-                                                data-list-id="${list.id}">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
+                                            ${sharedUser.fullName}
                                     </li>
-                                    <li class="list-inline-item">
-                                        <button type="button" class="btn btn-primary deletePermit"
-                                                style="padding: 0 .375rem 0 .375rem;"
-                                                data-toggle="modal" data-target="#deleteSharedUserModal"
-                                                data-id="${sharedUser.id}"
-                                                data-shared-name="${sharedUser.fullName}">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </li>
-                                </c:if>
-                            </ul>
-                        </li>
-                    </c:forEach>
-                </ul>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-dismiss="modal"><fmt:message
-                        key="list.button.close"/></button>
+                                    <c:if test="${list.share }">
+                                        <c:if test="${sharedUser.id ne user.id}">
+                                            <li class="list-inline-item">
+                                                <button type="button" class="btn btn-primary editPermit"
+                                                        style="padding: 0 .375rem 0 .375rem;"
+                                                        data-toggle="modal" data-target="#editPermitModal"
+                                                        data-id="${sharedUser.id}"
+                                                        data-list-id="${list.id}">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                            </li>
+                                        </c:if>
+                                        <li class="list-inline-item">
+                                            <button type="button" class="btn btn-primary deletePermit"
+                                                    style="padding: 0 .375rem 0 .375rem;"
+                                                    data-toggle="modal" data-target="#deleteSharedUserModal"
+                                                    data-id="${sharedUser.id}"
+                                                    data-shared-name="${sharedUser.fullName}">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </li>
+                                    </c:if>
+                                </ul>
+                            </li>
+                        </c:forEach>
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal"><fmt:message
+                            key="list.button.close"/></button>
+                </div>
             </div>
         </div>
     </div>
-</div>
-<!-- Modal edit share permit -->
-<div class="modal fade" id="editPermitModal" tabindex="-1" role="dialog" aria-labelledby="editPermitModalLabel"
-     aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="editPermitModalLabel"><fmt:message key="list.edit.permit"/></h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form action="${pageContext.request.contextPath}/list/share/edit" method="POST">
-                    <div class="form-row">
-                        <label><fmt:message key="list.label.chose_permission"/></label>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" id="editPermitAdd" type="checkbox" name="add" value="add">
-                            <label class="form-check-label" for="editPermitAdd"><fmt:message key="list.label.add"/></label>
+    <!-- Modal edit share permit -->
+    <div class="modal fade" id="editPermitModal" tabindex="-1" role="dialog" aria-labelledby="editPermitModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editPermitModalLabel"><fmt:message key="list.edit.permit"/></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="${pageContext.request.contextPath}/list/share/edit" method="POST">
+                        <div class="form-row">
+                            <label><fmt:message key="list.label.chose_permission"/></label>
                         </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" id="editPermitEdit" type="checkbox" name="edit"
-                                   value="edit">
-                            <label class="form-check-label" for="editPermitEdit"><fmt:message key="list.label.edit"/></label>
+                        <div class="form-row">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" id="editPermitAdd" type="checkbox" name="add"
+                                       value="add">
+                                <label class="form-check-label" for="editPermitAdd"><fmt:message
+                                        key="list.label.add"/></label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" id="editPermitEdit" type="checkbox" name="edit"
+                                       value="edit">
+                                <label class="form-check-label" for="editPermitEdit"><fmt:message
+                                        key="list.label.edit"/></label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" id="editPermitShare" type="checkbox" name="share"
+                                       value="share">
+                                <label class="form-check-label" for="editPermitShare"><fmt:message
+                                        key="list.label.share"/></label>
+                            </div>
                         </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" id="editPermitShare" type="checkbox" name="share"
-                                   value="share">
-                            <label class="form-check-label" for="editPermitShare"><fmt:message key="list.label.share"/></label>
-                        </div>
-                    </div>
-                    <br/>
-                    <input type="hidden" name="listId" value="${list.id}">
-                    <input type="hidden" id="userId" name="user">
-                    <button type="submit" class="btn btn-primary"><fmt:message key="list.button.share_list"/></button>
-                </form>
+                        <br/>
+                        <input type="hidden" name="listId" value="${list.id}">
+                        <input type="hidden" id="userId" name="user">
+                        <button type="submit" class="btn btn-primary"><fmt:message
+                                key="list.button.share_list"/></button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-</div>
-<!-- Modal edit shared user permit -->
-<div class="modal fade" id="deleteSharedUserModal" tabindex="-1" role="dialog"
-     aria-labelledby="deleteSharedUserModalLabel"
-     aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="deleteSharedUserModalLabel"><fmt:message key="list.delete.shareduser"/></h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form action="${pageContext.request.contextPath}/list/share/delete" method="POST">
-                    <label id="confirmLabelDeleteSharedUser"></label> <br/>
-                    <input type="hidden" id="listIdDeleteSharedUser" name="listId" value="${list.id}">
-                    <input type="hidden" id="userIdDeleteSharedUser" name="user">
-                    <button type="submit" class="btn btn-secondary" data-dismiss="modal"><fmt:message key="modal.cancel"/></button>
-                    <button type="submit" class="btn btn-danger"><fmt:message key="list.delete.shareduser"/></button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Modal delete product from list -->
-<div class="modal fade" id="deleteProductModal" tabindex="-1" role="dialog" aria-labelledby="deleteProductModalLabel"
-     aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="deleteProductModalLabel"><fmt:message key="list.remove.product"/></h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form action="${pageContext.request.contextPath}/list/product/delete" method="POST">
-                    <label id="confirmLabelDeleteProduct"><fmt:message key="list.remove.product.label"/></label> <br/>
-                    <c:if test="${anon}">
-                        <input type="hidden" id="anonymous" name="anonymous" value="true">
-                    </c:if>
-                    <input type="hidden" id="listIdDeleteProduct" name="listId" value="${list.id}">
-                    <input type="hidden" id="prodIdDelete" name="prodId">
-                    <button type="submit" class="btn btn-secondary" data-dismiss="modal"><fmt:message key="modal.cancel"/></button>
-                    <button type="submit" class="btn btn-danger"><fmt:message key="list.remove.product"/></button>
-                </form>
+    <!-- Modal edit shared user permit -->
+    <div class="modal fade" id="deleteSharedUserModal" tabindex="-1" role="dialog"
+         aria-labelledby="deleteSharedUserModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteSharedUserModalLabel"><fmt:message
+                            key="list.delete.shareduser"/></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="${pageContext.request.contextPath}/list/share/delete" method="POST">
+                        <label id="confirmLabelDeleteSharedUser"></label> <br/>
+                        <input type="hidden" id="listIdDeleteSharedUser" name="listId" value="${list.id}">
+                        <input type="hidden" id="userIdDeleteSharedUser" name="user">
+                        <button type="submit" class="btn btn-secondary" data-dismiss="modal"><fmt:message
+                                key="modal.cancel"/></button>
+                        <button type="submit" class="btn btn-danger"><fmt:message
+                                key="list.delete.shareduser"/></button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-</div>
+    <!-- Modal delete product from list -->
+    <div class="modal fade" id="deleteProductModal" tabindex="-1" role="dialog"
+         aria-labelledby="deleteProductModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteProductModalLabel"><fmt:message key="list.remove.product"/></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="${pageContext.request.contextPath}/list/product/delete" method="POST">
+                        <label id="confirmLabelDeleteProduct"><fmt:message key="list.remove.product.label"/></label>
+                        <br/>
+                        <c:if test="${anon}">
+                            <input type="hidden" id="anonymous" name="anonymous" value="true">
+                        </c:if>
+                        <input type="hidden" id="listIdDeleteProduct" name="listId" value="${list.id}">
+                        <input type="hidden" id="prodIdDelete" name="prodId">
+                        <button type="submit" class="btn btn-secondary" data-dismiss="modal"><fmt:message
+                                key="modal.cancel"/></button>
+                        <button type="submit" class="btn btn-danger"><fmt:message key="list.remove.product"/></button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
-<%@include file="parts/_footer.jspf" %>
-<%@include file="parts/_importsjs.jspf" %>
-<script type="text/javascript">
-    // language=JQuery-CSS
-    $('.editPermit').click(function () {
-        $('#userId').val($(this).data('id'));
-    });
-    $(document).on("click", ".editPermit", function () {        // When HTML DOM "click" event is invoked on element with ID "somebutton", execute the following function...
-        $.get("list/share/edit",
-            {
-                listId: $(this).data('list-id'),
-                userId: $(this).data('id')
-            }).done(function (responseJson) {                 // Execute Ajax GET request on URL of "someservlet" and execute the following function with Ajax response JSON...
-            $.each(responseJson, function (key, value) {               // Iterate over the JSON object.
-                switch (key) {
-                    case "add" :
-                        $("#editPermitAdd").prop('checked', value);
-                        break;
-                    case "edit" :
-                        $("#editPermitEdit").prop('checked', value);
-                        break;
-                    case "share" :
-                        $("#editPermitShare").prop('checked', value);
-                        break;
-                }
+    <%@include file="parts/_footer.jspf" %>
+    <%@include file="parts/_importsjs.jspf" %>
+    <script type="text/javascript">
+        // language=JQuery-CSS
+        $('.editPermit').click(function () {
+            $('#userId').val($(this).data('id'));
+        });
+        $(document).on("click", ".editPermit", function () {        // When HTML DOM "click" event is invoked on element with ID "somebutton", execute the following function...
+            $.get("list/share/edit",
+                {
+                    listId: $(this).data('list-id'),
+                    userId: $(this).data('id')
+                }).done(function (responseJson) {                 // Execute Ajax GET request on URL of "someservlet" and execute the following function with Ajax response JSON...
+                $.each(responseJson, function (key, value) {               // Iterate over the JSON object.
+                    switch (key) {
+                        case "add" :
+                            $("#editPermitAdd").prop('checked', value);
+                            break;
+                        case "edit" :
+                            $("#editPermitEdit").prop('checked', value);
+                            break;
+                        case "share" :
+                            $("#editPermitShare").prop('checked', value);
+                            break;
+                    }
+                });
             });
         });
-    });
-    // DELETE SHARED USER MODAL
-    $('.deletePermit').click(function () {
-        $('#confirmLabelDeleteSharedUser').html("Are you sure you want to unshare this list with " + $(this).data('shared-name') + "?");
-        $('#userIdDeleteSharedUser').val($(this).data('id'));
-    });
+        // DELETE SHARED USER MODAL
+        $('.deletePermit').click(function () {
+            $('#confirmLabelDeleteSharedUser').html("Are you sure you want to unshare this list with " + $(this).data('shared-name') + "?");
+            $('#userIdDeleteSharedUser').val($(this).data('id'));
+        });
 
-    $(document).ready(function () {
-        $('#tableProductInList').DataTable({
-            "order" : [[1, "asc"]],
-            "language" : {
-                "url" : getLang()
-            },
-            responsive: {
-                details: {
-                    type: 'column',
-                    target: 'tr'
-                }
-            },
-            columnDefs: [ {
-                className: 'control',
-                orderable: false,
-                targets:   0
-            } ]
-        });
-        <c:if test="${!anon}">
-        let listId = $("#listIdMessage").val();
-        let userId = $("#userIdMessage").val();
-        $.ajax({
-            type: "POST",
-            url: "message/show",
-            dataType: "html",
-            data:  {
-                listId : listId,
-                userId : userId
-            },
-            success: function(html){
-                $("#messages").html(html);
-                $("#divMessages").animate({scrollTop: $('#divMessages').prop("scrollHeight")}, 1000);
-            }
-        });
-        </c:if>
-    });
-    <c:if test="${!anon}">
-    var refreshMessage = setInterval(function(){
-        $.ajax({
-            type: "POST",
-            url: "message/show",
-            dataType: "html",
-            data:  {
-                listId : $("#listIdMessage").val(),
-                userId : $("#userIdMessage").val(),
-                lastMessageTime : $("#messages li").last().find("div h6 small").html()
-            },
-            success: function(html){
-                if(html !== ""){
-                    $("#messages").append(html);
+        $(document).ready(function () {
+            $('#tableProductInList').DataTable({
+                "order": [[1, "asc"]],
+                "language": {
+                    "url": getLang()
+                },
+                responsive: {
+                    details: {
+                        type: 'column',
+                        target: 'tr'
+                    }
+                },
+                columnDefs: [{
+                    className: 'control',
+                    orderable: false,
+                    targets: 0
+                }]
+            });
+            <c:if test="${!anon}">
+            let listId = $("#listIdMessage").val();
+            let userId = $("#userIdMessage").val();
+            $.ajax({
+                type: "POST",
+                url: "message/show",
+                dataType: "html",
+                data: {
+                    listId: listId,
+                    userId: userId
+                },
+                success: function (html) {
+                    $("#messages").html(html);
                     $("#divMessages").animate({scrollTop: $('#divMessages').prop("scrollHeight")}, 1000);
                 }
-            }
+            });
+            </c:if>
         });
-    }, 2000);
-    </c:if>
-    $(".chooseMessage").click(function(){
-        let elem = $(this).html();
-        $("#message").val(elem);
-    });
+        <c:if test="${!anon}">
+        var refreshMessage = setInterval(function () {
+            $.ajax({
+                type: "POST",
+                url: "message/show",
+                dataType: "html",
+                data: {
+                    listId: $("#listIdMessage").val(),
+                    userId: $("#userIdMessage").val(),
+                    lastMessageTime: $("#messages li").last().find("div h6 small").html()
+                },
+                success: function (html) {
+                    if (html !== "") {
+                        $("#messages").append(html);
+                        $("#divMessages").animate({scrollTop: $('#divMessages').prop("scrollHeight")}, 1000);
+                    }
+                }
+            });
+        }, 2000);
+        </c:if>
+        $(".chooseMessage").click(function () {
+            let elem = $(this).html();
+            $("#message").val(elem);
+        });
 
-    var lang = document.documentElement.lang;
-    function getLang(){
-        switch (lang){
-            case "it_IT" : return "https://cdn.datatables.net/plug-ins/1.10.19/i18n/Italian.json";
-                break;
-            case "en_US" : return "https://cdn.datatables.net/plug-ins/1.10.19/i18n/English.json";
-                break;
-            default :  return "https://cdn.datatables.net/plug-ins/1.10.19/i18n/English.json";
-                break;
+        var lang = document.documentElement.lang;
+
+        function getLang() {
+            switch (lang) {
+                case "it_IT" :
+                    return "https://cdn.datatables.net/plug-ins/1.10.19/i18n/Italian.json";
+                    break;
+                case "en_US" :
+                    return "https://cdn.datatables.net/plug-ins/1.10.19/i18n/English.json";
+                    break;
+                default :
+                    return "https://cdn.datatables.net/plug-ins/1.10.19/i18n/English.json";
+                    break;
+            }
         }
-    }
 
-    $('.removeProd').click(function () {
-        $('#prodIdDelete').val($(this).data('id'));
-    });
-
-
-    // chat
-    $('#submitMessage').click(function(){
-        let listId = $("#listIdMessage").val();
-        let message = $("#message").val();
-        let url = $("#sendMessageUrl").val();
-        $.ajax({
-            type: "POST",
-            url: url,
-            data: {
-                listId : listId,
-                message : message
-            }
-        }).done(function(){
-            $("#message").val('');
+        $('.removeProd').click(function () {
+            $('#prodIdDelete').val($(this).data('id'));
         });
-    });
 
 
-</script>
+        // chat
+        $('#submitMessage').click(function () {
+            let listId = $("#listIdMessage").val();
+            let message = $("#message").val();
+            let url = $("#sendMessageUrl").val();
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: {
+                    listId: listId,
+                    message: message
+                }
+            }).done(function () {
+                $("#message").val('');
+            });
+        });
+
+
+    </script>
 </body>
 
 </html>

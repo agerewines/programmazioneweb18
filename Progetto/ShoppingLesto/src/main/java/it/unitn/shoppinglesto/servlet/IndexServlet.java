@@ -56,9 +56,18 @@ public class IndexServlet extends HttpServlet {
         if (request.getParameterMap().containsKey("anonymous")) {
             anon = true;
         }
+        User user = null;
+        if(!anon){
+            user = (User) session.getAttribute("user");
+        }
         if(!response.isCommitted()) {
-            RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/index.jsp");
-            rd.forward(request, response);
+            if(user == null){
+                RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/index.jsp");
+                rd.forward(request, response);
+            }else{
+                response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath() + "/home"));
+            }
+
         }
     }
 

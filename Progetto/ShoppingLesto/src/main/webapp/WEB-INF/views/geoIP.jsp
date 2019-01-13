@@ -90,8 +90,6 @@
 <%@include file="parts/_footer.jspf" %>
 <%@include file="parts/_importsjs.jspf" %>
 <script type="text/javascript">
-
-
     $(document).ready(function(){
         $(this).addClass('active');
         $.ajax({
@@ -108,12 +106,11 @@
             }
         });
         {
-            let catId = 7;
             $.ajax({
                 type: "POST",
                 url: "geoip",
                 data: {
-                    catId: catId
+                    catId: 7
                 },
                 dataType : "html",
                 success: function (html) {

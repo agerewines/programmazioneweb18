@@ -174,11 +174,6 @@
 <script type="text/javascript">
 
     var timeout = null;
-    var addProd = function (e) {
-        console.log($(e.target).data('id'));
-        $('#hiddenProdId').val($(this).data('id'));
-    };
-
     $(document).ready(function(){
         var lang = document.documentElement.lang;
         function getLang(){
@@ -244,7 +239,7 @@
                             "            <td>"+ value.price +" €</td>\n" +
                             "            <td>\n" +
                             "                <button type=\"button\" class=\"btn btn-primary addButton\"\n" +
-                            "                        style=\"padding: 0 .375rem 0 .375rem;\"\n" +
+                            "                        onclick=\"$('#hiddenProdId').val($(this).data('id'));\"  style=\"padding: 0 .375rem 0 .375rem;\"\n" +
                             "                        data-toggle=\"modal\" data-target=\"#addProductModal\" data-id=\""+ value.id +"\">\n" +
                             "                    <i class=\"fas fa-plus\"></i>\n" +
                             "                </button>\n" +
@@ -252,7 +247,7 @@
                             "        </tr>\n";
                         datatable.row.add($(row)).draw();
                     });
-                    $('.addButton').click(addProd);
+
                 });
             }, 300);
         });
@@ -306,16 +301,17 @@
                         "               <td>"+ value.price +" €</td>\n" +
                         "            <td>\n" +
                         "                <button type=\"button\" class=\"btn btn-primary addButton\"\n" +
-                        "                        style=\"padding: 0 .375rem 0 .375rem;\"\n" +
+                        "                        onclick=\"$('#hiddenProdId').val($(this).data('id'));\" style=\"padding: 0 .375rem 0 .375rem;\"\n" +
                         "                        data-toggle=\"modal\" data-target=\"#addProductModal\" data-id=\""+ value.id +"\">\n" +
                         "                    <i class=\"fas fa-plus\"></i>\n" +
                         "                </button>\n" +
                         "            </td>\n" +
                         "        </tr>\n";
-                    datatable.row.add($(row)).draw()
+
+                    datatable.row.add($(row)).draw();
                 });
                 dismissLoad();
-                $('.addButton').click(addProd);
+
             });
         });
     })

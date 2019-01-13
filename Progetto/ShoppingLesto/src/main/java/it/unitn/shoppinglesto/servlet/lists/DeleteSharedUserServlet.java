@@ -63,8 +63,10 @@ public class DeleteSharedUserServlet extends HttpServlet {
         }
 
         Integer userIdToShare = null;
+        boolean isMe = false;
         try {
             userIdToShare = Integer.parseInt(request.getParameter("user"));
+            isMe = userIdToShare.equals(user.getId());
         } catch (RuntimeException e) {
             response.sendError(500, e.getMessage());
         }
@@ -86,8 +88,9 @@ public class DeleteSharedUserServlet extends HttpServlet {
             session.setAttribute("action", "newList");
             response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath() + "/home"));
         } else {
-            session.setAttribute("successMessage", message);
-            response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath() + "/list?id=" + listId));
+            session.setAttribute("successMessage", "User deleted");
+            String path = isMe ? "/home" : ("/list?id=" + listId);
+            response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath() + path));
         }
     }
 
