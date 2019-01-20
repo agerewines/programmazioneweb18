@@ -57,6 +57,9 @@
         setInterval(function () {
             $.ajax({
                 type: "POST",
+                data : {
+                   lang : "${language}"
+                },
                 url: "${pageContext.request.contextPath}/notification/expire",
                 dataType: "html",
                 success: function (html) {

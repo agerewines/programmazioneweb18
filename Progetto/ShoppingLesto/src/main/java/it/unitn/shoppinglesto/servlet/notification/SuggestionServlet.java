@@ -62,7 +62,8 @@ public class SuggestionServlet extends HttpServlet {
         List<NotificationExpire> allNews = new ArrayList<>();
         boolean inIta = true;
         try {
-            inIta = request.getHeader("Content-Language").equals("it-IT");
+            String lang  = request.getParameter("lang");
+            inIta = lang.equals("it_IT");
             List<ShoppingList> userList = shoppingListDAO.getUserLists(user);
             List<Suggestion> suggestions = new ArrayList<>();
             for (ShoppingList list: userList) {
