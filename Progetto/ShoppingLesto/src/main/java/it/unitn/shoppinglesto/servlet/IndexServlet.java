@@ -57,8 +57,8 @@ public class IndexServlet extends HttpServlet {
             anon = true;
         }
         User user = null;
-        if(!anon){
-            user = (User) session.getAttribute("user");
+        if(!anon && session != null){
+            user = session.getAttribute("user") != null ? (User) session.getAttribute("user") : null ;
         }
         if(!response.isCommitted()) {
             if(user == null){

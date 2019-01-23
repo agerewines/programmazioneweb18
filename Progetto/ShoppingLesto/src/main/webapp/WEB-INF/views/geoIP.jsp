@@ -90,34 +90,56 @@
 <%@include file="parts/_footer.jspf" %>
 <%@include file="parts/_importsjs.jspf" %>
 <script type="text/javascript">
-    $(document).ready(function(){
-        var options = {
-            enableHighAccuracy: true,
-            timeout: 5000,
-            maximumAge: 0
-        };
+    var options = {
+        enableHighAccuracy: true,
+        timeout: 5000,
+        maximumAge: 0
+    };
+    function getAddress(catName, long, lat){
+        return address = "https://www.google.com/maps/embed?pb=!1m16!1m12!1m3!1d22154.981200143142!2d" + long + "!3d" + lat + "!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!2m1!1s" + catName + "!5e0!3m2!1sit!2sit!4v1542911270560";
+    }
+    function success(pos) {
+        var crd = pos.coords;
+        let long = crd.longitude;
+        let lat = crd.latitude;
+        $("#map").attr("src", getAddress("Market", long, lat));
+        if(!$('#mapLabel').is(':visible')){
+            $('html, body').animate({
+                scrollTop: $("#map").offset().top
+            },1000);
+        }
+    }
 
-        function success(pos) {
+    function error(err) {
+        console.warn("error in geolocation");
+    }
+
+    $(document).ready(function(){
+        navigator.geolocation.getCurrentPosition(function(pos){
             var crd = pos.coords;
             let long = crd.longitude;
             let lat = crd.latitude;
-            let address = "https://www.google.com/maps/embed?pb=!1m16!1m12!1m3!1d22154.981200143142!2d" + long + "!3d" + lat + "!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!2m1!1sMarket!5e0!3m2!1sit!2sit!4v1542911270560";
-            $("#map").attr("src", address);
+            $("#map").attr("src", getAddress("Market", long, lat));
             if(!$('#mapLabel').is(':visible')){
                 $('html, body').animate({
                     scrollTop: $("#map").offset().top
                 },1000);
             }
-        }
+        }, error, options);
 
-        function error(err) {
-            console.warn("error in geolocation");
-        }
-
-        navigator.geolocation.getCurrentPosition(success, error, options);
         $(".showMapButton").click(function(){
             var catName = $(this).data("name-category");
-            navigator.geolocation.getCurrentPosition(success, error, options);
+            navigator.geolocation.getCurrentPosition(function(pos){
+                var crd = pos.coords;
+                let long = crd.longitude;
+                let lat = crd.latitude;
+                $("#map").attr("src", getAddress(catName, long, lat));
+                if(!$('#mapLabel').is(':visible')){
+                    $('html, body').animate({
+                        scrollTop: $("#map").offset().top
+                    },1000);
+                }
+            }, error, options);
             $('.showMapButton').removeClass('active');
             $(this).addClass('active');
         });
