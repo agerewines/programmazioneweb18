@@ -344,7 +344,7 @@
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>DeleteListCategoryPhotoServlet</servlet-name>
-        <url-pattern>/list/category/photo/delete</url-pattern>
+        <url-pattern>/admin/list/category/photo/delete</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>AddProductToListServlet</servlet-name>
@@ -364,7 +364,7 @@
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>DeleteProductCategoryPhotoServlet</servlet-name>
-        <url-pattern>/product/category/photo/delete</url-pattern>
+        <url-pattern>/admin/product/category/photo/delete</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>GetAllProductCategoryServlet</servlet-name>

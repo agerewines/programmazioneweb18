@@ -81,7 +81,7 @@
                                      src="${pageContext.request.contextPath}/images?id=${photo.id}&resource=listCatPhoto"
                                      onerror="this.onerror=null;this.src='${pageContext.request.contextPath}/images/avatars/Products/default.png';"
                                      onclick="deleteListCatPhoto(${photo.id}, this)"
-                                     onmouseover="mouseOverPhoto(this)" title="Click on the picture to delete it!"/>
+                                     data-toggle="tooltip" data-placement="bottom" title="Click on the picture to delete it!"/>
                             </c:forEach>
                         </td>
                         <td>
@@ -253,7 +253,6 @@
                 listCategoryPhotoId : id
             }).done(function(){});
         $(elem).fadeOut(300, function() { $(this).remove(); });
-        $(elem).tooltip( "option", "disabled" );
     }
     function mouseOverPhoto(elem){
         $(elem).css( 'cursor', 'pointer' );

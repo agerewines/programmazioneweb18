@@ -52,14 +52,6 @@ public class DeleteProductCategoryPhotoServlet extends HttpServlet {
         }catch (DAOException e){
             response.sendError(500, e.getMessage());
         }
-        if (hasError) {
-            session.setAttribute("errorMessage", message);
-            response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath() + "/home"));
-        } else {
-            message = "Photo deleted";
-            session.setAttribute("successMessage", message);
-            response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath() + "/home"));
-        }
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

@@ -80,8 +80,7 @@
                                 <img class="rounded shadow mb-3 bg-white rounded" height="65" width="65"
                                      src="${pageContext.request.contextPath}/images?id=${photo.id}&resource=prodCatPhoto"
                                      onerror="this.onerror=null;this.src='${pageContext.request.contextPath}/images/avatars/Products/default.png';"
-                                     onmouseover="mouseOverPhoto(this)"
-                                     onclick="deleteProdCatPhoto(${photo.id}, this)"  title="Click on the picture to delete it!"/>
+                                     onclick="deleteProdCatPhoto(${photo.id}, this)" data-toggle="tooltip" data-placement="bottom" title="Click on the picture to delete it!"/>
                             </c:forEach>
                         </td>
                         <td>
@@ -246,7 +245,6 @@
                 prodCategoryPhotoId : id
             }).done(function(){});
         $(elem).fadeOut(300, function() { $(this).remove(); });
-        $(elem).tooltip( "option", "disabled" );
     }
 
 
