@@ -49,23 +49,6 @@
     </div>
     <div class="stack-container">
         <div class="card-container">
-            <div class="perspec" style="--spreaddist: 125px; --scaledist: .75; --vertdist: -25px;">
-                <div class="card">
-                    <div class="writing">
-                        <div class="topbar">
-                            <div class="red"></div>
-                            <div class="yellow"></div>
-                            <div class="green"></div>
-                        </div>
-                        <div class="code">
-                            <ul>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card-container">
             <div class="perspec" style="--spreaddist: 100px; --scaledist: .8; --vertdist: -20px;">
                 <div class="card">
                     <div class="writing">

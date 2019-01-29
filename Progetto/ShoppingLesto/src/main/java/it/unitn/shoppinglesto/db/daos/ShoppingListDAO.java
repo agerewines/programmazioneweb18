@@ -73,7 +73,6 @@ public interface ShoppingListDAO extends DAO<ShoppingList, Integer> {
     /**
      * Checks if {@link User user} is allowed to view the {@link ShoppingList list}
      * @param user the {@link User user} to check.
-     * @param shoppingList the {@link ShoppingList list} where to check.
      * @return {@code true} if {@link User user} is in {@link ShoppingList list}.
      * @throws DAOException if an error occurs during the operation.
      */

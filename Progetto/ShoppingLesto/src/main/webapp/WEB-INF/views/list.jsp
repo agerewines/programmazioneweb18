@@ -55,7 +55,7 @@
                         <ul class="list-inline">
                             <li class="list-inline-item"><fmt:message key="list.li.list"/></li>
                             <li class="list-inline-item">${list.name}</li>
-                            <c:if test="${list.edit}">
+                            <c:if test="${list.edit || anon}">
                                 <li class="list-inline-item">
                                     <button type="button" class="btn btn-primary"
                                             style="padding: 0 .375rem 0 .375rem;"
@@ -288,7 +288,9 @@
                             </div>
                         </div>
                         <input type="hidden" id="listId" name="listId" value="${list.id}">
-
+                        <c:if test="${anon}">
+                            <input type="hidden" id="anonymous" name="anonymous" value="true">
+                        </c:if>
                         <button type="submit" class="btn btn-primary"><fmt:message key="list.h.edit_list"/></button>
                     </form>
                 </div>

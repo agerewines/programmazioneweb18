@@ -63,12 +63,24 @@
                                        href="${pageContext.request.contextPath}/home"><fmt:message
                                             key="navigation.a.lists"/></a>
                                 </li>
-                                <li class="nav-item">
-                                    <a class="nav-link js-scroll-trigger"
-                                       href="${pageContext.request.contextPath}/geoip"><fmt:message key="home.nav.locate"/></a>
-                                </li>
                             </c:otherwise>
                         </c:choose>
+                    </c:when>
+                    <c:otherwise>
+                    </c:otherwise>
+                </c:choose>
+                <c:choose>
+                    <c:when test="${anon || not empty user}">
+                        <li class="nav-item">
+                            <a class="nav-link js-scroll-trigger"
+                               href="${pageContext.request.contextPath}/geoip?anonymous=true"><fmt:message key="home.nav.locate"/></a>
+                        </li>
+                    </c:when>
+                    <c:otherwise>
+                    </c:otherwise>
+                </c:choose>
+                <c:choose>
+                    <c:when test="${not empty user}">
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

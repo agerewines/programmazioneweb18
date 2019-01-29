@@ -53,7 +53,11 @@ public class ModifyListServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);
         User user = (User) session.getAttribute("user");
-        if (user == null) {
+        boolean anon = false;
+        if (request.getParameterMap().containsKey("anonymous")) {
+            anon = true;
+        }
+        if (user == null && !anon) {
             response.sendError(500, "There was an error processing the request");
             return;
         }
@@ -75,7 +79,8 @@ public class ModifyListServlet extends HttpServlet {
         }
         try {
             ShoppingList list = shoppingListDAO.getByPrimaryKey(listId);
-            list.setUser(userDAO.getById(list.getUserId()));
+            if(!anon)
+                list.setUser(userDAO.getById(list.getUserId()));
             list.setCategory(listCategoryDAO.getByPrimaryKey(list.getCategoryId()));
             String rootPath = System.getProperty("catalina.home");
             String name = request.getParameter("nameList");
@@ -95,7 +100,10 @@ public class ModifyListServlet extends HttpServlet {
                     if(categoryId != -1)
                         list.setCategoryId(categoryId);
 
-                    shoppingListDAO.update(list);
+                    if(!anon)
+                        list = shoppingListDAO.update(list);
+                    else
+                        list = shoppingListDAO.updateAnon(list);
 
                     Part filePart = request.getPart("avatar");
                     if ((filePart != null) && (filePart.getSize() > 0)) {
@@ -109,13 +117,11 @@ public class ModifyListServlet extends HttpServlet {
                         }
                         modified = true;
                     }
-                    list = shoppingListDAO.update(list);
-                    if (user == null) {
-                        String uuid = UUID.randomUUID().toString();
-                        //shoppingListDAO.insertTempList(list, uuid);
-                        //CookieHelper.storeGenericCookie(response, TEMPLISTCOOKIENAME, uuid);
-                    } else {
-                        //shoppingListDAO.linkShoppingListToUser(list, user);
+                    if(!anon)
+                        list = shoppingListDAO.update(list);
+                    else
+                        list = shoppingListDAO.updateAnon(list);
+                    if (user != null) {
                         list.setUserId(user.getId());
                     }
                 }
@@ -132,7 +138,10 @@ public class ModifyListServlet extends HttpServlet {
         } else {
             message = "List was successfully updated";
             session.setAttribute("successMessage", message);
-            response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath() + "/list?id=" + listId));
+            if(anon)
+                response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath() + "/list?id=" + listId + "&anonymous=true"));
+            else
+                response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath() + "/list?id=" + listId));
         }
     }
 

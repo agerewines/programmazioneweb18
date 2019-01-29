@@ -77,7 +77,6 @@ public class SuggestionServlet extends HttpServlet {
                         if( counter>= 3 ){
                             LocalTime last = s.getLast().toLocalTime();
                             LocalTime expire = last.plusSeconds(s.getAverage());
-                            System.out.println(expire.toString() + ", " + LocalTime.now());
                             if(expire.isBefore(LocalTime.now())){
                                 NotificationExpire newNews = new NotificationExpire();
                                 newNews.setList(shoppingListDAO.getByPrimaryKey(s.getIdList()));

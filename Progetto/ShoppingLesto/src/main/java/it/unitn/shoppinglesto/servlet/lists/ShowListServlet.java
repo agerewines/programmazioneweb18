@@ -111,7 +111,7 @@ public class ShowListServlet extends HttpServlet {
                 if (listId == null) {
                     response.sendError(500, "There is no list selected!");
                     return;
-                } else if (listId == cookieList) {
+                } else if (listId.equals(cookieList)) {
                     list = shoppingListDAO.getByPrimaryKey(listId);
                     list.setCategory(listCategoryDAO.getByPrimaryKey(list.getCategoryId()));
                     productList = productDAO.getProductsByList(list);
@@ -127,8 +127,8 @@ public class ShowListServlet extends HttpServlet {
         request.getSession().setAttribute("list", list);
         request.getSession().setAttribute("productsList", productList);
         List<Category> categories = new ArrayList<>();
-        List<User> listUsers = new ArrayList<>();
-        List<User> sharedWith = new ArrayList<>();
+        List<User> listUsers;
+        List<User> sharedWith;
         try {
             categories = listCategoryDAO.getAll();
             if (!anon) {
