@@ -66,7 +66,15 @@
                                     <img id="listPic" class="align-self-center mr-2 rounded" height="64" width="64" src="${pageContext.request.contextPath}/images?id=${list.id}&resource=shoppingLists" onerror="this.onerror=null;this.src='${pageContext.request.contextPath}/images/avatars/Lists/default.png';"/>
                                     <div class="media-body">
                                         <h5 class="mb-1">${list.name}</h5>
-                                        <p>${list.user.fullName} • ${list.category.name}</p>
+                                        <c:choose>
+                                            <c:when test="${!anon}">
+                                                <p>${list.user.fullName} • ${list.category.name}</p>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <p>${list.category.name}</p>
+                                            </c:otherwise>
+                                        </c:choose>
+
                                     </div>
                                 </div>
                             </a>

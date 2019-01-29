@@ -5,7 +5,8 @@
             <div class="col-2">
                 <!-- Default dropup button -->
                 <div class="btn-group dropup mt-1">
-                    <button type="button" class="btn btn-warning btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <button type="button" class="btn btn-warning btn-sm dropdown-toggle" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">
                         <i class="fas fa-globe"></i>
                         <p id="langDropdown">
                             <c:choose>
@@ -21,12 +22,16 @@
                     <div class="dropdown-menu">
                         <c:choose>
                             <c:when test="${language eq 'en_US'}">
-                                <a class="dropdown-item langChange disabled" style="line-height: 25px; !important;" onclick="changeLang('en_US')">English</a>
-                                <a class="dropdown-item langChange" style="line-height: 25px; !important;" onclick="changeLang('it_IT')">Italiano</a>
+                                <a class="dropdown-item langChange disabled" style="line-height: 25px; !important;"
+                                   onclick="changeLang('en_US')">English</a>
+                                <a class="dropdown-item langChange" style="line-height: 25px; !important;"
+                                   onclick="changeLang('it_IT')">Italiano</a>
                             </c:when>
                             <c:otherwise>
-                                <a class="dropdown-item langChange" style="line-height: 25px; !important;" onclick="changeLang('en_US')">English</a>
-                                <a class="dropdown-item langChange disabled" style="line-height: 25px; !important;" onclick="changeLang('it_IT')">Italiano</a>
+                                <a class="dropdown-item langChange" style="line-height: 25px; !important;"
+                                   onclick="changeLang('en_US')">English</a>
+                                <a class="dropdown-item langChange disabled" style="line-height: 25px; !important;"
+                                   onclick="changeLang('it_IT')">Italiano</a>
                             </c:otherwise>
                         </c:choose>
 
@@ -35,8 +40,10 @@
             </div>
             <div class="col-8">
                 <span class="copyright text-center">
-                    <div class="d-lg-none"><i class="far fa-copyright"></i> ShoppingLesto</div>
-                    <div class="d-none d-lg-block"><i class="far fa-copyright"></i> ShoppingLesto 2018</div>
+                    <a href="https://github.com/ImGere/programmazioneweb18" class="text-dark">
+                        <div class="d-lg-none"><i class="far fa-copyright"></i> ShoppingLesto</div>
+                        <div class="d-none d-lg-block"><i class="far fa-copyright"></i> ShoppingLesto 2018</div>
+                    </a>
                 </span>
             </div>
             <div class="col-2">
