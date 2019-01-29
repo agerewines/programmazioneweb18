@@ -65,6 +65,7 @@
                         </div>
                         <input type="password" class="form-control" id="password" name="password"
                                placeholder="<fmt:message key="login.label.password" />">
+                        <small id="emailHelp" class="form-text text-muted"><fmt:message key="register.label.pw" /></small>
                     </div>
                     <div class="form-group col-md-5">
                         <label for="confirmation"><fmt:message key="register.label.confirm" /></label>
