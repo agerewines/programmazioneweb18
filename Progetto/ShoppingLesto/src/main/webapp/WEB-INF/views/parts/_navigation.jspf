@@ -85,7 +85,7 @@
                     </c:when>
                     <c:otherwise>
                         <c:choose>
-                            <c:when test="${not empty user}">
+                            <c:when test="${not empty user && !user.admin}">
                                 <li class="nav-item">
                                     <a class="nav-link js-scroll-trigger"
                                        href="${pageContext.request.contextPath}/geoip"><fmt:message key="home.nav.locate"/></a>

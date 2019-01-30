@@ -60,9 +60,9 @@ public class NewProductServlet extends HttpServlet {
         }
 
         String rootPath = System.getProperty("catalina.home");
-        String name = request.getParameter("name");
-        String description = request.getParameter("description");
-        int categoryId = Integer.parseInt(request.getParameter("category"));
+        String name = request.getParameter("nameProd");
+        String description = request.getParameter("descriptionProd");
+        int categoryId = Integer.parseInt(request.getParameter("productCategory"));
         Double price = Double.parseDouble(request.getParameter("price"));
         if (name == null || description == null || name.equals("") || description.equals("")) {
             hasError = true;
@@ -101,15 +101,15 @@ public class NewProductServlet extends HttpServlet {
                     }
                 }
             }
+        }
 
-            if (hasError) {
-                session.setAttribute("errorMessage", message);
-                response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath() + "/home"));
-            } else {
-                message = "Product category was successfully added";
-                session.setAttribute("successMessage", message);
-                response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath() + "/home"));
-            }
+        if (hasError) {
+            session.setAttribute("errorMessage", message);
+            response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath() + "/home"));
+        } else {
+            message = "Product category was successfully added";
+            session.setAttribute("successMessage", message);
+            response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath() + "/home"));
         }
     }
 

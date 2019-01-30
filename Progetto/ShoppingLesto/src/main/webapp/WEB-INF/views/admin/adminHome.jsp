@@ -155,7 +155,7 @@
                     <div class="form-row">
                         <label for="productCategory"><fmt:message key="admin.h.category"/></label>
                         <div class="form-group col-md-10 col-10">
-                            <select id="productCategory" name="category" class="form-control" required>
+                            <select id="productCategory" name="productCategory" class="form-control" required>
                             </select>
                         </div>
                         <div class="form-group col-md-1 col-2">
@@ -321,10 +321,11 @@
         $.ajax({
             type: "POST",
             url: url,
-            data: myData
+            data: { "prodId" : myData }
         }).done(function() {
             var elem = document.getElementById("prod" + myData);
             $(elem).fadeOut(300, function() { $(this).remove(); });
+            $("#deleteProdModal").modal('hide');
         }).fail(function() {
             alert("error deleting product");
         });

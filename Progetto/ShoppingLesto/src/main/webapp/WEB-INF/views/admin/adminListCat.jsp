@@ -135,7 +135,6 @@
                             <label for="nameListCat"><fmt:message key="admin.h.name"/></label>
                             <select id="nameListCatAdd" name="nameListCat" class="form-control">
                                 <option value="Tempo Libero"><fmt:message key="admin.h.free_time"/></option>
-                                <option value="Alimentari"><fmt:message key="admin.h.food"/></option>
                                 <option value="Videogiochi"><fmt:message key="admin.h.videogames"/></option>
                                 <option value="Tecnologia"><fmt:message key="admin.h.technology"/></option>
                                 <option value="Accessori per la casa"><fmt:message key="admin.h.home_accessories"/></option>
