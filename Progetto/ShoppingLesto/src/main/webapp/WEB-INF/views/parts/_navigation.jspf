@@ -5,21 +5,23 @@
             <c:when test="${not empty user}">
                 <a class="navbar-brand js-scroll-trigger"
                    href="${pageContext.request.contextPath}/home">ShoppingLesto</a>
-                <div class="dropdown nav navbar-bar alight-right ml-auto">
-                    <a class="nav-link dropdown-toggle notification-indicator" href="#"
-                       id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
-                       aria-expanded="false">
-                        <span class="" id="notificationBall"></span>
-                        <i class="fas fa-bell"></i>
-                    </a>
+                <c:if test="${!user.admin}">
+                    <div class="dropdown nav navbar-bar alight-right ml-auto">
+                        <a class="nav-link dropdown-toggle notification-indicator" href="#"
+                           id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
+                           aria-expanded="false">
+                            <span class="" id="notificationBall"></span>
+                            <i class="fas fa-bell"></i>
+                        </a>
 
-                    <div class="dropdown-menu dropdown-menu-right notificationBoxDD"
-                         aria-labelledby="navbarDropdownMenuLink" id="notificationDD">
-                        <h6 class="card-header"><fmt:message key="home.nav.notificationbox"/></h6>
-                        <ul class="list-group notificationBoxUL " id="notificationBox">
-                        </ul>
+                        <div class="dropdown-menu dropdown-menu-right notificationBoxDD"
+                             aria-labelledby="navbarDropdownMenuLink" id="notificationDD">
+                            <h6 class="card-header"><fmt:message key="home.nav.notificationbox"/></h6>
+                            <ul class="list-group notificationBoxUL " id="notificationBox">
+                            </ul>
+                        </div>
                     </div>
-                </div>
+                </c:if>
             </c:when>
             <c:otherwise>
                 <a class="navbar-brand js-scroll-trigger" href="${pageContext.request.contextPath}/">ShoppingLesto</a>

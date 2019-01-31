@@ -5,6 +5,7 @@ import it.unitn.shoppinglesto.db.entities.User;
 import it.unitn.shoppinglesto.db.exceptions.DAOException;
 import it.unitn.shoppinglesto.db.exceptions.DAOFactoryException;
 import it.unitn.shoppinglesto.db.factories.DAOFactory;
+import it.unitn.shoppinglesto.utils.CookieHelper;
 import it.unitn.shoppinglesto.utils.MailHelper;
 import it.unitn.shoppinglesto.utils.VelocityHelper;
 
@@ -42,13 +43,16 @@ public class DeleteUserServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);
         User user = (User) session.getAttribute("user");
-        session.removeAttribute("user");
         if (user == null) {
             response.sendError(500, "There was an error processing the request");
             return;
         }
         // delete user
         try{
+            session.setAttribute("user", null);
+            userDAO.deleteUuidToken(user);
+            CookieHelper.deleteUserCookie(response);
+            session.invalidate();
             String email = user.getMail();
             String fullName = user.getFullName();
             userDAO.delete(user.getId());

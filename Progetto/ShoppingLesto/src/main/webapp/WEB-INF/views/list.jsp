@@ -176,9 +176,11 @@
                             key="list.a.add_product"/></a>
                 </c:when>
                 <c:otherwise>
-                    <a class="btn btn-primary mb-4"
-                       href="${pageContext.request.contextPath}/product/add?listId=${list.id}"><fmt:message
-                            key="list.a.add_product"/></a>
+                    <c:if test="${list.add}">
+                        <a class="btn btn-primary mb-4"
+                           href="${pageContext.request.contextPath}/product/add?listId=${list.id}"><fmt:message
+                                key="list.a.add_product"/></a>
+                    </c:if>
                 </c:otherwise>
             </c:choose>
         </div>
