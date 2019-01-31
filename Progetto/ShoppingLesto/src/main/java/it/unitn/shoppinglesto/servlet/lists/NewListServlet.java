@@ -75,43 +75,42 @@ public class NewListServlet extends HttpServlet {
             response.sendError(500, "Avatars folder not configured");
             return;
         }
-
-        String rootPath = System.getProperty("catalina.home");
-        String name = request.getParameter("name");
-        String description = request.getParameter("description");
-        int categoryId = Integer.parseInt(request.getParameter("category"));
-        if (name == null || description == null || name.equals("") || description.equals("")) {
-            hasError = true;
-            message = "All fields are mandatory and must be filled!";
-        } else {
-            if (description.length() > 255) {
+        try {
+            String rootPath = System.getProperty("catalina.home");
+            String name = request.getParameter("name");
+            String description = request.getParameter("description");
+            int categoryId = Integer.parseInt(request.getParameter("category"));
+            if (name == null || description == null || name.equals("") || description.equals("")) {
                 hasError = true;
-                message = "List description can contain a maximum of  255 characters.";
+                message = "All fields are mandatory and must be filled!";
             } else {
-                ShoppingList list;
-                // int id, String name, String description, String image, int categoryId, int userId, User user
-                list = anon ? new ShoppingList(null, name, description, null, categoryId, null, user) : new ShoppingList(null, name, description, null, categoryId, user.getId(), user);
-                try {
-                    if(list.getUserId() != null)
-                        list.setId(shoppingListDAO.save(list));
-                    else
-                        list.setId(shoppingListDAO.saveAnon(list));
-                } catch (DAOException e) {
-                    e.printStackTrace();
-                }
-                Part filePart = request.getPart("avatar");
-                if ((filePart != null) && (filePart.getSize() > 0)) {
-                    String fileName = UtilityHelper.getFilename(filePart);
-                    fileName = UtilityHelper.renameImage(fileName, "List_" + list.getId());
-                    String listIconUploadDir = rootPath + File.separator + avatarsFolder + "Lists";
+                if (description.length() > 255) {
+                    hasError = true;
+                    message = "List description can contain a maximum of  255 characters.";
+                } else {
+                    ShoppingList list;
+                    // int id, String name, String description, String image, int categoryId, int userId, User user
+                    list = anon ? new ShoppingList(null, name, description, null, categoryId, null, user) : new ShoppingList(null, name, description, null, categoryId, user.getId(), user);
                     try {
-                        list.setImage(UtilityHelper.uploadFileToDirectory(listIconUploadDir, fileName, filePart));
-                    } catch (IOException ex) {
-                        response.sendError(500, ex.getMessage());
+                        if (list.getUserId() != null)
+                            list.setId(shoppingListDAO.save(list));
+                        else
+                            list.setId(shoppingListDAO.saveAnon(list));
+                    } catch (DAOException e) {
+                        e.printStackTrace();
                     }
-                    modified = true;
-                }
-                try {
+                    Part filePart = request.getPart("avatar");
+                    if ((filePart != null) && (filePart.getSize() > 0)) {
+                        String fileName = UtilityHelper.getFilename(filePart);
+                        fileName = UtilityHelper.renameImage(fileName, "List_" + list.getId());
+                        String listIconUploadDir = rootPath + File.separator + avatarsFolder + "Lists";
+                        try {
+                            list.setImage(UtilityHelper.uploadFileToDirectory(listIconUploadDir, fileName, filePart));
+                        } catch (IOException ex) {
+                            response.sendError(500, ex.getMessage());
+                        }
+                        modified = true;
+                    }
                     if (anon) {
                         list = shoppingListDAO.updateAnon(list);
                         list.setUser(new User(null, null, "Anonymous", "User", null));
@@ -124,13 +123,11 @@ public class NewListServlet extends HttpServlet {
                         list.setUserId(user.getId());
                     }
 
-                } catch (DAOException ex) {
-                    response.sendError(500, ex.getMessage());
                 }
             }
-
+        } catch (DAOException ex) {
+            response.sendError(500, ex.getMessage());
         }
-
         if (hasError) {
             session.setAttribute("errorMessage", message);
             session.setAttribute("action", "newList");
@@ -138,7 +135,7 @@ public class NewListServlet extends HttpServlet {
             message = "List was successfully created";
             session.setAttribute("successMessage", message);
         }
-        if(anon)
+        if (anon)
             response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath() + "/home?anonymous=true"));
         else
             response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath() + "/home"));
