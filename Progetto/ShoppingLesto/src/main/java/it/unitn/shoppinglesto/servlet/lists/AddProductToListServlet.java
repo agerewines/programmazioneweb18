@@ -43,6 +43,8 @@ public class AddProductToListServlet extends HttpServlet {
         if (request.getParameterMap().containsKey("anonymous")) {
             anon = true;
         }
+        request.setAttribute("anon", anon);
+
         if (user == null && !anon) {
             response.sendError(500, "There was an error processing the request, user is null");
             return;
@@ -80,6 +82,16 @@ public class AddProductToListServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);
         User user = (User) session.getAttribute("user");
+        boolean anon = false;
+        if (request.getParameterMap().containsKey("anonymous")) {
+            anon = true;
+        }
+        request.setAttribute("anon", anon);
+
+        if (user == null && !anon) {
+            response.sendError(500, "There was an error processing the request, user is null");
+            return;
+        }
         RequestDispatcher rd = getServletContext().getRequestDispatcher("/WEB-INF/views/addProduct.jsp");
         rd.forward(request, response);
     }

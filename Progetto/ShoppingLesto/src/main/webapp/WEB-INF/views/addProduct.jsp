@@ -170,9 +170,7 @@
 <%@include file="parts/_importsjs.jspf" %>
 <script src="${pageContext.request.contextPath}/assets/js/blockUI.js"></script>
 
-
 <script type="text/javascript">
-
     var timeout = null;
     $(document).ready(function(){
         var lang = document.documentElement.lang;
@@ -211,7 +209,14 @@
             }
             timeout = setTimeout(function() {
                 $.ajax({
-                    'url': "/ShoppingLesto/list/availableproduct?listId=" + new URLSearchParams(window.location.search).get('listId') + "&q=" + e.target.value,
+                    <c:choose>
+                        <c:when test="${anon}">
+                            'url': "/ShoppingLesto/list/availableproduct?listId=" + new URLSearchParams(window.location.search).get('listId') + "&q=" + e.target.value + "&anonymous=true",
+                        </c:when>
+                        <c:otherwise>
+                            'url': "/ShoppingLesto/list/availableproduct?listId=" + new URLSearchParams(window.location.search).get('listId') + "&q=" + e.target.value,
+                        </c:otherwise>
+                    </c:choose>
                     'method': "GET",
                     'contentType': 'application/json'
                 }).done(function (responseJson) {
@@ -272,7 +277,14 @@
 
         $('#showAll').click(function(e) {
             $.ajax({
+                <c:choose>
+                    <c:when test="${anon}">
+                'url': "/ShoppingLesto/list/availableproduct?listId=" + new URLSearchParams(window.location.search).get('listId') + "&anonymous=true",
+                    </c:when>
+                    <c:otherwise>
                 'url': "/ShoppingLesto/list/availableproduct?listId=" + new URLSearchParams(window.location.search).get('listId'),
+                    </c:otherwise>
+                </c:choose>
                 'method': "GET",
                 'contentType': 'application/json',
                 beforeSend : showLoad()
@@ -315,8 +327,6 @@
             });
         });
     })
-
-
 </script>
 </body>
 
